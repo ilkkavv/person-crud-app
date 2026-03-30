@@ -8,6 +8,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+    id 'checkstyle'
 }
 
 repositories {
@@ -35,6 +36,23 @@ java {
 application {
     // Define the main class for the application.
     mainClass = 'fi.tuni.tamk.tiko.wahalailkka.App'
+}
+
+checkstyle {
+    toolVersion = "10.12.5"
+    configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+    ignoreFailures = false
+}
+
+tasks.named('checkstyleTest') {
+    enabled = false
+}
+
+tasks.withType(Checkstyle).configureEach {
+    reports {
+        xml.required = false
+        html.required = true
+    }
 }
 
 tasks.named('test') {
