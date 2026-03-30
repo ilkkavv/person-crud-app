@@ -33,3 +33,6 @@ Thumbs.db
 
 # Environment
 .env
+
+# Ignore Kotlin plugin data
+.kotlin
