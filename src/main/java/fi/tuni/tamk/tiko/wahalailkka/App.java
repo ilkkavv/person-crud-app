@@ -3,12 +3,20 @@
  */
 package fi.tuni.tamk.tiko.wahalailkka;
 
-public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
+import fi.tuni.tamk.tiko.wahalailkka.repository.MemPersonRepository;
+import fi.tuni.tamk.tiko.wahalailkka.ui.Cli;
 
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+public final class App {
+    private App() { }
+
+    /**
+     * Main method to run the application.
+     *
+     * @param args command line arguments (not used)
+     */
+    public static void main(final String[] args) {
+        Cli cli = new Cli(new PersonController(new MemPersonRepository()));
+        cli.run();
     }
 }
