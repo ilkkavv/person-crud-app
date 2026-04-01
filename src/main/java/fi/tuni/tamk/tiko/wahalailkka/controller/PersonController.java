@@ -7,11 +7,13 @@ import fi.tuni.tamk.tiko.wahalailkka.repository.PersonRepository;
 import java.util.Optional;
 
 /**
- * Controller class responsible for handling application logic related to persons.
+ * Controller class responsible for handling application logic related to
+ * persons.
  * <p>
  * This class acts as an intermediary between the user interface and the
  * {@link PersonRepository}. It receives input data from the UI, creates
- * {@link Person} objects when needed, and delegates data operations to the repository.
+ * {@link Person} objects when needed, and delegates data operations to the
+ * repository.
  */
 public class PersonController {
     /** Repository used for storing and managing persons. */
