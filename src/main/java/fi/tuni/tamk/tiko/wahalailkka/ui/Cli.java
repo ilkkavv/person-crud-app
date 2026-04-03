@@ -87,7 +87,7 @@ public class Cli {
         System.out.println("(C)reate new person");
         System.out.println("(L)ist all persons");
         System.out.println("(F)ind person by ID");
-        //System.out.println("(U)pdate person data by ID");
+        System.out.println("(U)pdate person data by ID");
         //System.out.println("(D)elete person by ID");
         System.out.println("(H)elp");
         System.out.println("(E)xit");
@@ -108,6 +108,9 @@ public class Cli {
             case CMD_F, CMD_FIND:
                 find();
                 break;
+            case CMD_U, CMD_UPDATE:
+                update();
+                break;
             case CMD_H, CMD_HELP:
                 help();
                 break;
@@ -127,16 +130,7 @@ public class Cli {
         String firstName = scanner.nextLine();
         System.out.print("Enter person last name: ");
         String lastName = scanner.nextLine();
-        System.out.print("Enter person age: ");
-        String ageString = scanner.nextLine();
-        int age;
-
-        try {
-            age = Integer.parseInt(ageString);
-        } catch (NumberFormatException e) {
-            System.out.print("Please enter a valid age.");
-            return;
-        }
+        int age = askForAge();
 
         Person newPerson = controller.createPerson(firstName, lastName, age);
 
@@ -162,17 +156,7 @@ public class Cli {
     }
 
     private void find() {
-        System.out.println();
-        System.out.print("Enter ID: ");
-        String idString = scanner.nextLine();
-        int id;
-
-        try {
-            id = Integer.parseInt(idString);
-        } catch (NumberFormatException e) {
-            System.out.print("ID must be a positive integer.");
-            return;
-        }
+        int id = askForId();
 
         Optional<Person> optionalPerson = controller.findPersonById(id);
 
@@ -182,6 +166,39 @@ public class Cli {
                 () -> System.out.println("Person NOT found with ID: " + id));
 
         waitForEnter();
+    }
+
+    private void update() {
+        int id = askForId();
+
+        System.out.println();
+        System.out.println("Enter new values:");
+        System.out.println();
+
+        Optional<Person> optionalPerson = controller.findPersonById(id);
+
+        if (optionalPerson.isPresent()) {
+            System.out.print("Enter person first name: ");
+            String firstName = scanner.nextLine();
+            System.out.print("Enter person last name: ");
+            String lastName = scanner.nextLine();
+            int age = askForAge();
+
+            Optional<Person> optionalUpdated = controller.updatePersonById(id,
+                    firstName, lastName, age);
+
+            if (optionalUpdated.isPresent()) {
+                System.out.println();
+                System.out.println("Person data updated!");
+                printPersonData(optionalUpdated.get());
+
+                waitForEnter();
+            }
+        } else {
+            System.out.println();
+            System.out.println("Person NOT found with ID: " + id);
+            waitForEnter();
+        }
     }
 
     private void help() {
@@ -210,5 +227,46 @@ public class Cli {
         System.out.println();
         System.out.print("Press Enter to continue...");
         scanner.nextLine();
+    }
+
+    private int askForId() {
+        while (true) {
+            System.out.println();
+            System.out.print("Enter ID: ");
+            String stringId = scanner.nextLine();
+
+            try {
+                int id = Integer.parseInt(stringId);
+
+                if (id > 0) {
+                    return id;
+                } else {
+                    System.out.println("ID must be a positive integer.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. ID must be a positive "
+                        + "integer.");
+            }
+        }
+    }
+
+    private int askForAge() {
+        while (true) {
+            System.out.print("Enter person age: ");
+            String stringAge = scanner.nextLine();
+
+            try {
+                int age = Integer.parseInt(stringAge);
+
+                if (age >= 0) {
+                    return age;
+                } else {
+                    System.out.println("Age must be a non-negative integer.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Age must be a non-negative "
+                        + "integer.");
+            }
+        }
     }
 }
