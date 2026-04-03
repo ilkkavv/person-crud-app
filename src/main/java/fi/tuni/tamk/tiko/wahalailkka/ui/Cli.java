@@ -4,6 +4,7 @@ import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 /**
@@ -85,7 +86,7 @@ public class Cli {
         System.out.println();
         System.out.println("(C)reate new person");
         System.out.println("(L)ist all persons");
-        //System.out.println("(F)ind person by ID");
+        System.out.println("(F)ind person by ID");
         //System.out.println("(U)pdate person data by ID");
         //System.out.println("(D)elete person by ID");
         System.out.println("(H)elp");
@@ -103,6 +104,9 @@ public class Cli {
                 break;
             case CMD_L, CMD_LIST:
                 list();
+                break;
+            case CMD_F, CMD_FIND:
+                find();
                 break;
             case CMD_H, CMD_HELP:
                 help();
@@ -125,7 +129,14 @@ public class Cli {
         String lastName = scanner.nextLine();
         System.out.print("Enter person age: ");
         String ageString = scanner.nextLine();
-        int age = Integer.parseInt(ageString);
+        int age;
+
+        try {
+            age = Integer.parseInt(ageString);
+        } catch (NumberFormatException e) {
+            System.out.print("Please enter a valid age.");
+            return;
+        }
 
         Person newPerson = controller.createPerson(firstName, lastName, age);
 
@@ -147,6 +158,29 @@ public class Cli {
                 printPersonData(person);
             }
         }
+        waitForEnter();
+    }
+
+    private void find() {
+        System.out.println();
+        System.out.print("Enter ID: ");
+        String idString = scanner.nextLine();
+        int id;
+
+        try {
+            id = Integer.parseInt(idString);
+        } catch (NumberFormatException e) {
+            System.out.print("ID must be a positive integer.");
+            return;
+        }
+
+        Optional<Person> optionalPerson = controller.findPersonById(id);
+
+        System.out.println();
+        optionalPerson.ifPresentOrElse(
+                this::printPersonData,
+                () -> System.out.println("Person NOT found with ID: " + id));
+
         waitForEnter();
     }
 
