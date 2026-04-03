@@ -38,6 +38,14 @@ application {
     mainClass = 'fi.tuni.tamk.tiko.wahalailkka.App'
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': application.mainClass.get()
+        )
+    }
+}
+
 checkstyle {
     toolVersion = "10.12.5"
     configFile = rootProject.file('config/checkstyle/checkstyle.xml')
