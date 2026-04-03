@@ -88,7 +88,7 @@ public class Cli {
         System.out.println("(L)ist all persons");
         System.out.println("(F)ind person by ID");
         System.out.println("(U)pdate person data by ID");
-        //System.out.println("(D)elete person by ID");
+        System.out.println("(D)elete person by ID");
         System.out.println("(H)elp");
         System.out.println("(E)xit");
         System.out.println();
@@ -110,6 +110,9 @@ public class Cli {
                 break;
             case CMD_U, CMD_UPDATE:
                 update();
+                break;
+            case CMD_D, CMD_DELETE:
+                delete();
                 break;
             case CMD_H, CMD_HELP:
                 help();
@@ -196,6 +199,27 @@ public class Cli {
             }
         } else {
             System.out.println();
+            System.out.println("Person NOT found with ID: " + id);
+            waitForEnter();
+        }
+    }
+
+    private void delete() {
+        int id = askForId();
+
+        Optional<Person> optionalPerson = controller.findPersonById(id);
+
+        if (optionalPerson.isPresent()) {
+            Optional<Person> optionalDeleted = controller.deletePersonById(id);
+
+            if (optionalDeleted.isPresent()) {
+                System.out.println("Person data deleted!");
+                System.out.print("DELETED: ");
+                printPersonData(optionalDeleted.get());
+
+                waitForEnter();
+            }
+        } else {
             System.out.println("Person NOT found with ID: " + id);
             waitForEnter();
         }
