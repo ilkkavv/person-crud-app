@@ -70,6 +70,7 @@ public class Cli {
     public void run() {
         isRunning = true;
 
+        System.out.println();
         System.out.println("* --- Person CRUD App --- *");
 
         while (isRunning) {
@@ -130,9 +131,9 @@ public class Cli {
     private void create() {
         System.out.println();
         System.out.print("Enter person first name: ");
-        String firstName = scanner.nextLine();
+        String firstName = scanner.nextLine().trim();
         System.out.print("Enter person last name: ");
-        String lastName = scanner.nextLine();
+        String lastName = scanner.nextLine().trim();
         int age = askForAge();
 
         Person newPerson = controller.createPerson(firstName, lastName, age);
@@ -182,9 +183,9 @@ public class Cli {
 
         if (optionalPerson.isPresent()) {
             System.out.print("Enter person first name: ");
-            String firstName = scanner.nextLine();
+            String firstName = scanner.nextLine().trim();
             System.out.print("Enter person last name: ");
-            String lastName = scanner.nextLine();
+            String lastName = scanner.nextLine().trim();
             int age = askForAge();
 
             Optional<Person> optionalUpdated = controller.updatePersonById(id,
@@ -220,6 +221,7 @@ public class Cli {
                 waitForEnter();
             }
         } else {
+            System.out.println();
             System.out.println("Person NOT found with ID: " + id);
             waitForEnter();
         }
@@ -257,7 +259,7 @@ public class Cli {
         while (true) {
             System.out.println();
             System.out.print("Enter ID: ");
-            String stringId = scanner.nextLine();
+            String stringId = scanner.nextLine().trim();
 
             try {
                 int id = Integer.parseInt(stringId);
@@ -277,7 +279,7 @@ public class Cli {
     private int askForAge() {
         while (true) {
             System.out.print("Enter person age: ");
-            String stringAge = scanner.nextLine();
+            String stringAge = scanner.nextLine().trim();
 
             try {
                 int age = Integer.parseInt(stringAge);
