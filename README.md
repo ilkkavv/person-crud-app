@@ -64,3 +64,6 @@ You can also run the application with an in-memory repository:
 ```bash
 java -jar person-crud-app.jar --repo=mem
 ```
+
+> [!IMPORTANT]
+> In-memory mode does not save data after the program exits.
