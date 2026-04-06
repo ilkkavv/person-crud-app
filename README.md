@@ -152,3 +152,12 @@ course concepts, assist with understanding error messages, and improve the quali
 comments, and commit messages).
 
 AI was not used to generate code, but rather to support learning and enhance documentation quality.
+
+## 📄 License
+
+This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**.
+
+You are free to use, modify, and distribute this project, provided that any
+derivative work is also distributed under the same license.
+
+See the [LICENSE](LICENSE) file for details.
