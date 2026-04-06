@@ -144,3 +144,11 @@ java -jar build/libs/person-crud-app.jar
 ```bash
 java -jar build/libs/person-crud-app.jar --repo=mem
 ```
+
+## 🧠 AI Usage
+
+**ChatGPT** (OpenAI GPT-5.3) was used during this project primarily as a learning aid. The tool was utilized to clarify
+course concepts, assist with understanding error messages, and improve the quality of documentation (README, code
+comments, and commit messages).
+
+AI was not used to generate code, but rather to support learning and enhance documentation quality.
