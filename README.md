@@ -83,3 +83,40 @@ and extensibility.
 
 Through this project, the aim is to develop skills in writing clear, maintainable, and well-structured code while
 following common software development practices.
+
+## 🏗️ Architecture
+
+**Person CRUD app** follows a layered architecture with clear separation of concerns:
+
+UI → Controller → Repository → Data Structure
+
+The architecture allows switching between different UI and repository implementations without modifying other layers.
+
+### Components
+
+- **UI**
+    - Handles user interaction
+    - Reads input and displays output
+
+- **Controller**
+    - Acts as an intermediary between UI and repository
+    - Contains application logic
+    - Ensures separation between layers
+
+- **Repository**
+    - Responsible for data access and persistence
+    - Two implementations:
+        - CSV-based repository (persistent storage)
+        - In-memory repository (for testing)
+
+- **Data Structure**
+    - Custom list implementation
+    - Used to store and manage Person objects
+    - The implementation can be easily replaced without affecting other parts of the application
+
+### Design Principles
+
+- Separation of concerns between layers
+- Use of interfaces to allow interchangeable implementations
+- Loose coupling between components
+- Easy to extend with new UI or repository implementations
