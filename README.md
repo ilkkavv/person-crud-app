@@ -41,6 +41,8 @@
 operations (create, read, update, delete) and is built using a clean layered architecture with a controller, repository
 abstraction, and custom data structures. Data can be stored either in memory or in a CSV file.
 
+![CLI Demo](assets/cli-demo.gif)
+
 ## ✨ Current Features
 
 - CLI-based CRUD operations for managing persons
