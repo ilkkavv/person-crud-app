@@ -67,3 +67,19 @@ java -jar person-crud-app.jar --repo=mem
 
 > [!IMPORTANT]
 > In-memory mode does not save data after the program exits.
+
+## 📖 About
+
+This project is developed as part of an **Object-Oriented Programming** course at **Tampere University of Applied
+Sciences (TAMK)**.
+
+The goal of the project is to apply core object-oriented programming principles in practice by designing and
+implementing a small but structured application. The project focuses on concepts such as classes and objects,
+encapsulation, abstraction, and the use of interfaces.
+
+The application is built using a clean layered architecture, separating the user interface, controller, and data access
+logic. It also includes custom data structures and interchangeable repository implementations to support maintainability
+and extensibility.
+
+Through this project, the aim is to develop skills in writing clear, maintainable, and well-structured code while
+following common software development practices.
