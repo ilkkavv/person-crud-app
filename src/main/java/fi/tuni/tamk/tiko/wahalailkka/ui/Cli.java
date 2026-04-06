@@ -175,13 +175,12 @@ public class Cli {
     private void update() {
         int id = askForId();
 
-        System.out.println();
-        System.out.println("Enter new values:");
-        System.out.println();
-
         Optional<Person> optionalPerson = controller.findPersonById(id);
 
         if (optionalPerson.isPresent()) {
+            System.out.println();
+            System.out.println("Enter new values:");
+            System.out.println();
             System.out.print("Enter person first name: ");
             String firstName = scanner.nextLine().trim();
             System.out.print("Enter person last name: ");
