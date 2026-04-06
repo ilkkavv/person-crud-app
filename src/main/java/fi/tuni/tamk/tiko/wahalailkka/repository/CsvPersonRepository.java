@@ -209,7 +209,7 @@ public class CsvPersonRepository implements PersonRepository {
                     String[] data = line.split(csvDelimiter);
                     int id = Integer.parseInt(data[idIndex]);
                     int age = Integer.parseInt(data[ageIndex]);
-                    if (nextId < id) {
+                    if (nextId <= id) {
                         nextId = id + 1;
                     }
                     personList.add(new Person(id, data[firstNameIndex],
