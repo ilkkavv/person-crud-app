@@ -1,6 +1,16 @@
 # Person CRUD app
 
+![Version](https://img.shields.io/badge/version-1.0.0--alpha-red)
+![License](https://img.shields.io/badge/license-GPLv3-blue)
+![Status](https://img.shields.io/badge/status-active%20development-green)
+
+![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Gradle](https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+
 ## 📑 Table of Contents
+
 
 - [Person CRUD app](#person-crud-app)
   - [📑 Table of Contents](#-table-of-contents)
@@ -19,9 +29,10 @@
     - [Design Principles](#design-principles)
   - [🧰 How to Compile and Run](#-how-to-compile-and-run)
     - [❗ Requirements](#-requirements)
-    - [Compile:](#compile)
-    - [Run:](#run)
-    - [Run with in-memory repository:](#run-with-in-memory-repository)
+    - [Clone the repository](#clone-the-repository)
+    - [Compile](#compile)
+    - [Run](#run)
+    - [Run with in-memory repository](#run-with-in-memory-repository)
   - [🧠 AI Usage](#-ai-usage)
   - [📄 License](#-license)
 
