@@ -13,6 +13,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
+/**
+ * CSV-based implementation of the PersonRepository interface.
+ * <p>
+ * This repository stores and retrieves Person data from a CSV file.
+ * It supports basic CRUD operations (create, read, update, delete).
+ */
 public class CsvPersonRepository implements PersonRepository {
     private final String pathToFile;
 
@@ -28,11 +34,26 @@ public class CsvPersonRepository implements PersonRepository {
     private final int lastNameIndex = 2;
     private final int ageIndex = 3;
 
+    /**
+     * Constructs a CsvPersonRepository using the given file path.
+     * <p>
+     * If the file does not exist or is empty, it is initialized with a header
+     * row. Otherwise, existing data is loaded and the next available ID is
+     * determined.
+     *
+     * @param pathToFile the path to the CSV file used for persistence
+     */
     public CsvPersonRepository(final String pathToFile) {
         this.pathToFile = pathToFile;
         initializeCsv();
     }
 
+    /**
+     * Creates a new person and appends it to the CSV file.
+     *
+     * @param person the person data
+     * @return the created person with an assigned ID
+     */
     @Override
     public Person create(final Person person) {
         Person newPerson = new Person(nextId, person.firstName(),
@@ -42,12 +63,23 @@ public class CsvPersonRepository implements PersonRepository {
         return newPerson;
     }
 
+    /**
+     * Retrieves all persons from the CSV file.
+     *
+     * @return a list of all persons
+     */
     @Override
     public MyList<Person> findAll() {
         readPersonsFromCsv();
         return personList;
     }
 
+    /**
+     * Finds a person by their ID.
+     *
+     * @param id the ID of the person to find
+     * @return an Optional containing the person if found, otherwise empty
+     */
     @Override
     public Optional<Person> findById(final int id) {
         readPersonsFromCsv();
@@ -59,8 +91,19 @@ public class CsvPersonRepository implements PersonRepository {
         return Optional.empty();
     }
 
+    /**
+     * Updates a person with the given ID.
+     * <p>
+     * If a matching person is found, their data is replaced and the CSV file
+     * is rewritten.
+     *
+     * @param id the ID of the person to update
+     * @param person the new person data
+     * @return an Optional containing the updated person if the given ID is
+     * found, otherwise empty
+     */
     @Override
-    public Optional<Person> updateById(int id, Person person) {
+    public Optional<Person> updateById(final int id, final Person person) {
         readPersonsFromCsv();
 
         boolean personFound = false;
@@ -85,8 +128,18 @@ public class CsvPersonRepository implements PersonRepository {
         return Optional.empty();
     }
 
+    /**
+     * Deletes a person with the given ID.
+     * <p>
+     * If a matching person is found, it is removed and the CSV file is
+     * rewritten.
+     *
+     * @param id the ID of the person to delete
+     * @return an Optional containing the deleted person if the given ID is
+     * found, otherwise empty
+     */
     @Override
-    public Optional<Person> deleteById(int id) {
+    public Optional<Person> deleteById(final int id) {
         readPersonsFromCsv();
 
         boolean personFound = false;
