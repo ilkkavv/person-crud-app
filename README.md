@@ -1,5 +1,30 @@
 # Person CRUD app
 
+## 📑 Table of Contents
+
+- [Person CRUD app](#person-crud-app)
+  - [📑 Table of Contents](#-table-of-contents)
+  - [📝 Description](#-description)
+  - [✨ Current Features](#-current-features)
+  - [🎓 How to Use](#-how-to-use)
+    - [Creating a person](#creating-a-person)
+    - [Listing persons](#listing-persons)
+    - [Finding a person](#finding-a-person)
+    - [Updating a person](#updating-a-person)
+    - [Deleting a person](#deleting-a-person)
+    - [Repository option](#repository-option)
+  - [📖 About](#-about)
+  - [🏗️ Architecture](#️-architecture)
+    - [Components](#components)
+    - [Design Principles](#design-principles)
+  - [🧰 How to Compile and Run](#-how-to-compile-and-run)
+    - [❗ Requirements](#-requirements)
+    - [Compile:](#compile)
+    - [Run:](#run)
+    - [Run with in-memory repository:](#run-with-in-memory-repository)
+  - [🧠 AI Usage](#-ai-usage)
+  - [📄 License](#-license)
+
 ## 📝 Description
 
 **Person CRUD App** is a simple command-line application for managing a collection of persons. It supports basic CRUD
