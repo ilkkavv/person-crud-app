@@ -36,3 +36,6 @@ Thumbs.db
 
 # Ignore Kotlin plugin data
 .kotlin
+
+# Data
+person.csv
