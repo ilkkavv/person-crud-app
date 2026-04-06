@@ -11,7 +11,6 @@
 
 ## 📑 Table of Contents
 
-
 - [Person CRUD app](#person-crud-app)
   - [📑 Table of Contents](#-table-of-contents)
   - [📝 Description](#-description)
@@ -35,7 +34,6 @@
     - [Run with in-memory repository](#run-with-in-memory-repository)
   - [🧠 AI Usage](#-ai-usage)
   - [📄 License](#-license)
-
 
 ## 📝 Description
 
@@ -132,24 +130,24 @@ The architecture allows switching between different UI and repository implementa
 ### Components
 
 - **UI**
-    - Handles user interaction
-    - Reads input and displays output
+  - Handles user interaction
+  - Reads input and displays output
 
 - **Controller**
-    - Acts as an intermediary between UI and repository
-    - Contains application logic
-    - Ensures separation between layers
+  - Acts as an intermediary between UI and repository
+  - Contains application logic
+  - Ensures separation between layers
 
 - **Repository**
-    - Responsible for data access and persistence
-    - Two implementations:
-        - CSV-based repository (persistent storage)
-        - In-memory repository (for testing)
+  - Responsible for data access and persistence
+  - Two implementations:
+    - CSV-based repository (persistent storage)
+    - In-memory repository (for testing)
 
 - **Data Structure**
-    - Custom list implementation
-    - Used to store and manage Person objects
-    - The implementation can be easily replaced without affecting other parts of the application
+  - Custom list implementation
+  - Used to store and manage Person objects
+  - The implementation can be easily replaced without affecting other parts of the application
 
 ### Design Principles
 
@@ -185,6 +183,7 @@ java -jar build/libs/person-crud-app.jar
 ```
 
 ### Run with in-memory repository
+
 ```bash
 java -jar build/libs/person-crud-app.jar --repo=mem
 ```
