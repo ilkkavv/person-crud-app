@@ -120,3 +120,27 @@ The architecture allows switching between different UI and repository implementa
 - Use of interfaces to allow interchangeable implementations
 - Loose coupling between components
 - Easy to extend with new UI or repository implementations
+
+## 🧰 How to Compile and Run
+
+### ❗ Requirements
+
+- **Java 17** or newer (tested with **Java 25**)
+- No separate **Gradle** installation required (**Gradle Wrapper** included)
+
+### Compile:
+
+```bash
+./gradlew clean build
+```
+
+### Run:
+
+```bash
+java -jar build/libs/person-crud-app.jar
+```
+
+### Run with in-memory repository:
+```bash
+java -jar build/libs/person-crud-app.jar --repo=mem
+```
