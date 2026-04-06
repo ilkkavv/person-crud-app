@@ -4,20 +4,24 @@ import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
 public class CsvPersonRepository implements PersonRepository {
     private final String pathToFile;
+
     private final String csvDelimiter = ",";
+    private final String headers = String.format("id%sfirstName%slastName%sage",
+            csvDelimiter, csvDelimiter, csvDelimiter);
 
     private MyList<Person> personList = new MyArrayList<>();
     private int nextId = 1;
-
-    private final String headers = String.format("id%sfirstName%slastName%sage",
-            csvDelimiter, csvDelimiter, csvDelimiter);
 
     private final int idIndex = 0;
     private final int firstNameIndex = 1;
@@ -57,6 +61,8 @@ public class CsvPersonRepository implements PersonRepository {
 
     @Override
     public Optional<Person> updateById(int id, Person person) {
+        readPersonsFromCsv();
+
         boolean personFound = false;
         MyList<Person> newPersonList = new MyArrayList<>();
         Person updatedPerson = new Person(id, person.firstName(),
@@ -81,6 +87,8 @@ public class CsvPersonRepository implements PersonRepository {
 
     @Override
     public Optional<Person> deleteById(int id) {
+        readPersonsFromCsv();
+
         boolean personFound = false;
         MyList<Person> newPersonList = new MyArrayList<>();
         Person deletedPerson = null;
@@ -102,22 +110,16 @@ public class CsvPersonRepository implements PersonRepository {
         return Optional.empty();
     }
 
-    private void writeHeadersToCsv() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(
-                pathToFile))) {
-            writer.write(headers);
-            writer.newLine();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to write headers to CSV file!");
-        }
-    }
-
     private void initializeCsv() {
         Path path = Path.of(pathToFile);
 
         try {
             if (!Files.exists(path) || Files.size(path) == 0) {
-                writeHeadersToCsv();
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(
+                        pathToFile))) {
+                    writer.write(headers);
+                    writer.newLine();
+                }
             } else {
                 readPersonsFromCsv();
             }
@@ -135,7 +137,6 @@ public class CsvPersonRepository implements PersonRepository {
                     person.lastName(), csvDelimiter,
                     person.age()));
             writer.newLine();
-            readPersonsFromCsv();
         } catch (IOException e) {
             throw new RuntimeException("Failed to write Person data to CSV "
                     + "file!");
@@ -151,7 +152,7 @@ public class CsvPersonRepository implements PersonRepository {
             reader.readLine(); // Skip header
 
             while ((line = reader.readLine()) != null) {
-                if (!line.isEmpty()) {
+                if (!line.isBlank()) {
                     String[] data = line.split(csvDelimiter);
                     int id = Integer.parseInt(data[idIndex]);
                     int age = Integer.parseInt(data[ageIndex]);
@@ -168,9 +169,10 @@ public class CsvPersonRepository implements PersonRepository {
     }
 
     private void writePersonListToCsv() {
-        writeHeadersToCsv();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(
-                pathToFile, true))) {
+                pathToFile))) {
+            writer.write(headers);
+            writer.newLine();
             for (int i = 0; i < personList.size(); i++) {
                 Person person = personList.get(i);
                 writer.write(String.format("%d%s%s%s%s%s%d",
@@ -180,7 +182,6 @@ public class CsvPersonRepository implements PersonRepository {
                         person.age()));
                 writer.newLine();
             }
-            readPersonsFromCsv();
         } catch (IOException e) {
             throw new RuntimeException("Failed to write Person list to CSV "
                     + "file!");
