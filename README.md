@@ -25,6 +25,7 @@
   - [🧠 AI Usage](#-ai-usage)
   - [📄 License](#-license)
 
+
 ## 📝 Description
 
 **Person CRUD App** is a simple command-line application for managing a collection of persons. It supports basic CRUD
@@ -153,19 +154,26 @@ The architecture allows switching between different UI and repository implementa
 - **Java 17** or newer (tested with **Java 25**)
 - No separate **Gradle** installation required (**Gradle Wrapper** included)
 
-### Compile:
+### Clone the repository
+
+```bash
+git clone https://github.com/ilkkavv/person-crud-app
+cd person-crud-app
+```
+
+### Compile
 
 ```bash
 ./gradlew clean build
 ```
 
-### Run:
+### Run
 
 ```bash
 java -jar build/libs/person-crud-app.jar
 ```
 
-### Run with in-memory repository:
+### Run with in-memory repository
 ```bash
 java -jar build/libs/person-crud-app.jar --repo=mem
 ```
