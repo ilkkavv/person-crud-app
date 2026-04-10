@@ -207,18 +207,14 @@ public class Cli {
     private void delete() {
         int id = askForId();
 
-        Optional<Person> optionalPerson = controller.findPersonById(id);
+        Optional<Person> optionalDeleted = controller.deletePersonById(id);
 
-        if (optionalPerson.isPresent()) {
-            Optional<Person> optionalDeleted = controller.deletePersonById(id);
+        if (optionalDeleted.isPresent()) {
+            System.out.println("Person data deleted!");
+            System.out.print("DELETED: ");
+            printPersonData(optionalDeleted.get());
 
-            if (optionalDeleted.isPresent()) {
-                System.out.println("Person data deleted!");
-                System.out.print("DELETED: ");
-                printPersonData(optionalDeleted.get());
-
-                waitForEnter();
-            }
+            waitForEnter();
         } else {
             System.out.println();
             System.out.println("Person NOT found with ID: " + id);
