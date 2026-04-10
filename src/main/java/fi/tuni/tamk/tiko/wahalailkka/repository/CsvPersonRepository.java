@@ -167,7 +167,12 @@ public class CsvPersonRepository implements PersonRepository {
         Path path = Path.of(pathToFile);
 
         try {
-            if (!Files.exists(path) || Files.size(path) == 0) {
+            Path parent = path.getParent();
+            if (parent != null && Files.notExists(parent)) {
+                Files.createDirectories(parent);
+            }
+
+            if (Files.notExists(path) || Files.size(path) == 0) {
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(
                         pathToFile))) {
                     writer.write(headers);
