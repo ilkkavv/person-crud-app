@@ -125,7 +125,7 @@ following common software development practices.
 
 **Person CRUD app** follows a layered architecture with clear separation of concerns:
 
-UI → Controller → Repository → Data Structure
+UI → Controller → Repository → MyList (MyArrayList / MyLinkedList)
 
 The architecture allows switching between different UI and repository implementations without modifying other layers.
 
