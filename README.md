@@ -181,13 +181,13 @@ cd person-crud-app
 ### Run
 
 ```bash
-java -jar build/libs/person-crud-app.jar
+java -jar build/libs/person-crud-app-1.0.0-alpha.jar
 ```
 
 ### Run with in-memory repository
 
 ```bash
-java -jar build/libs/person-crud-app.jar --repo=mem
+java -jar build/libs/person-crud-app-1.0.0-alpha.jar --repo=mem
 ```
 
 ## 🧠 AI Usage
