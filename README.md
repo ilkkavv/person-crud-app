@@ -184,11 +184,18 @@ cd person-crud-app
 java -jar build/libs/person-crud-app-1.0.0-alpha.jar
 ```
 
+The application runs as an interactive CLI and will prompt for user input.
+
 ### Run with in-memory repository
 
 ```bash
 java -jar build/libs/person-crud-app-1.0.0-alpha.jar --repo=mem
 ```
+
+---
+
+> [!NOTE]
+> Alternatively, download the pre-built JAR from the GitHub Releases page.
 
 ## 🧠 AI Usage
 
