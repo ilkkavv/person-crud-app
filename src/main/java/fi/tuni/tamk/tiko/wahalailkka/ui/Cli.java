@@ -210,6 +210,7 @@ public class Cli {
         Optional<Person> optionalDeleted = controller.deletePersonById(id);
 
         if (optionalDeleted.isPresent()) {
+            System.out.println();
             System.out.println("Person data deleted!");
             System.out.print("DELETED: ");
             printPersonData(optionalDeleted.get());
