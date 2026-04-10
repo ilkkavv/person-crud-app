@@ -53,16 +53,22 @@ public final class App {
     }
 
     private static void handleArgs(final String[] args) {
-        personRepository = new CsvPersonRepository(PATH_TO_CSV);
+        boolean useMemRepo = false;
 
         for (String arg : args) {
             if (arg.equals("--repo=mem")) {
-                personRepository = new MemPersonRepository();
+                useMemRepo = true;
             } else {
                 System.err.println("Invalid command line argument given.");
                 System.out.println(USAGE_MSG);
                 System.exit(1);
             }
+        }
+
+        if (useMemRepo) {
+            personRepository = new MemPersonRepository();
+        } else {
+            personRepository = new CsvPersonRepository(PATH_TO_CSV);
         }
     }
 }
