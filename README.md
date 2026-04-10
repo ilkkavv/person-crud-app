@@ -162,7 +162,7 @@ The architecture allows switching between different UI and repository implementa
 
 ### ❗ Requirements
 
-- **Java 17** or newer (tested with **Java 25**)
+- **Java 25** (tested)
 - No separate **Gradle** installation required (**Gradle Wrapper** included)
 
 ### Clone the repository
