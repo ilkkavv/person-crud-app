@@ -3,6 +3,7 @@ package fi.tuni.tamk.tiko.wahalailkka.repository;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
+import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -51,13 +52,13 @@ public class CsvPersonRepository implements PersonRepository {
     /**
      * Creates a new person and appends it to the CSV file.
      *
-     * @param person the person data
+     * @param personData the person data used to create a new person
      * @return the created person with an assigned ID
      */
     @Override
-    public Person create(final Person person) {
-        Person newPerson = new Person(nextId, person.firstName(),
-                person.lastName(), person.age());
+    public Person create(final PersonData personData) {
+        Person newPerson = new Person(nextId, personData.firstName(),
+                personData.lastName(), personData.age());
         writePersonToCsv(newPerson);
         nextId++;
         return newPerson;
@@ -98,18 +99,19 @@ public class CsvPersonRepository implements PersonRepository {
      * is rewritten.
      *
      * @param id the ID of the person to update
-     * @param person the new person data
+     * @param personData the new person data
      * @return an Optional containing the updated person if the given ID is
      * found, otherwise empty
      */
     @Override
-    public Optional<Person> updateById(final int id, final Person person) {
+    public Optional<Person> updateById(final int id,
+                                       final PersonData personData) {
         readPersonsFromCsv();
 
         boolean personFound = false;
         MyList<Person> newPersonList = new MyArrayList<>();
-        Person updatedPerson = new Person(id, person.firstName(),
-                person.lastName(), person.age());
+        Person updatedPerson = new Person(id, personData.firstName(),
+                personData.lastName(), personData.age());
 
         for (int i = 0; i < personList.size(); i++) {
             if (id == personList.get(i).id()) {
