@@ -2,6 +2,7 @@ package fi.tuni.tamk.tiko.wahalailkka.repository;
 
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
+import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
 
 import java.util.Optional;
 
@@ -13,11 +14,13 @@ import java.util.Optional;
 public interface PersonRepository {
     /**
      * Creates and stores a new person.
+     * <p>
+     * The repository assigns a unique ID to the person.
      *
-     * @param person the person to be created
+     * @param personData the person data used to create a new person
      * @return the created person
      */
-    Person create(Person person);
+    Person create(PersonData personData);
 
     /**
      * Returns all stored persons.
@@ -38,11 +41,11 @@ public interface PersonRepository {
      * Updates an existing person by id.
      *
      * @param id the id of the person to update
-     * @param person the new data for the person
+     * @param personData the new data for the person
      * @return an Optional containing the updated person if found,
      *         otherwise empty
      */
-    Optional<Person> updateById(int id, Person person);
+    Optional<Person> updateById(int id, PersonData personData);
 
     /**
      * Deletes a person by id.
