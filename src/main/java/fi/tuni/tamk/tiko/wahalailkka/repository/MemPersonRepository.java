@@ -3,6 +3,7 @@ package fi.tuni.tamk.tiko.wahalailkka.repository;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
+import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
 
 import java.util.Optional;
 
@@ -25,22 +26,21 @@ public class MemPersonRepository implements PersonRepository {
     /**
      * Creates a new person and assigns an unique ID.
      *
-     * @param person the person to create
+     * @param personData  the person data used to create a new person
      * @return the created person
      * @throws IllegalArgumentException if person is null
      */
     @Override
-    public Person create(final Person person) {
-        if (person == null) {
-            throw new IllegalArgumentException("Person must not be null.");
+    public Person create(final PersonData personData) {
+        if (personData == null) {
+            throw new IllegalArgumentException("Person data must not be null.");
         }
-        Person newPerson = new Person(nextId, person.firstName(),
-                person.lastName(), person.age());
+        Person newPerson = new Person(nextId, personData.firstName(),
+                personData.lastName(), personData.age());
         personList.add(newPerson);
         nextId++;
         return newPerson;
     }
-
 
     /**
      * Returns all persons stored in the repository.
@@ -76,21 +76,23 @@ public class MemPersonRepository implements PersonRepository {
      * The ID remains unchanged, but other fields are updated.
      *
      * @param id the ID of the person to update
-     * @param person the new person data
+     * @param personData the new person data
      * @return an {@link Optional} containing the updated person,
      *         or empty if no person with the given ID exists
      * @throws IllegalArgumentException if person is null
      */
     @Override
-    public Optional<Person> updateById(final int id, final Person person) {
-        if (person == null) {
-            throw new IllegalArgumentException("Person must not be null.");
+    public Optional<Person> updateById(final int id,
+                                       final PersonData personData) {
+        if (personData == null) {
+            throw new IllegalArgumentException("Person data must not be null.");
         }
         for (int i = 0; i < personList.size(); i++) {
             Person listedPerson = personList.get(i);
             if (listedPerson.id() == id) {
                 Person updatedPerson = new Person(listedPerson.id(),
-                        person.firstName(), person.lastName(), person.age());
+                        personData.firstName(), personData.lastName(),
+                        personData.age());
                 personList.set(i, updatedPerson);
                 return Optional.of(updatedPerson);
             }
