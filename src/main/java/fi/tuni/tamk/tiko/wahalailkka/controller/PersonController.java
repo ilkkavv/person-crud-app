@@ -2,6 +2,7 @@ package fi.tuni.tamk.tiko.wahalailkka.controller;
 
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
+import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
 import fi.tuni.tamk.tiko.wahalailkka.repository.PersonRepository;
 
 import java.util.Optional;
@@ -39,8 +40,8 @@ public class PersonController {
      * @return the created person with assigned ID
      */
     public Person createPerson(final String firstName, final String lastName,
-                         final int age) {
-        return personRepository.create(new Person(0, firstName, lastName,
+                               final int age) {
+        return personRepository.create(new PersonData(firstName, lastName,
                 age));
     }
 
@@ -78,7 +79,7 @@ public class PersonController {
                                              final String firstName,
                                              final String lastName,
                                              final int age) {
-        return personRepository.updateById(id, new Person(0, firstName,
+        return personRepository.updateById(id, new PersonData(firstName,
                 lastName, age));
     }
 
