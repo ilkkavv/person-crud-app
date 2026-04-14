@@ -1,9 +1,12 @@
 package fi.tuni.tamk.tiko.wahalailkka.controller;
 
+import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
 import fi.tuni.tamk.tiko.wahalailkka.repository.PersonRepository;
+import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidator.
+        validatePersonData;
 
 import java.util.Optional;
 
@@ -19,6 +22,8 @@ import java.util.Optional;
 public class PersonController {
     /** Repository used for storing and managing persons. */
     private final PersonRepository personRepository;
+    /** Stores validation error messages */
+    private final MyList<String> validationErrors = new MyArrayList<>();
 
     /**
      * Constructs a new PersonController with the given repository.
@@ -32,17 +37,32 @@ public class PersonController {
     /**
      * Creates a new person with the given data.
      * <p>
-     * The ID is assigned by the repository.
+     * The input data is validated before creation. If validation fails, the
+     * result contains validation errors. Otherwise, a new person is created
+     * and assigned a unique ID by the repository.
      *
      * @param firstName the first name of the person
      * @param lastName the last name of the person
      * @param age the age of the person
-     * @return the created person with assigned ID
+     * @return a {@link PersonResult} containing:
+     * <ul>
+     *     <li>the created person if successful</li>
+     *     <li>validation errors if input is invalid</li>
+     * </ul>
      */
-    public Person createPerson(final String firstName, final String lastName,
-                               final int age) {
-        return personRepository.create(new PersonData(firstName, lastName,
-                age));
+    public PersonResult createPerson(final String firstName,
+                                     final String lastName, final int age) {
+        PersonData newPersonData = new PersonData(firstName, lastName, age);
+        MyList<String> validationErrors = validatePersonData(newPersonData);
+
+        if (validationErrors.size() == 0) {
+            return new PersonResult(true,
+                    personRepository.create(newPersonData),
+                    validationErrors, null);
+        } else {
+            return new PersonResult(false, null,
+                    validationErrors, null);
+        }
     }
 
     /**
@@ -67,20 +87,44 @@ public class PersonController {
 
     /**
      * Updates a person identified by the given ID.
+     * <p>
+     * The input data is first validated. If validation fails, the result
+     * contains validation errors. If validation succeeds but no person with
+     * the given ID exists, the result contains a repository error message.
      *
      * @param id the ID of the person to update
      * @param firstName the new first name
      * @param lastName the new last name
      * @param age the new age
-     * @return an {@link Optional} containing the updated person,
-     *         or empty if no person with the given ID exists
+     * @return a {@link PersonResult} containing:
+     * <ul>
+     *     <li>the updated person if successful</li>
+     *     <li>validation errors if input is invalid</li>
+     *     <li>an error message if the person was not found</li>
+     * </ul>
      */
-    public Optional<Person> updatePersonById(final int id,
-                                             final String firstName,
-                                             final String lastName,
-                                             final int age) {
-        return personRepository.updateById(id, new PersonData(firstName,
-                lastName, age));
+    public PersonResult updatePersonById(final int id,
+                                         final String firstName,
+                                         final String lastName,
+                                         final int age) {
+        PersonData newPersonData = new PersonData(firstName, lastName, age);
+        MyList<String> validationErrors = validatePersonData(newPersonData);
+
+        if (validationErrors.size() == 0) {
+            Optional<Person> updatedPerson = personRepository.updateById(id,
+                    newPersonData);
+            if (updatedPerson.isEmpty()) {
+                return new PersonResult(false, null,
+                        validationErrors,
+                        "Person not found with ID: " + id);
+            } else {
+                return new PersonResult(true, updatedPerson.get(),
+                        validationErrors, null);
+            }
+        } else {
+            return new PersonResult(false, null,
+                    validationErrors, null);
+        }
     }
 
     /**
