@@ -23,7 +23,7 @@ import java.util.Optional;
 public class PersonController {
     /** Repository used for storing and managing persons. */
     private final PersonRepository personRepository;
-    /** Message displayed when Person with given ID is not found */
+    /** Message displayed when Person with given ID is not found. */
     private final String notFoundMsg = "Person not found with ID: ";
 
     /**
@@ -56,7 +56,7 @@ public class PersonController {
         PersonData newPersonData = new PersonData(firstName, lastName, age);
         MyList<String> validationErrors = validatePersonData(newPersonData);
 
-        if (validationErrors.size() == 0) {
+        if (validationErrors.isEmpty()) {
             return new PersonResult(true,
                     personRepository.create(newPersonData),
                     validationErrors, null);
@@ -93,7 +93,7 @@ public class PersonController {
     public PersonResult findPersonById(final int id) {
         MyList<String> validationErrors = validatePersonId(id);
 
-        if (validationErrors.size() == 0) {
+        if (validationErrors.isEmpty()) {
             Optional<Person> person = personRepository.findById(id);
             if (person.isEmpty()) {
                 return new PersonResult(false, null,
@@ -135,7 +135,7 @@ public class PersonController {
         PersonData newPersonData = new PersonData(firstName, lastName, age);
         validationErrors.addAll(validatePersonData(newPersonData));
 
-        if (validationErrors.size() == 0) {
+        if (validationErrors.isEmpty()) {
             Optional<Person> updatedPerson = personRepository.updateById(id,
                     newPersonData);
             if (updatedPerson.isEmpty()) {
@@ -169,7 +169,7 @@ public class PersonController {
     public PersonResult deletePersonById(final int id) {
         MyList<String> validationErrors = validatePersonId(id);
 
-        if (validationErrors.size() == 0) {
+        if (validationErrors.isEmpty()) {
             Optional<Person> deletedPerson = personRepository.deleteById(id);
             if (deletedPerson.isEmpty()) {
                 return new PersonResult(false, null,
