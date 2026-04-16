@@ -49,7 +49,9 @@ public class MemPersonRepository implements PersonRepository {
      */
     @Override
     public MyList<Person> findAll() {
-        return personList;
+        MyList<Person> newPersonList = new MyArrayList<>();
+        newPersonList.addAll(personList);
+        return newPersonList;
     }
 
     /**
