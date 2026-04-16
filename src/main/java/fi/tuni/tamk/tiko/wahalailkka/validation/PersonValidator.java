@@ -7,7 +7,7 @@ import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PersonValidator {
+public final class PersonValidator {
     private static final String NAME_PATTERN = "^[A-ZÅÄÖ][a-zåäö]+"
             + "(-[A-ZÅÄÖ][a-zåäö]+)*$";
     private static final Pattern NAME_REGEX = Pattern.compile(NAME_PATTERN);
@@ -60,7 +60,7 @@ public class PersonValidator {
 
     private static void validateFirstName(final String firstName,
                                    final MyList<String> errorList) {
-        int maxLength = 50;
+        final int maxLength = 50;
 
         if (firstName.isEmpty() || firstName.length() > maxLength) {
             errorList.add("First name must be 1 - 50 characters long.");
@@ -76,7 +76,7 @@ public class PersonValidator {
 
     private static void validateLastName(final String lastName,
                                          final MyList<String> errorList) {
-        int maxLength = 50;
+        final int maxLength = 50;
 
         if (lastName.isEmpty() || lastName.length() > maxLength) {
             errorList.add("Last name must be 1 - 50 characters long.");
@@ -92,7 +92,7 @@ public class PersonValidator {
 
     private static void validateAge(final int age,
                                     final MyList<String> errorList) {
-        int maxAge = 150;
+        final int maxAge = 150;
 
         if (age < 0 || age > maxAge) {
             errorList.add("Age must be between 0 and 150.");
