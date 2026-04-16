@@ -1,12 +1,13 @@
 package fi.tuni.tamk.tiko.wahalailkka.controller;
 
-import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
 import fi.tuni.tamk.tiko.wahalailkka.repository.PersonRepository;
 import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidator.
         validatePersonData;
+import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidator.
+        validatePersonId;
 
 import java.util.Optional;
 
@@ -22,8 +23,8 @@ import java.util.Optional;
 public class PersonController {
     /** Repository used for storing and managing persons. */
     private final PersonRepository personRepository;
-    /** Stores validation error messages */
-    private final MyList<String> validationErrors = new MyArrayList<>();
+    /** Message displayed when Person with given ID is not found */
+    private final String notFoundMsg = "Person not found with ID: ";
 
     /**
      * Constructs a new PersonController with the given repository.
@@ -47,7 +48,7 @@ public class PersonController {
      * @return a {@link PersonResult} containing:
      * <ul>
      *     <li>the created person if successful</li>
-     *     <li>validation errors if input is invalid</li>
+     *     <li>validation errors if the input data is invalid</li>
      * </ul>
      */
     public PersonResult createPerson(final String firstName,
@@ -76,21 +77,44 @@ public class PersonController {
 
     /**
      * Finds a person by their ID.
+     * <p>
+     * The given ID is validated before querying the repository. If the ID is
+     * invalid, the result contains validation errors. If the ID is valid but no
+     * matching person exists, the result contains a repository error message.
      *
-     * @param id the ID of the person
-     * @return an {@link Optional} containing the found person,
-     *         or empty if not found
+     * @param id the ID of the person to find
+     * @return a {@link PersonResult} containing:
+     * <ul>
+     *     <li>the found person if successful</li>
+     *     <li>validation errors if the ID is invalid</li>
+     *     <li>an error message if no person with the given ID exists</li>
+     * </ul>
      */
-    public Optional<Person> findPersonById(final int id) {
-        return personRepository.findById(id);
+    public PersonResult findPersonById(final int id) {
+        MyList<String> validationErrors = validatePersonId(id);
+
+        if (validationErrors.size() == 0) {
+            Optional<Person> person = personRepository.findById(id);
+            if (person.isEmpty()) {
+                return new PersonResult(false, null,
+                        validationErrors, notFoundMsg + id);
+            } else {
+                return new PersonResult(true, person.get(),
+                        validationErrors, null);
+            }
+        } else {
+            return new PersonResult(false, null,
+                    validationErrors, null);
+        }
     }
 
     /**
      * Updates a person identified by the given ID.
      * <p>
-     * The input data is first validated. If validation fails, the result
-     * contains validation errors. If validation succeeds but no person with
-     * the given ID exists, the result contains a repository error message.
+     * The given ID and input data are validated before updating. If validation
+     * fails, the result contains validation errors. If validation succeeds but
+     * no person with the given ID exists, the result contains a repository
+     * error message.
      *
      * @param id the ID of the person to update
      * @param firstName the new first name
@@ -99,24 +123,24 @@ public class PersonController {
      * @return a {@link PersonResult} containing:
      * <ul>
      *     <li>the updated person if successful</li>
-     *     <li>validation errors if input is invalid</li>
-     *     <li>an error message if the person was not found</li>
+     *     <li>validation errors if the ID or input data is invalid</li>
+     *     <li>an error message if no person with the given ID exists</li>
      * </ul>
      */
     public PersonResult updatePersonById(final int id,
                                          final String firstName,
                                          final String lastName,
                                          final int age) {
+        MyList<String> validationErrors = validatePersonId(id);
         PersonData newPersonData = new PersonData(firstName, lastName, age);
-        MyList<String> validationErrors = validatePersonData(newPersonData);
+        validationErrors.addAll(validatePersonData(newPersonData));
 
         if (validationErrors.size() == 0) {
             Optional<Person> updatedPerson = personRepository.updateById(id,
                     newPersonData);
             if (updatedPerson.isEmpty()) {
                 return new PersonResult(false, null,
-                        validationErrors,
-                        "Person not found with ID: " + id);
+                        validationErrors, notFoundMsg + id);
             } else {
                 return new PersonResult(true, updatedPerson.get(),
                         validationErrors, null);
@@ -129,12 +153,34 @@ public class PersonController {
 
     /**
      * Deletes a person by their ID.
+     * <p>
+     * The given ID is validated before deleting. If the ID is invalid, the
+     * result contains validation errors. If the ID is valid but no matching
+     * person exists, the result contains a repository error message.
      *
      * @param id the ID of the person to delete
-     * @return an {@link Optional} containing the deleted person,
-     *         or empty if not found
+     * @return a {@link PersonResult} containing:
+     * <ul>
+     *     <li>the deleted person if successful</li>
+     *     <li>validation errors if the ID is invalid</li>
+     *     <li>an error message if no person with the given ID exists</li>
+     * </ul>
      */
-    public Optional<Person> deletePersonById(final int id) {
-        return personRepository.deleteById(id);
+    public PersonResult deletePersonById(final int id) {
+        MyList<String> validationErrors = validatePersonId(id);
+
+        if (validationErrors.size() == 0) {
+            Optional<Person> deletedPerson = personRepository.deleteById(id);
+            if (deletedPerson.isEmpty()) {
+                return new PersonResult(false, null,
+                        validationErrors, notFoundMsg + id);
+            } else {
+                return new PersonResult(true, deletedPerson.get(),
+                        validationErrors, null);
+            }
+        } else {
+            return new PersonResult(false, null,
+                    validationErrors, null);
+        }
     }
 }
