@@ -250,16 +250,9 @@ public class Cli {
             String stringId = scanner.nextLine().trim();
 
             try {
-                int id = Integer.parseInt(stringId);
-
-                if (id > 0) {
-                    return id;
-                } else {
-                    System.out.println("ID must be a positive integer.");
-                }
+                return Integer.parseInt(stringId);
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. ID must be a positive "
-                        + "integer.");
+                System.out.println("Invalid input. ID must be a number.");
             }
         }
     }
@@ -270,16 +263,9 @@ public class Cli {
             String stringAge = scanner.nextLine().trim();
 
             try {
-                int age = Integer.parseInt(stringAge);
-
-                if (age >= 0) {
-                    return age;
-                } else {
-                    System.out.println("Age must be a non-negative integer.");
-                }
+                return Integer.parseInt(stringAge);
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Age must be a non-negative "
-                        + "integer.");
+                System.out.println("Invalid input. Age must be a number.");
             }
         }
     }
