@@ -1,10 +1,10 @@
 package fi.tuni.tamk.tiko.wahalailkka.ui;
 
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
+import fi.tuni.tamk.tiko.wahalailkka.controller.PersonResult;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 
-import java.util.Optional;
 import java.util.Scanner;
 
 /**
@@ -136,11 +136,8 @@ public class Cli {
         String lastName = scanner.nextLine().trim();
         int age = askForAge();
 
-        Person newPerson = controller.createPerson(firstName, lastName, age);
-
-        System.out.println();
-        System.out.println("New person created!");
-        printPersonData(newPerson);
+        PersonResult result = controller.createPerson(firstName, lastName, age);
+        printPersonResult(result, "New person created!");
         waitForEnter();
     }
 
@@ -148,7 +145,7 @@ public class Cli {
         MyList<Person> personList = controller.findAllPersons();
 
         System.out.println();
-        if (personList.size() == 0) {
+        if (personList.isEmpty()) {
             System.out.println("Person list is empty.");
         } else {
             for (int i = 0; i < personList.size(); i++) {
@@ -156,71 +153,42 @@ public class Cli {
                 printPersonData(person);
             }
         }
+
         waitForEnter();
     }
 
     private void find() {
         int id = askForId();
 
-        Optional<Person> optionalPerson = controller.findPersonById(id);
-
-        System.out.println();
-        optionalPerson.ifPresentOrElse(
-                this::printPersonData,
-                () -> System.out.println("Person NOT found with ID: " + id));
-
+        PersonResult result = controller.findPersonById(id);
+        printPersonResult(result, null);
         waitForEnter();
     }
 
     private void update() {
         int id = askForId();
 
-        Optional<Person> optionalPerson = controller.findPersonById(id);
+        System.out.println();
+        System.out.println("Enter new values:");
+        System.out.println();
+        System.out.print("Enter person first name: ");
+        String firstName = scanner.nextLine().trim();
+        System.out.print("Enter person last name: ");
+        String lastName = scanner.nextLine().trim();
+        int age = askForAge();
 
-        if (optionalPerson.isPresent()) {
-            System.out.println();
-            System.out.println("Enter new values:");
-            System.out.println();
-            System.out.print("Enter person first name: ");
-            String firstName = scanner.nextLine().trim();
-            System.out.print("Enter person last name: ");
-            String lastName = scanner.nextLine().trim();
-            int age = askForAge();
-
-            Optional<Person> optionalUpdated = controller.updatePersonById(id,
-                    firstName, lastName, age);
-
-            if (optionalUpdated.isPresent()) {
-                System.out.println();
-                System.out.println("Person data updated!");
-                printPersonData(optionalUpdated.get());
-
-                waitForEnter();
-            }
-        } else {
-            System.out.println();
-            System.out.println("Person NOT found with ID: " + id);
-            waitForEnter();
-        }
+        PersonResult result = controller.updatePersonById(id, firstName,
+                lastName, age);
+        printPersonResult(result, "Person data updated!");
+        waitForEnter();
     }
 
     private void delete() {
         int id = askForId();
 
-        Optional<Person> optionalDeleted = controller.deletePersonById(id);
-
-        if (optionalDeleted.isPresent()) {
-            System.out.println();
-            System.out.println("Person data deleted!");
-            System.out.print("DELETED: ");
-            printPersonData(optionalDeleted.get());
-
-            waitForEnter();
-        } else {
-            System.out.println();
-            System.out.println("Person NOT found with ID: " + id);
-            waitForEnter();
-        }
+        PersonResult result = controller.deletePersonById(id);
+        printPersonResult(result, "Person data deleted!");
+        waitForEnter();
     }
 
     private void help() {
@@ -235,6 +203,24 @@ public class Cli {
         isRunning = false;
     }
 
+    private void printPersonResult(final PersonResult result,
+                                   final String operationMsg) {
+        System.out.println();
+        if (result.isSuccess()) {
+            if (operationMsg != null) {
+                System.out.println(operationMsg);
+            }
+            printPersonData(result.person());
+        } else {
+            if (result.repositoryError() != null) {
+                System.out.println(result.repositoryError());
+            } else {
+                printValidationErrors(result.validationErrors());
+            }
+        }
+        System.out.println();
+    }
+
     private void printPersonData(final Person person) {
         System.out.printf(
                 "ID: %d | %s %s | Age: %d%n",
@@ -243,6 +229,12 @@ public class Cli {
                 person.lastName(),
                 person.age()
         );
+    }
+
+    private void printValidationErrors(final MyList<String> errorList) {
+        for (int i = 0; i < errorList.size(); i++) {
+            System.out.println(errorList.get(i));
+        }
     }
 
     private void waitForEnter() {
