@@ -7,6 +7,17 @@ package fi.tuni.tamk.tiko.wahalailkka.datastructure;
  */
 public interface MyList<T> {
     /**
+     * Adds all elements from the given list to this list.
+     *
+     * @param otherList the list whose elements are to be added
+     */
+    default void addAll(MyList<T> otherList) {
+        for (int i = 0; i < otherList.size(); i++) {
+            this.add(otherList.get(i));
+        }
+    }
+
+    /**
      * Adds an element to the end of the list.
      *
      * @param element the element to be added
