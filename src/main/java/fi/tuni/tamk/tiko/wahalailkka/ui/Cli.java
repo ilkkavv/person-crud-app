@@ -4,6 +4,7 @@ import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonResult;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
+import fi.tuni.tamk.tiko.wahalailkka.repository.CsvRepositoryException;
 
 import java.util.Scanner;
 
@@ -77,8 +78,10 @@ public class Cli {
             try {
                 showMenu();
                 handleCommand();
-            } catch (Exception e) {
+            } catch (CsvRepositoryException e) {
                 System.err.println(e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Unexpected error.");
             }
         }
     }
@@ -218,7 +221,6 @@ public class Cli {
                 printValidationErrors(result.validationErrors());
             }
         }
-        System.out.println();
     }
 
     private void printPersonData(final Person person) {
