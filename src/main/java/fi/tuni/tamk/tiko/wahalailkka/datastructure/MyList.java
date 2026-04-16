@@ -18,6 +18,15 @@ public interface MyList<T> {
     }
 
     /**
+     * Returns true if this list contains no elements.
+     *
+     * @return true if the list is empty, false otherwise
+     */
+    default boolean isEmpty() {
+        return this.size() == 0;
+    }
+
+    /**
      * Adds an element to the end of the list.
      *
      * @param element the element to be added
