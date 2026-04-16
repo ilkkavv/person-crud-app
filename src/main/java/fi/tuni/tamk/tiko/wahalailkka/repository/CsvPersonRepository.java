@@ -187,7 +187,8 @@ public class CsvPersonRepository implements PersonRepository {
                 readPersonsFromCsv();
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to initialize CSV file!");
+            throw new CsvRepositoryException("Failed to initialize CSV file!",
+                    e);
         }
     }
 
@@ -201,8 +202,8 @@ public class CsvPersonRepository implements PersonRepository {
                     person.age()));
             writer.newLine();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to write Person data to CSV "
-                    + "file!");
+            throw new CsvRepositoryException("Failed to write Person data to "
+                    + "CSV file!", e);
         }
     }
 
@@ -227,7 +228,8 @@ public class CsvPersonRepository implements PersonRepository {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to read from CSV file!");
+            throw new CsvRepositoryException("Failed to read from CSV file!",
+                    e);
         }
     }
 
@@ -246,8 +248,8 @@ public class CsvPersonRepository implements PersonRepository {
                 writer.newLine();
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to write Person list to CSV "
-                    + "file!");
+            throw new CsvRepositoryException("Failed to write Person list to "
+                    + "CSV file!", e);
         }
     }
 }
