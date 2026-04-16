@@ -39,6 +39,25 @@ public class PersonValidator {
         return validationErrors;
     }
 
+    /**
+     * Validates the given person ID.
+     * <p>
+     * The ID must be a positive integer (greater than 0).
+     *
+     * @param id the ID to validate
+     * @return a {@link MyList} containing validation error messages;
+     *         the list is empty if the ID is valid
+     */
+    public static MyList<String> validatePersonId(final int id) {
+        MyList<String> validationErrors = new MyArrayList<>();
+
+        if (id < 1) {
+            validationErrors.add("Person ID must be a positive integer.");
+        }
+
+        return validationErrors;
+    }
+
     private static void validateFirstName(final String firstName,
                                    final MyList<String> errorList) {
         int maxLength = 50;
