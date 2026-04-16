@@ -72,7 +72,10 @@ public class CsvPersonRepository implements PersonRepository {
     @Override
     public MyList<Person> findAll() {
         readPersonsFromCsv();
-        return personList;
+
+        MyList<Person> newPersonList = new MyArrayList<>();
+        newPersonList.addAll(personList);
+        return newPersonList;
     }
 
     /**
