@@ -59,7 +59,7 @@ public class PersonController {
         if (validationErrors.isEmpty()) {
             return PersonResult.success(personRepository.create(newPersonData));
         } else {
-            return PersonResult.validationError(validationErrors);
+            return PersonResult.validationFailure(validationErrors);
         }
     }
 
@@ -98,7 +98,7 @@ public class PersonController {
                 return PersonResult.success(person.get());
             }
         } else {
-            return PersonResult.validationError(validationErrors);
+            return PersonResult.validationFailure(validationErrors);
         }
     }
 
@@ -138,7 +138,7 @@ public class PersonController {
                 return PersonResult.success(updatedPerson.get());
             }
         } else {
-            return PersonResult.validationError(validationErrors);
+            return PersonResult.validationFailure(validationErrors);
         }
     }
 
@@ -168,7 +168,7 @@ public class PersonController {
                 return PersonResult.success(deletedPerson.get());
             }
         } else {
-            return PersonResult.validationError(validationErrors);
+            return PersonResult.validationFailure(validationErrors);
         }
     }
 }
