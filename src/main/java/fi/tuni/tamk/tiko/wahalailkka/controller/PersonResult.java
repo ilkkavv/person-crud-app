@@ -39,4 +39,20 @@ public record PersonResult(boolean isSuccess, Person person,
         return new PersonResult(true, person,
                 new MyArrayList<String>(), null);
     }
+
+    /**
+     * Creates a result representing validation failure.
+     * <p>
+     * This method should be used when input validation fails. The returned
+     * result contains the validation error messages and no person or
+     * repository error.
+     *
+     * @param validationErrors a list of validation error messages
+     * @return a failed {@link PersonResult} containing validation errors
+     */
+    public static PersonResult validationError(
+            final MyList<String> validationErrors) {
+        return new PersonResult(false, null,
+                validationErrors, null);
+    }
 }
