@@ -92,11 +92,8 @@ public class PersonController {
 
         if (validationErrors.isEmpty()) {
             Optional<Person> person = personRepository.findById(id);
-            if (person.isEmpty()) {
-                return PersonResult.notFound(notFoundMsg + id);
-            } else {
-                return PersonResult.success(person.get());
-            }
+            return person.map(PersonResult::success)
+                    .orElseGet(() -> PersonResult.notFound(notFoundMsg + id));
         } else {
             return PersonResult.validationFailure(validationErrors);
         }
@@ -132,11 +129,8 @@ public class PersonController {
         if (validationErrors.isEmpty()) {
             Optional<Person> updatedPerson = personRepository.updateById(id,
                     newPersonData);
-            if (updatedPerson.isEmpty()) {
-                return PersonResult.notFound(notFoundMsg + id);
-            } else {
-                return PersonResult.success(updatedPerson.get());
-            }
+            return updatedPerson.map(PersonResult::success)
+                    .orElseGet(() -> PersonResult.notFound(notFoundMsg + id));
         } else {
             return PersonResult.validationFailure(validationErrors);
         }
@@ -162,11 +156,8 @@ public class PersonController {
 
         if (validationErrors.isEmpty()) {
             Optional<Person> deletedPerson = personRepository.deleteById(id);
-            if (deletedPerson.isEmpty()) {
-                return PersonResult.notFound(notFoundMsg + id);
-            } else {
-                return PersonResult.success(deletedPerson.get());
-            }
+            return deletedPerson.map(PersonResult::success)
+                    .orElseGet(() -> PersonResult.notFound(notFoundMsg + id));
         } else {
             return PersonResult.validationFailure(validationErrors);
         }
