@@ -57,12 +57,9 @@ public class PersonController {
         MyList<String> validationErrors = validatePersonData(newPersonData);
 
         if (validationErrors.isEmpty()) {
-            return new PersonResult(true,
-                    personRepository.create(newPersonData),
-                    validationErrors, null);
+            return PersonResult.success(personRepository.create(newPersonData));
         } else {
-            return new PersonResult(false, null,
-                    validationErrors, null);
+            return PersonResult.validationError(validationErrors);
         }
     }
 
@@ -96,15 +93,12 @@ public class PersonController {
         if (validationErrors.isEmpty()) {
             Optional<Person> person = personRepository.findById(id);
             if (person.isEmpty()) {
-                return new PersonResult(false, null,
-                        validationErrors, notFoundMsg + id);
+                return PersonResult.notFound(notFoundMsg + id);
             } else {
-                return new PersonResult(true, person.get(),
-                        validationErrors, null);
+                return PersonResult.success(person.get());
             }
         } else {
-            return new PersonResult(false, null,
-                    validationErrors, null);
+            return PersonResult.validationError(validationErrors);
         }
     }
 
@@ -139,15 +133,12 @@ public class PersonController {
             Optional<Person> updatedPerson = personRepository.updateById(id,
                     newPersonData);
             if (updatedPerson.isEmpty()) {
-                return new PersonResult(false, null,
-                        validationErrors, notFoundMsg + id);
+                return PersonResult.notFound(notFoundMsg + id);
             } else {
-                return new PersonResult(true, updatedPerson.get(),
-                        validationErrors, null);
+                return PersonResult.success(updatedPerson.get());
             }
         } else {
-            return new PersonResult(false, null,
-                    validationErrors, null);
+            return PersonResult.validationError(validationErrors);
         }
     }
 
@@ -172,15 +163,12 @@ public class PersonController {
         if (validationErrors.isEmpty()) {
             Optional<Person> deletedPerson = personRepository.deleteById(id);
             if (deletedPerson.isEmpty()) {
-                return new PersonResult(false, null,
-                        validationErrors, notFoundMsg + id);
+                return PersonResult.notFound(notFoundMsg + id);
             } else {
-                return new PersonResult(true, deletedPerson.get(),
-                        validationErrors, null);
+                return PersonResult.success(deletedPerson.get());
             }
         } else {
-            return new PersonResult(false, null,
-                    validationErrors, null);
+            return PersonResult.validationError(validationErrors);
         }
     }
 }
