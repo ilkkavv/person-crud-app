@@ -55,4 +55,20 @@ public record PersonResult(boolean isSuccess, Person person,
         return new PersonResult(false, null,
                 validationErrors, null);
     }
+
+    /**
+     * Creates a result representing a repository error where a person
+     * was not found.
+     * <p>
+     * This method should be used when an operation fails because no
+     * entity exists with the given identifier. The returned result
+     * contains an error message and no person or validation errors.
+     *
+     * @param notFoundMsg the error message describing the failure
+     * @return a failed {@link PersonResult} containing the error message
+     */
+    public static PersonResult notFound(final String notFoundMsg) {
+        return new PersonResult(false, null,
+                new MyArrayList<String>(), notFoundMsg);
+    }
 }
