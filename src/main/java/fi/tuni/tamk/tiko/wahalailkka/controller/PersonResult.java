@@ -50,7 +50,7 @@ public record PersonResult(boolean isSuccess, Person person,
      * @param validationErrors a list of validation error messages
      * @return a failed {@link PersonResult} containing validation errors
      */
-    public static PersonResult validationError(
+    public static PersonResult validationFailure(
             final MyList<String> validationErrors) {
         return new PersonResult(false, null,
                 validationErrors, null);
