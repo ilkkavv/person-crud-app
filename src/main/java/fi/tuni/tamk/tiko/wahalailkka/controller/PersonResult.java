@@ -1,5 +1,6 @@
 package fi.tuni.tamk.tiko.wahalailkka.controller;
 
+import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 
@@ -24,4 +25,18 @@ import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 public record PersonResult(boolean isSuccess, Person person,
                            MyList<String> validationErrors,
                            String repositoryError) {
+    /**
+     * Creates a successful result containing the given person.
+     * <p>
+     * This method should be used when an operation completes successfully.
+     * The returned result contains the created, found, or updated person,
+     * and no validation or repository errors.
+     *
+     * @param person the resulting person
+     * @return a successful {@link PersonResult} containing the person
+     */
+    public static PersonResult success(final Person person) {
+        return new PersonResult(true, person,
+                new MyArrayList<String>(), null);
+    }
 }
