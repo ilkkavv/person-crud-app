@@ -71,10 +71,10 @@ public class PersonController {
     /**
      * Retrieves all persons from the repository.
      *
-     * @return a list containing all persons
+     * @return a {@link PersonListResult} containing the list of all persons
      */
-    public MyList<Person> findAllPersons() {
-        return personRepository.findAll();
+    public PersonListResult findAllPersons() {
+        return PersonListResult.success(personRepository.findAll());
     }
 
     /**
