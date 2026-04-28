@@ -1,5 +1,6 @@
 package fi.tuni.tamk.tiko.wahalailkka.controller;
 
+import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
@@ -97,6 +98,27 @@ public class PersonController {
         } else {
             return PersonResult.validationFailure(validationErrors);
         }
+    }
+
+    /**
+     * Searches for persons whose first or last name matches the given input.
+     * <p>
+     * The input is lightly validated to prevent unnecessary repository calls.
+     * If the input is {@code null} or empty after trimming, an empty result
+     * list is returned.
+     * <p>
+     * The actual search logic is delegated to the repository layer.
+     *
+     * @param searchInput the text used to search for matching persons
+     * @return a list of persons matching the given input;
+     *         an empty list if the input is invalid or no matches are found
+     */
+    public MyList<Person> searchPersonsByName(final String searchInput) {
+        if (searchInput == null || searchInput.trim().isEmpty()) {
+            return new MyArrayList<>();
+        }
+
+        return personRepository.searchByName(searchInput);
     }
 
     /**
