@@ -38,6 +38,15 @@ public interface PersonRepository {
     Optional<Person> findById(int id);
 
     /**
+     * Searches for persons whose first or last name contains the given input.
+     *
+     * @param searchInput the text used to search for matching persons
+     * @return a list of persons whose name matches the given input;
+     *         an empty list if no matches are found
+     */
+    MyList<Person> searchByName(String searchInput);
+
+    /**
      * Updates an existing person by id.
      *
      * @param id the id of the person to update
