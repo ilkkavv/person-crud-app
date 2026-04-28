@@ -1,5 +1,6 @@
 package fi.tuni.tamk.tiko.wahalailkka.validation;
 
+import fi.tuni.tamk.tiko.wahalailkka.controller.PersonListResult;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
@@ -11,6 +12,8 @@ public final class PersonValidator {
     private static final String NAME_PATTERN = "^[A-ZÅÄÖ][a-zåäö]+"
             + "(-[A-ZÅÄÖ][a-zåäö]+)*$";
     private static final Pattern NAME_REGEX = Pattern.compile(NAME_PATTERN);
+
+    private static final int MAX_AGE = 150;
 
     private PersonValidator() { }
 
@@ -58,6 +61,41 @@ public final class PersonValidator {
         return validationErrors;
     }
 
+    /**
+     * Validates that the given age range is valid.
+     * <p>
+     * The following rules are checked:
+     * <ul>
+     *     <li>minimum value must be at least 0</li>
+     *     <li>maximum value must not exceed the allowed maximum</li>
+     *     <li>maximum value must be greater than or equal to minimum</li>
+     * </ul>
+     *
+     * @param min the minimum age value
+     * @param max the maximum age value
+     * @return a list of validation error messages; empty if the range is valid
+     */
+    public static MyList<String> validateAgeRange(final int min,
+                                                  final int max) {
+        MyList<String> validationErrors = new MyArrayList<>();
+
+        if (min < 0) {
+            validationErrors.add("Minimum value must be at least 0.");
+        }
+
+        if (max > MAX_AGE) {
+            validationErrors.add("Maximum value must not exceed " + MAX_AGE
+                    + ".");
+        }
+
+        if (max < min) {
+            validationErrors.add(
+                    "Maximum value must be at least the minimum value.");
+        }
+
+        return validationErrors;
+    }
+
     private static void validateFirstName(final String firstName,
                                    final MyList<String> errorList) {
         final int maxLength = 50;
@@ -92,9 +130,7 @@ public final class PersonValidator {
 
     private static void validateAge(final int age,
                                     final MyList<String> errorList) {
-        final int maxAge = 150;
-
-        if (age < 0 || age > maxAge) {
+        if (age < 0 || age > MAX_AGE) {
             errorList.add("Age must be between 0 and 150.");
         }
     }
