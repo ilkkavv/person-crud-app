@@ -30,6 +30,10 @@ public class Cli {
     private static final String CMD_LIST = "list";
     private static final String CMD_F = "f";
     private static final String CMD_FIND = "find";
+    private static final String CMD_N = "n";
+    private static final String CMD_NAME = "name";
+    private static final String CMD_A = "a";
+    private static final String CMD_AGE = "age";
     private static final String CMD_U = "u";
     private static final String CMD_UPDATE = "update";
     private static final String CMD_D = "d";
@@ -92,6 +96,8 @@ public class Cli {
         System.out.println("(C)reate new person");
         System.out.println("(L)ist all persons");
         System.out.println("(F)ind person by ID");
+        System.out.println("Search person by (N)ame");
+        System.out.println("Search person by (A)ge");
         System.out.println("(U)pdate person data by ID");
         System.out.println("(D)elete person by ID");
         System.out.println("(H)elp");
@@ -112,6 +118,12 @@ public class Cli {
                 break;
             case CMD_F, CMD_FIND:
                 find();
+                break;
+            case CMD_N, CMD_NAME:
+                searchByName();
+                break;
+            case CMD_A, CMD_AGE:
+                searchByAge();
                 break;
             case CMD_U, CMD_UPDATE:
                 update();
