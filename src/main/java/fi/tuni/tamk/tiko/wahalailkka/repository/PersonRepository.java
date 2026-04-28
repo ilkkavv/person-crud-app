@@ -47,6 +47,18 @@ public interface PersonRepository {
     MyList<Person> searchByName(String searchInput);
 
     /**
+     * Searches for persons whose age falls within the given range.
+     * <p>
+     * Both minimum and maximum values are inclusive.
+     *
+     * @param min the minimum age (inclusive)
+     * @param max the maximum age (inclusive)
+     * @return a list of persons whose age is within the given range;
+     *         an empty list if no matches are found
+     */
+    MyList<Person> searchByAge(int min, int max);
+
+    /**
      * Updates an existing person by id.
      *
      * @param id the id of the person to update
