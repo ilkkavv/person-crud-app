@@ -4,6 +4,7 @@ import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
+import fi.tuni.tamk.tiko.wahalailkka.util.PersonFilter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -93,6 +94,39 @@ public class CsvPersonRepository implements PersonRepository {
             }
         }
         return Optional.empty();
+    }
+
+    /**
+     * Searches for persons whose first or last name matches the given input.
+     * <p>
+     * The data is first read from the CSV file to ensure up-to-date results.
+     * The filtering logic is delegated to {@link PersonFilter}.
+     *
+     * @param searchInput the text used to search for matching persons
+     * @return a list of persons matching the given input;
+     *         an empty list if no matches are found or input is invalid
+     */
+    @Override
+    public MyList<Person> searchByName(final String searchInput) {
+        readPersonsFromCsv();
+        return PersonFilter.filterByName(personList, searchInput);
+    }
+
+    /**
+     * Searches for persons whose age falls within the given range.
+     * <p>
+     * The data is first read from the CSV file to ensure up-to-date results.
+     * The filtering logic is delegated to {@link PersonFilter}.
+     *
+     * @param min the minimum age (inclusive)
+     * @param max the maximum age (inclusive)
+     * @return a list of persons whose age is within the given range;
+     *         an empty list if no matches are found
+     */
+    @Override
+    public MyList<Person> searchByAge(final int min, final int max) {
+        readPersonsFromCsv();
+        return PersonFilter.filterByAge(personList, min, max);
     }
 
     /**
