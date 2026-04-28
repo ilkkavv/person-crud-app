@@ -5,10 +5,14 @@ import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
 import fi.tuni.tamk.tiko.wahalailkka.repository.PersonRepository;
+import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidator;
+
 import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidator.
         validatePersonData;
 import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidator.
         validatePersonId;
+import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidator.
+        validateAgeRange;
 
 import java.util.Optional;
 
@@ -119,6 +123,32 @@ public class PersonController {
         }
 
         return personRepository.searchByName(searchInput);
+    }
+
+    /**
+     * Searches for persons whose age falls within the given range.
+     * <p>
+     * The input range is validated before performing the search. If validation
+     * fails, the result contains validation error messages. Otherwise, the
+     * search is delegated to the repository layer.
+     *
+     * @param min the minimum age (inclusive)
+     * @param max the maximum age (inclusive)
+     * @return a {@link PersonListResult} containing:
+     * <ul>
+     *     <li>the list of matching persons if the search is successful</li>
+     *     <li>validation errors if the given range is invalid</li>
+     * </ul>
+     */
+    public PersonListResult searchPersonsByAge(final int min, final int max) {
+        MyList<String> validationErrors = validateAgeRange(min, max);
+
+        if (validationErrors.isEmpty()) {
+            return PersonListResult.success(personRepository.searchByAge(
+                    min, max));
+        } else {
+            return PersonListResult.failure(validationErrors);
+        }
     }
 
     /**
