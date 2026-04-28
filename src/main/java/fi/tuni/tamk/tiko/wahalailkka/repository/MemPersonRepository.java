@@ -94,6 +94,20 @@ public class MemPersonRepository implements PersonRepository {
         return matches;
     }
 
+    @Override
+    public MyList<Person> searchByAge(final int min, final int max) {
+        MyList<Person> matches = new MyArrayList<>();
+
+        for (int i = 0; i < personList.size(); i++) {
+            Person person = personList.get(i);
+            if (person.age() >= min && person.age() <= max) {
+                matches.add(person);
+            }
+        }
+
+        return matches;
+    }
+
     /**
      * Updates a person identified by ID.
      * <p>
