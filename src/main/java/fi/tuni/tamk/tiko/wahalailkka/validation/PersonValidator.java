@@ -1,6 +1,5 @@
 package fi.tuni.tamk.tiko.wahalailkka.validation;
 
-import fi.tuni.tamk.tiko.wahalailkka.controller.PersonListResult;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
