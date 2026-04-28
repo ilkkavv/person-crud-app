@@ -107,22 +107,26 @@ public class PersonController {
     /**
      * Searches for persons whose first or last name matches the given input.
      * <p>
-     * The input is lightly validated to prevent unnecessary repository calls.
-     * If the input is {@code null} or empty after trimming, an empty result
-     * list is returned.
-     * <p>
-     * The actual search logic is delegated to the repository layer.
+     * The input is validated before performing the search. If the input is
+     * {@code null} or empty after trimming, the result contains validation
+     * error. Otherwise, the search is delegated to the repository.
      *
      * @param searchInput the text used to search for matching persons
-     * @return a list of persons matching the given input;
-     *         an empty list if the input is invalid or no matches are found
+     * @return a {@link PersonListResult} containing:
+     * <ul>
+     *     <li>the list of matching persons if the search is successful</li>
+     *     <li>validation error if the input is invalid</li>
+     * </ul>
      */
-    public MyList<Person> searchPersonsByName(final String searchInput) {
+    public PersonListResult searchPersonsByName(final String searchInput) {
         if (searchInput == null || searchInput.trim().isEmpty()) {
-            return new MyArrayList<>();
+            MyList<String> validationErrors = new MyArrayList<>();
+            validationErrors.add("Search input cannot be empty.");
+            return PersonListResult.failure(validationErrors);
         }
 
-        return personRepository.searchByName(searchInput);
+        return PersonListResult.success(personRepository.searchByName(
+                searchInput));
     }
 
     /**
