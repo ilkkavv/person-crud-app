@@ -208,6 +208,7 @@ public class Cli {
 
                 printPersonListResult(result);
             } catch (NumberFormatException e) {
+                System.out.println();
                 System.out.println("Invalid input. Both values must be"
                         + " integers.");
             }
