@@ -12,7 +12,7 @@ import fi.tuni.tamk.tiko.wahalailkka.model.Person;
  * repository implementations. All methods are stateless and operate only on
  * the given input data.
  */
-public class PersonFilter {
+public final class PersonFilter {
     private PersonFilter() { }
 
     /**
