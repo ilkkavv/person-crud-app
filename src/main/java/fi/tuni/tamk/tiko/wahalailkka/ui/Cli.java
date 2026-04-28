@@ -146,17 +146,9 @@ public class Cli {
     }
 
     private void list() {
-        MyList<Person> personList = controller.findAllPersons();
+        PersonListResult result = controller.findAllPersons();
 
-        System.out.println();
-        if (personList.isEmpty()) {
-            System.out.println("Person list is empty.");
-        } else {
-            for (int i = 0; i < personList.size(); i++) {
-                Person person = personList.get(i);
-                printPersonData(person);
-            }
-        }
+        printPersonListResult(result);
 
         waitForEnter();
     }
