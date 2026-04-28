@@ -5,7 +5,6 @@ import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
 import fi.tuni.tamk.tiko.wahalailkka.repository.PersonRepository;
-import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidator;
 
 import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidator.
         validatePersonData;
