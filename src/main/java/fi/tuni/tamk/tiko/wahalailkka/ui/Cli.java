@@ -178,6 +178,32 @@ public class Cli {
         waitForEnter();
     }
 
+    private void searchByAge() {
+        PersonListResult result = null;
+
+        do {
+            System.out.println();
+            System.out.print("Enter minimum age: ");
+            String stringMin = scanner.nextLine().trim();
+            System.out.print("Enter maximum age: ");
+            String stringMax = scanner.nextLine().trim();
+
+            try {
+                int min = Integer.parseInt(stringMin);
+                int max = Integer.parseInt(stringMax);
+
+                result = controller.searchPersonsByAge(min, max);
+
+                printPersonListResult(result);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Both values must be"
+                        + " integers.");
+            }
+        } while (result == null || !result.isSuccess());
+
+        waitForEnter();
+    }
+
     private void update() {
         int id = askForId();
 
