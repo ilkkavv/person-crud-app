@@ -72,6 +72,19 @@ public class MemPersonRepository implements PersonRepository {
         return Optional.empty();
     }
 
+    /**
+     * Searches for persons whose first or last name contains the given input.
+     * <p>
+     * The search is performed as a case-insensitive substring match against
+     * both first and last names.
+     * <p>
+     * If the given input is {@code null} or empty after trimming, an empty
+     * result list is returned.
+     *
+     * @param searchInput the text used to search for matching persons
+     * @return a list of persons whose first or last name contains the given
+     *         input; an empty list if no matches are found or input is invalid
+     */
     @Override
     public MyList<Person> searchByName(final String searchInput) {
         MyList<Person> matches = new MyArrayList<>();
@@ -94,6 +107,17 @@ public class MemPersonRepository implements PersonRepository {
         return matches;
     }
 
+    /**
+     * Searches for persons whose age falls within the given range.
+     * <p>
+     * Both minimum and maximum values are inclusive. This method assumes that
+     * the provided range has been validated by the caller.
+     *
+     * @param min the minimum age (inclusive)
+     * @param max the maximum age (inclusive)
+     * @return a list of persons whose age is within the given range;
+     *         an empty list if no matches are found
+     */
     @Override
     public MyList<Person> searchByAge(final int min, final int max) {
         MyList<Person> matches = new MyArrayList<>();
