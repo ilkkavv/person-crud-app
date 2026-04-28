@@ -1,6 +1,7 @@
 package fi.tuni.tamk.tiko.wahalailkka.ui;
 
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
+import fi.tuni.tamk.tiko.wahalailkka.controller.PersonListResult;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonResult;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
@@ -168,6 +169,23 @@ public class Cli {
         waitForEnter();
     }
 
+    private void searchByName() {
+        PersonListResult result;
+
+        do {
+            System.out.println();
+            System.out.print("Search name: ");
+            String searchInput = scanner.nextLine().trim();
+
+            result = controller.searchPersonsByName(searchInput);
+
+            printPersonListResult(result);
+
+        } while (!result.isSuccess());
+
+        waitForEnter();
+    }
+
     private void update() {
         int id = askForId();
 
@@ -220,6 +238,23 @@ public class Cli {
             } else {
                 printValidationErrors(result.validationErrors());
             }
+        }
+    }
+
+    private void printPersonListResult(final PersonListResult result) {
+        System.out.println();
+        if (result.isSuccess()) {
+            MyList<Person> personList = result.personList();
+
+            if (personList.isEmpty()) {
+                System.out.println("No persons found.");
+            } else {
+                for (int i = 0; i < personList.size(); i++) {
+                    printPersonData(personList.get(i));
+                }
+            }
+        } else {
+            printValidationErrors(result.validationErrors());
         }
     }
 
