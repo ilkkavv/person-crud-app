@@ -72,6 +72,28 @@ public class MemPersonRepository implements PersonRepository {
         return Optional.empty();
     }
 
+    @Override
+    public MyList<Person> searchByName(final String searchInput) {
+        MyList<Person> matches = new MyArrayList<>();
+
+        if (searchInput == null || searchInput.trim().isEmpty()) {
+            return matches;
+        }
+
+        String searchInputLower = searchInput.trim().toLowerCase();
+
+        for (int i = 0; i < personList.size(); i++) {
+            Person person = personList.get(i);
+            if (person.firstName().toLowerCase().contains(searchInputLower)
+                    || person.lastName().toLowerCase()
+                    .contains(searchInputLower)) {
+                matches.add(person);
+            }
+        }
+
+        return matches;
+    }
+
     /**
      * Updates a person identified by ID.
      * <p>
