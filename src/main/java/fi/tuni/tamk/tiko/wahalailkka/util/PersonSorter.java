@@ -56,9 +56,11 @@ public final class PersonSorter {
                 }
             }
 
-            Person temp = personList.get(min);
-            personList.set(min, personList.get(i));
-            personList.set(i, temp);
+            if (min != i) {
+                Person temp = personList.get(min);
+                personList.set(min, personList.get(i));
+                personList.set(i, temp);
+            }
         }
     }
 
@@ -76,7 +78,7 @@ public final class PersonSorter {
      *                       {@code false} for descending order (oldest first)
      */
     public static void sortByAge(final MyList<Person> personList,
-                                           final boolean ascendingOrder) {
+                                 final boolean ascendingOrder) {
         int size = personList.size();
 
         for (int i = 0; i < size; i++) {
@@ -94,9 +96,11 @@ public final class PersonSorter {
                 }
             }
 
-            Person temp = personList.get(min);
-            personList.set(min, personList.get(i));
-            personList.set(i, temp);
+            if (min != i) {
+                Person temp = personList.get(min);
+                personList.set(min, personList.get(i));
+                personList.set(i, temp);
+            }
         }
     }
 
