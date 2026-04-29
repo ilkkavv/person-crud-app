@@ -6,6 +6,7 @@ import fi.tuni.tamk.tiko.wahalailkka.controller.PersonResult;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.repository.CsvRepositoryException;
+import fi.tuni.tamk.tiko.wahalailkka.util.PersonSorter;
 
 import java.util.Scanner;
 
@@ -23,6 +24,8 @@ public class Cli {
     private final Scanner scanner = new Scanner(System.in);
     /** Controller used to handle person-related application logic. */
     private final PersonController controller;
+    /** List of persons used for displaying and sorting results in the CLI. */
+    private MyList<Person> currentList;
 
     private static final String CMD_C = "c";
     private static final String CMD_CREATE = "create";
@@ -42,6 +45,8 @@ public class Cli {
     private static final String CMD_HELP = "help";
     private static final String CMD_E = "e";
     private static final String CMD_EXIT = "exit";
+    private static final String CMD_1 = "1";
+    private static final String CMD_2 = "2";
 
     private static final String HELP_MSG = """
         NAME
@@ -162,7 +167,12 @@ public class Cli {
 
         printPersonListResult(result);
 
-        waitForEnter();
+        if (result.isSuccess() && result.personList().size() > 1) {
+            currentList = result.personList();
+            askForSorting();
+        } else {
+            waitForEnter();
+        }
     }
 
     private void find() {
@@ -187,7 +197,12 @@ public class Cli {
 
         } while (!result.isSuccess());
 
-        waitForEnter();
+        if (result.personList().size() > 1) {
+            currentList = result.personList();
+            askForSorting();
+        } else {
+            waitForEnter();
+        }
     }
 
     private void searchByAge() {
@@ -214,7 +229,80 @@ public class Cli {
             }
         } while (result == null || !result.isSuccess());
 
-        waitForEnter();
+        if (result.personList().size() > 1) {
+            currentList = result.personList();
+            askForSorting();
+        } else {
+            waitForEnter();
+        }
+    }
+
+    private void askForSorting() {
+        boolean sort = showChoices("Sort?", "Yes", "No (return to main menu)");
+
+        if (sort) {
+            handleSorting();
+        }
+    }
+
+    private void handleSorting() {
+        boolean sortByAge;
+        boolean sortByFirstName = false;
+        boolean sortByAscendingOrder;
+
+        sortByAge = showChoices("Sort options:", "Sort by age",
+                "Sort by name");
+
+        if (!sortByAge) {
+            sortByFirstName = showChoices("Sort options:", "Sort by first name",
+                    "Sort by last name");
+        }
+
+        sortByAscendingOrder = showChoices("Sort options:",
+                "Sort by ascending order", "Sort by descending order");
+
+        PersonListResult result;
+
+        if (sortByAge) {
+            result = controller.sortPersonsByAge(currentList,
+                    sortByAscendingOrder);
+        } else {
+            if (sortByFirstName) {
+                result = controller.sortPersonsByName(currentList,
+                        PersonSorter.NameField.FIRST_NAME,
+                        sortByAscendingOrder);
+            } else {
+                result = controller.sortPersonsByName(currentList,
+                        PersonSorter.NameField.LAST_NAME,
+                        sortByAscendingOrder);
+            }
+        }
+
+        printPersonListResult(result);
+        currentList = result.personList();
+        askForSorting();
+    }
+
+    private boolean showChoices(final String question,
+                                final String firstChoice,
+                                final String secondChoice) {
+        while (true) {
+            System.out.println();
+            System.out.println(question);
+            System.out.println();
+            System.out.println("1) " + firstChoice);
+            System.out.println("2) " + secondChoice);
+            System.out.println();
+            System.out.print("Choice: ");
+            String choice = scanner.nextLine().trim();
+
+            if (!choice.equals(CMD_1) && !choice.equals(CMD_2)) {
+                System.out.println("'" + choice + "' is not a valid choice.");
+                waitForEnter();
+            } else {
+                return choice.equals(CMD_1);
+            }
+        }
     }
 
     private void update() {
