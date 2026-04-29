@@ -11,7 +11,56 @@ import fi.tuni.tamk.tiko.wahalailkka.model.Person;
  * modify its order in-place.
  */
 public final class PersonSorter {
+    /**
+     * Defines which name field is used for name-based sorting.
+     */
+    public enum NameField {
+        FIRST_NAME,
+        LAST_NAME
+    }
+
     private PersonSorter() { }
+
+    /**
+     * Sorts the given list of persons by first or last name.
+     * <p>
+     * The sorting is performed using the selection sort algorithm and modifies
+     * the given list in-place. Name comparison is case-insensitive.
+     *
+     * @param personList the list of persons to sort
+     * @param nameField the name field used for sorting
+     * @param ascendingOrder {@code true} for ascending order,
+     *                       {@code false} for descending order
+     */
+    public static void sortByName(final MyList<Person> personList,
+                                  final NameField nameField,
+                                  final boolean ascendingOrder) {
+        int size = personList.size();
+
+        for (int i = 0; i < size; i++) {
+            int min = i;
+
+            for (int j = i + 1; j < size; j++) {
+                int comparisonResult = getName(personList.get(j), nameField)
+                        .compareTo(getName(personList.get(min),
+                                nameField));
+
+                if (ascendingOrder) {
+                    if (comparisonResult < 0) {
+                        min = j;
+                    }
+                } else {
+                    if (comparisonResult > 0) {
+                        min = j;
+                    }
+                }
+            }
+
+            Person temp = personList.get(min);
+            personList.set(min, personList.get(i));
+            personList.set(i, temp);
+        }
+    }
 
     /**
      * Sorts the given list of persons by age.
@@ -48,6 +97,15 @@ public final class PersonSorter {
             Person temp = personList.get(min);
             personList.set(min, personList.get(i));
             personList.set(i, temp);
+        }
+    }
+
+    private static String getName(final Person person,
+                                  final NameField nameField) {
+        if (nameField == NameField.FIRST_NAME) {
+            return person.firstName().toLowerCase();
+        } else {
+            return person.lastName().toLowerCase();
         }
     }
 }
