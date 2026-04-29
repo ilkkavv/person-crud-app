@@ -5,6 +5,7 @@ import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
 import fi.tuni.tamk.tiko.wahalailkka.repository.PersonRepository;
+import fi.tuni.tamk.tiko.wahalailkka.util.PersonSorter;
 
 import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidator.
         validatePersonData;
@@ -74,6 +75,48 @@ public class PersonController {
      */
     public PersonListResult findAllPersons() {
         return PersonListResult.success(personRepository.findAll());
+    }
+
+    /**
+     * Sorts the given list of persons by first or last name.
+     * <p>
+     * The given list is not modified. A copy of the list is created, sorted,
+     * and returned as part of the result.
+     *
+     * @param personList the list of persons to sort
+     * @param nameField the name field used for sorting (first or last name)
+     * @param ascendingOrder {@code true} for ascending order,
+     *                       {@code false} for descending order
+     * @return a {@link PersonListResult} containing the sorted list of persons
+     */
+    public PersonListResult sortPersonsByName(final MyList<Person> personList,
+                           final PersonSorter.NameField nameField,
+                           final boolean ascendingOrder) {
+        MyList<Person> sortedList = new MyArrayList<>();
+        sortedList.addAll(personList);
+        PersonSorter.sortByName(sortedList, nameField, ascendingOrder);
+
+        return PersonListResult.success(sortedList);
+    }
+
+    /**
+     * Sorts the given list of persons by age.
+     * <p>
+     * The given list is not modified. A copy of the list is created, sorted,
+     * and returned as part of the result.
+     *
+     * @param personList the list of persons to sort
+     * @param ascendingOrder {@code true} for ascending order (youngest first),
+     *                       {@code false} for descending order (oldest first)
+     * @return a {@link PersonListResult} containing the sorted list of persons
+     */
+    public PersonListResult sortPersonsByAge(final MyList<Person> personList,
+                                             final boolean ascendingOrder) {
+        MyList<Person> sortedList = new MyArrayList<>();
+        sortedList.addAll(personList);
+        PersonSorter.sortByAge(sortedList, ascendingOrder);
+
+        return PersonListResult.success(sortedList);
     }
 
     /**
