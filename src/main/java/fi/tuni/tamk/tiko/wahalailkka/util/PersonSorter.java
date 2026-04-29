@@ -15,7 +15,9 @@ public final class PersonSorter {
      * Defines which name field is used for name-based sorting.
      */
     public enum NameField {
+        /** Sort by person's first name. **/
         FIRST_NAME,
+        /** Sort by person's last name. **/
         LAST_NAME
     }
 
