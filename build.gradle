@@ -11,7 +11,7 @@ plugins {
     id 'checkstyle'
 }
 
-version = '1.0.0-alpha'
+version = '1.0.0-beta'
 
 repositories {
     // Use Maven Central for resolving dependencies.
