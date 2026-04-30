@@ -171,7 +171,7 @@ The architecture allows switching between different UI and repository implementa
 
 - **Data Structure**
   - Custom list implementation
-  - Used to store and manage Person objects
+  - Used to store and manage `Person` objects
   - The implementation can be easily replaced without affecting other parts of the application
 
 ### Design Principles
@@ -179,7 +179,32 @@ The architecture allows switching between different UI and repository implementa
 - Separation of concerns between layers
 - Use of interfaces to allow interchangeable implementations
 - Loose coupling between components
-- Easy to extend with new UI or repository implementations
+- Easy extensibility with new UI or repository implementations
+
+### Data Handling
+
+The application separates input data from persisted entities:
+
+- `PersonData` is used for user input and validation
+- `Person` represents the stored entity with an assigned ID
+
+The repository is responsible for assigning IDs and creating the final `Person` object.
+
+### Encapsulation
+
+The repository does not expose its internal data structures directly.  
+Instead, methods such as `findAll()` return a copy of the internal list  
+to preserve encapsulation and prevent unintended side effects.
+
+## Error Handling and Results
+
+The application uses result wrapper classes to handle success and failure cases:
+
+- `PersonResult` – used for single-person operations
+- `PersonListResult` – used for list-based operations
+
+This approach allows the controller to return both data and validation errors
+in a consistent and structured way.
 
 ## 🧰 How to Compile and Run
 
