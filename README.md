@@ -181,7 +181,7 @@ cd person-crud-app
 ### Run
 
 ```bash
-java -jar build/libs/person-crud-app-1.0.0-alpha.jar
+java -jar build/libs/person-crud-app-1.0.0-beta.jar
 ```
 
 The application runs as an interactive CLI and will prompt for user input.
@@ -189,7 +189,7 @@ The application runs as an interactive CLI and will prompt for user input.
 ### Run with in-memory repository
 
 ```bash
-java -jar build/libs/person-crud-app-1.0.0-alpha.jar --repo=mem
+java -jar build/libs/person-crud-app-1.0.0-beta.jar --repo=mem
 ```
 
 ---
