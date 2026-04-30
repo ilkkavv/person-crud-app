@@ -19,6 +19,8 @@
     - [Creating a person](#creating-a-person)
     - [Listing persons](#listing-persons)
     - [Finding a person](#finding-a-person)
+    - [Searching for persons](#searching-for-persons)
+    - [Sorting results](#sorting-results)
     - [Updating a person](#updating-a-person)
     - [Deleting a person](#deleting-a-person)
     - [Repository option](#repository-option)
@@ -26,6 +28,9 @@
   - [🏗️ Architecture](#️-architecture)
     - [Components](#components)
     - [Design Principles](#design-principles)
+    - [Data Handling](#data-handling)
+    - [Encapsulation](#encapsulation)
+    - [Error Handling and Results](#error-handling-and-results)
   - [🧰 How to Compile and Run](#-how-to-compile-and-run)
     - [❗ Requirements](#-requirements)
     - [Clone the repository](#clone-the-repository)
@@ -200,7 +205,7 @@ The repository does not expose its internal data structures directly.
 Instead, methods such as `findAll()` return a copy of the internal list  
 to preserve encapsulation and prevent unintended side effects.
 
-## Error Handling and Results
+### Error Handling and Results
 
 The application uses result wrapper classes to handle success and failure cases:
 
