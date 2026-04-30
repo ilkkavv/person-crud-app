@@ -59,13 +59,16 @@ abstraction, and custom data structures. Data can be stored either in memory or 
 ## 🎓 How to Use
 
 When the application starts, it opens an interactive command-line menu.  
-You can choose an operation by entering either the full command or its short form shown in parentheses.
+You can choose an operation by entering either the full command or its short form shown in parentheses.  
+The application guides the user with prompts and validation messages during input.
 
 Available commands:
 
 - `c` or `create` – create a new person
 - `l` or `list` – list all persons
 - `f` or `find` – find a person by ID
+- `n` or `name` – search persons by name
+- `a` or `age` – search persons by age range
 - `u` or `update` – update a person by ID
 - `d` or `delete` – delete a person by ID
 - `h` or `help` – show help information
@@ -88,6 +91,21 @@ Choose `list` to display all stored persons.
 ### Finding a person
 
 Choose `find` and enter a person ID to view that person's details.
+
+### Searching for persons
+
+Choose `name` to search by first or last name (case-insensitive),  
+or `age` to search within a specified age range.
+
+### Sorting results
+
+After listing or searching persons, the application allows sorting the results interactively by:
+
+- first name
+- last name
+- age
+
+Both ascending and descending order are supported.
 
 ### Updating a person
 
