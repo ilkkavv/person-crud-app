@@ -46,10 +46,15 @@ abstraction, and custom data structures. Data can be stored either in memory or 
 ## ✨ Current Features
 
 - CLI-based CRUD operations for managing persons
-- Supports both CSV and in-memory data storage
+- Search persons by name (case-insensitive) or by age range
+- Sort results by name or age (supports ascending and descending order)
+- Input validation for name and age
+- Supports both CSV-based and in-memory data storage
 - Clean layered architecture with controller and repository abstraction
-- Custom list implementation
 - Automatic ID generation
+- Result wrapper classes for handling success and validation errors
+- Custom list implementation (MyArrayList)
+- Custom exception handling for CSV repository errors
 
 ## 🎓 How to Use
 
