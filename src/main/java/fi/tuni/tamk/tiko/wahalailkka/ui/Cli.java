@@ -101,8 +101,8 @@ public class Cli {
         System.out.println("(C)reate new person");
         System.out.println("(L)ist all persons");
         System.out.println("(F)ind person by ID");
-        System.out.println("Search person by (N)ame");
-        System.out.println("Search person by (A)ge");
+        System.out.println("Search persons by (N)ame");
+        System.out.println("Search persons by (A)ge range");
         System.out.println("(U)pdate person data by ID");
         System.out.println("(D)elete person by ID");
         System.out.println("(H)elp");
