@@ -52,6 +52,8 @@ The application is designed to be easily extensible and demonstrates clean separ
 
 ![CLI Demo](assets/cli-demo.gif)
 
+---
+
 ## ✨ Current Features
 
 - CLI-based CRUD operations for managing persons
@@ -115,6 +117,12 @@ After listing or searching persons, the application allows sorting the results i
 - age
 
 Both ascending and descending order are supported.
+
+---
+
+![CLI Results sorting](assets/cli-sorting.gif)
+
+---
 
 ### Updating a person
 
