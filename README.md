@@ -41,6 +41,10 @@
 operations (create, read, update, delete) and is built using a clean layered architecture with a controller, repository
 abstraction, and custom data structures. Data can be stored either in memory or in a CSV file.
 
+The application is designed to be easily extensible and demonstrates clean separation of concerns.
+
+---
+
 ![CLI Demo](assets/cli-demo.gif)
 
 ## ✨ Current Features
