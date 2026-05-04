@@ -32,12 +32,14 @@ public class MyArrayList<T> implements MyList<T> {
         if (element == null) {
             throw new IllegalArgumentException("Element must not be null.");
         }
+
         if (size == data.length) {
             Object[] oldData = data.clone();
             data = (T[]) new Object[(int) (size * SIZE_MULTIPLIER)];
             System.arraycopy(oldData, 0, data, 0,
                     oldData.length);
         }
+
         data[size] = element;
         size++;
     }
@@ -55,6 +57,7 @@ public class MyArrayList<T> implements MyList<T> {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: "
                     + size);
         }
+
         return data[index];
     }
 
@@ -71,6 +74,11 @@ public class MyArrayList<T> implements MyList<T> {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: "
                     + size);
         }
+
+        if (element == null) {
+            throw new IllegalArgumentException("Element must not be null.");
+        }
+
         data[index] = element;
     }
 
@@ -89,10 +97,13 @@ public class MyArrayList<T> implements MyList<T> {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: "
                     + size);
         }
+
         T element = data[index];
+
         for (int i = index; i < size - 1; i++) {
             data[i] = data[i + 1];
         }
+
         data[size - 1] = null;
         size--;
         return element;
@@ -102,16 +113,22 @@ public class MyArrayList<T> implements MyList<T> {
      * Removes the first occurrence of the specified element from the list.
      *
      * @param element the element to remove
-     * @return true if the element was found and removed, otherwise false
+     * @return {@code true} if the element was found and removed,
+     *         {@code false} otherwise
      */
     @Override
     public boolean remove(final T element) {
+        if (element == null) {
+            throw new IllegalArgumentException("Element must not be null.");
+        }
+
         for (int i = 0; i < size; i++) {
             if (data[i].equals(element)) {
                 remove(i);
                 return true;
             }
         }
+
         return false;
     }
 
