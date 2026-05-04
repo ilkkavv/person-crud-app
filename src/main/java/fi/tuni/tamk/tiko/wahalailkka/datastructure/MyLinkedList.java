@@ -1,6 +1,16 @@
 package fi.tuni.tamk.tiko.wahalailkka.datastructure;
 
+/**
+ * Linked list implementation of the {@link MyList} interface.
+ *
+ * @param <T> the type of elements stored in this list
+ */
 public class MyLinkedList<T> implements MyList<T> {
+    /**
+     * Node used internally by {@link MyLinkedList}.
+     *
+     * @param <T> the type of data stored in the node
+     */
     private static class Node<T> {
         private T data;
         private Node<T> next;
@@ -35,7 +45,10 @@ public class MyLinkedList<T> implements MyList<T> {
     private int size = 0;
 
     /**
+     * Adds the given element to the end of this list.
+     *
      * @param element the element to be added
+     * @throws IllegalArgumentException if the element is {@code null}
      */
     @Override
     public void add(final T element) {
@@ -57,8 +70,11 @@ public class MyLinkedList<T> implements MyList<T> {
     }
 
     /**
+     * Returns the element at the specified index.
+     *
      * @param index the index of the element to return
-     * @return
+     * @return the element at the specified index
+     * @throws IndexOutOfBoundsException if the index is out of range
      */
     @Override
     public T get(final int index) {
@@ -77,8 +93,12 @@ public class MyLinkedList<T> implements MyList<T> {
     }
 
     /**
-     * @param index   the index of the element to replace
+     * Replaces the element at the specified index with the given element.
+     *
+     * @param index the index of the element to replace
      * @param element the new element
+     * @throws IndexOutOfBoundsException if the index is out of range
+     * @throws IllegalArgumentException if the element is {@code null}
      */
     @Override
     public void set(final int index, final T element) {
@@ -101,8 +121,11 @@ public class MyLinkedList<T> implements MyList<T> {
     }
 
     /**
+     * Removes the element at the specified index.
+     *
      * @param index the index of the element to remove
-     * @return
+     * @return the removed element
+     * @throws IndexOutOfBoundsException if the index is out of range
      */
     @Override
     public T remove(final int index) {
@@ -138,8 +161,12 @@ public class MyLinkedList<T> implements MyList<T> {
     }
 
     /**
+     * Removes the first occurrence of the given element from this list.
+     *
      * @param element the element to remove
-     * @return
+     * @return {@code true} if the element was found and removed,
+     *         {@code false} otherwise
+     * @throws IllegalArgumentException if the element is {@code null}
      */
     @Override
     public boolean remove(final T element) {
@@ -176,7 +203,7 @@ public class MyLinkedList<T> implements MyList<T> {
     }
 
     /**
-     *
+     * Removes all elements from this list.
      */
     @Override
     public void clear() {
@@ -186,8 +213,11 @@ public class MyLinkedList<T> implements MyList<T> {
     }
 
     /**
-     * @return
+     * Returns the number of elements in this list.
+     *
+     * @return the number of elements in this list
      */
     @Override
-    public int size() { return size; }
+    public int size() {
+        return size; }
 }
