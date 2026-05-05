@@ -326,9 +326,12 @@ public class Cli {
     private void delete() {
         int id = askForId();
 
-        PersonResult result = controller.deletePersonById(id);
-        printPersonResult(result, "Person data deleted!");
-        waitForEnter();
+        if (showChoices("Are you sure you want to delete person with ID " + id
+                + "?", "Yes", "No")) {
+            PersonResult result = controller.deletePersonById(id);
+            printPersonResult(result, "Person data deleted!");
+            waitForEnter();
+        }
     }
 
     private void help() {
