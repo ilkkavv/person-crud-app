@@ -13,10 +13,12 @@ import fi.tuni.tamk.tiko.wahalailkka.model.Person;
  *     <li>the updated {@link Person}, if successful</li>
  *     <li>a list of changed fields describing what was modified</li>
  *     <li>a list of validation errors, if validation failed</li>
- *     <li>a repository error message, if the operation failed at the data layer</li>
+ *     <li>a repository error message, if the operation failed at the data
+ *         layer</li>
  * </ul>
  *
- * @param isSuccess {@code true} if the operation succeeded, {@code false} otherwise
+ * @param isSuccess {@code true} if the operation succeeded,
+ *                  {@code false} otherwise
  * @param person the updated person, or {@code null} if the operation failed
  * @param changedFields a list describing which fields were changed,
  *                      or an empty list if none or if the operation failed
