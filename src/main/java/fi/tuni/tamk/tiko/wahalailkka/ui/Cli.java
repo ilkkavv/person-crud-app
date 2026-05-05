@@ -3,6 +3,7 @@ package fi.tuni.tamk.tiko.wahalailkka.ui;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonListResult;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonResult;
+import fi.tuni.tamk.tiko.wahalailkka.controller.PersonUpdateResult;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.repository.CsvRepositoryException;
@@ -317,9 +318,9 @@ public class Cli {
         String lastName = scanner.nextLine().trim();
         int age = askForAge();
 
-        PersonResult result = controller.updatePersonById(id, firstName,
+        PersonUpdateResult result = controller.updatePersonById(id, firstName,
                 lastName, age);
-        printPersonResult(result, "Person data updated!");
+        printPersonUpdateResult(result);
         waitForEnter();
     }
 
@@ -377,6 +378,29 @@ public class Cli {
             }
         } else {
             printValidationErrors(result.validationErrors());
+        }
+    }
+
+    private void printPersonUpdateResult(final PersonUpdateResult result) {
+        System.out.println();
+        if (result.isSuccess()) {
+            if (result.changedFields().isEmpty()) {
+                System.out.println("No fields were changed.");
+            } else {
+                System.out.println("Person data updated.");
+                System.out.println();
+                System.out.println("Updated fields:");
+
+                for (int i = 0; i < result.changedFields().size(); i++) {
+                    System.out.println(result.changedFields().get(i));
+                }
+            }
+        } else {
+            if (result.repositoryError() != null) {
+                System.out.println(result.repositoryError());
+            } else {
+                printValidationErrors(result.validationErrors());
+            }
         }
     }
 
