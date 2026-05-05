@@ -201,22 +201,27 @@ public class PersonController {
      * Updates a person identified by the given ID.
      * <p>
      * The given ID and input data are validated before updating. If validation
-     * fails, the result contains validation errors. If validation succeeds but
-     * no person with the given ID exists, the result contains a repository
-     * error message.
+     * fails, the result contains validation errors. If no person with the given
+     * ID exists, the result contains a repository error message.
+     * <p>
+     * Before updating, the current person data is compared with the new data.
+     * If no fields have changed, the repository update is skipped and the
+     * current person is returned with an empty list of changed fields.
      *
      * @param id the ID of the person to update
      * @param firstName the new first name
      * @param lastName the new last name
      * @param age the new age
-     * @return a {@link PersonResult} containing:
+     * @return a {@link PersonUpdateResult} containing:
      * <ul>
-     *     <li>the updated person if successful</li>
+     *     <li>the updated person if the update is successful</li>
+     *     <li>the current person if no fields were changed</li>
+     *     <li>a list of changed fields if any values were modified</li>
      *     <li>validation errors if the ID or input data is invalid</li>
      *     <li>an error message if no person with the given ID exists</li>
      * </ul>
      */
-    public PersonResult updatePersonById(final int id,
+    public PersonUpdateResult updatePersonById(final int id,
                                          final String firstName,
                                          final String lastName,
                                          final int age) {
@@ -224,14 +229,30 @@ public class PersonController {
         PersonData newPersonData = new PersonData(firstName, lastName, age);
         validationErrors.addAll(validatePersonData(newPersonData));
 
-        if (validationErrors.isEmpty()) {
-            Optional<Person> updatedPerson = personRepository.updateById(id,
-                    newPersonData);
-            return updatedPerson.map(PersonResult::success)
-                    .orElseGet(() -> PersonResult.notFound(notFoundMsg + id));
-        } else {
-            return PersonResult.validationFailure(validationErrors);
+        if (!validationErrors.isEmpty()) {
+            return PersonUpdateResult.validationFailure(validationErrors);
         }
+
+        Optional<Person> person = personRepository.findById(id);
+
+        if (person.isEmpty()) {
+            return PersonUpdateResult.notFound(notFoundMsg + id);
+        }
+
+        Person existingPerson = person.get();
+        MyList<String> changedFields = compareFields(newPersonData,
+                existingPerson);
+
+        if (changedFields.isEmpty()) {
+            return PersonUpdateResult.success(existingPerson, changedFields);
+        }
+
+        Optional<Person> updatedPerson = personRepository.updateById(id,
+                newPersonData);
+
+        return updatedPerson.map(updated -> PersonUpdateResult.success(updated,
+                changedFields)).orElseGet(() -> PersonUpdateResult.notFound(
+                        notFoundMsg + id));
     }
 
     /**
@@ -259,5 +280,26 @@ public class PersonController {
         } else {
             return PersonResult.validationFailure(validationErrors);
         }
+    }
+
+    private MyList<String> compareFields(final PersonData newData,
+                                         final Person person) {
+        MyList<String> changedFields = new MyArrayList<>();
+
+        if (!newData.firstName().equals(person.firstName())) {
+            changedFields.add("first name: " + person.firstName() + " -> "
+                    + newData.firstName());
+        }
+
+        if (!newData.lastName().equals(person.lastName())) {
+            changedFields.add("last name: " + person.lastName() + " -> "
+                    + newData.lastName());
+        }
+
+        if (newData.age() != person.age()) {
+            changedFields.add("age: " + person.age() + " -> " + newData.age());
+        }
+
+        return changedFields;
     }
 }
