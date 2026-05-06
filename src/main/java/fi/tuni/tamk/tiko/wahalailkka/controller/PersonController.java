@@ -15,6 +15,8 @@ import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidator.
         validateAgeRange;
 
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Controller class responsible for handling application logic related to
@@ -26,6 +28,8 @@ import java.util.Optional;
  * repository.
  */
 public class PersonController {
+    private static final Logger LOGGER = LogManager.getLogger(
+            PersonController.class);
     /** Repository used for storing and managing persons. */
     private final PersonRepository personRepository;
     /** Message displayed when Person with given ID is not found. */
@@ -62,7 +66,10 @@ public class PersonController {
         MyList<String> validationErrors = validatePersonData(newPersonData);
 
         if (validationErrors.isEmpty()) {
-            return PersonResult.success(personRepository.create(newPersonData));
+            PersonResult success = PersonResult.success(personRepository.create(
+                    newPersonData));
+            LOGGER.info("Created person: {}", success.person());
+            return success;
         } else {
             return PersonResult.validationFailure(validationErrors);
         }
@@ -139,8 +146,13 @@ public class PersonController {
 
         if (validationErrors.isEmpty()) {
             Optional<Person> person = personRepository.findById(id);
-            return person.map(PersonResult::success)
-                    .orElseGet(() -> PersonResult.notFound(notFoundMsg + id));
+
+            if (person.isEmpty()) {
+                logNotFound(id);
+                return PersonResult.notFound(notFoundMsg + id);
+            } else {
+                return PersonResult.success(person.get());
+            }
         } else {
             return PersonResult.validationFailure(validationErrors);
         }
@@ -236,7 +248,10 @@ public class PersonController {
         Optional<Person> person = personRepository.findById(id);
 
         if (person.isEmpty()) {
-            return PersonUpdateResult.notFound(notFoundMsg + id);
+            PersonUpdateResult notFound =  PersonUpdateResult.notFound(
+                    notFoundMsg + id);
+            logNotFound(id);
+            return notFound;
         }
 
         Person existingPerson = person.get();
@@ -244,15 +259,26 @@ public class PersonController {
                 existingPerson);
 
         if (changedFields.isEmpty()) {
-            return PersonUpdateResult.success(existingPerson, changedFields);
+            PersonUpdateResult success = PersonUpdateResult.success(
+                    existingPerson, changedFields);
+            LOGGER.warn("Update skipped for person with ID {} because"
+                    + " no fields changed", id);
+            return success;
         }
 
         Optional<Person> updatedPerson = personRepository.updateById(id,
                 newPersonData);
 
-        return updatedPerson.map(updated -> PersonUpdateResult.success(updated,
-                changedFields)).orElseGet(() -> PersonUpdateResult.notFound(
-                        notFoundMsg + id));
+        if (updatedPerson.isEmpty()) {
+            PersonUpdateResult notFound =  PersonUpdateResult.notFound(
+                    notFoundMsg + id);
+            logNotFound(id);
+            return notFound;
+        } else {
+            LOGGER.info("Person with ID {} updated", id);
+            return PersonUpdateResult.success(updatedPerson.get(),
+                    changedFields);
+        }
     }
 
     /**
@@ -275,8 +301,15 @@ public class PersonController {
 
         if (validationErrors.isEmpty()) {
             Optional<Person> deletedPerson = personRepository.deleteById(id);
-            return deletedPerson.map(PersonResult::success)
-                    .orElseGet(() -> PersonResult.notFound(notFoundMsg + id));
+
+            if (deletedPerson.isEmpty()) {
+                PersonResult notFound =  PersonResult.notFound(notFoundMsg + id);
+                logNotFound(id);
+                return notFound;
+            } else {
+                LOGGER.info("Person with ID {} deleted", id);
+                return PersonResult.success(deletedPerson.get());
+            }
         } else {
             return PersonResult.validationFailure(validationErrors);
         }
@@ -301,5 +334,9 @@ public class PersonController {
         }
 
         return changedFields;
+    }
+
+    private void logNotFound(final int id) {
+        LOGGER.warn(notFoundMsg + "{}", id);
     }
 }
