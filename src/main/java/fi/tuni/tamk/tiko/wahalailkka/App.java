@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
  * <p>
  * This class is responsible for initializing the application by:
  * <ul>
+ *     <li>Initializing application logging</li>
  *     <li>Parsing command-line arguments</li>
  *     <li>Configuring the repository implementation</li>
  *     <li>Creating the controller and user interface</li>
