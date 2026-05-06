@@ -9,6 +9,8 @@ import fi.tuni.tamk.tiko.wahalailkka.ui.Cli;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Entry point of the Person CRUD application.
@@ -27,6 +29,7 @@ public final class App {
     private static final Path LOG_FOLDER = Path.of("logs");
     private static final String PATH_TO_CSV = "data/person.csv";
     private static PersonRepository personRepository;
+    private static final Logger LOGGER = LogManager.getLogger(App.class);
 
     /** Usage instructions displayed when invalid arguments are provided. */
     private static final String USAGE_MSG = """
@@ -51,16 +54,19 @@ public final class App {
      *
      * @param args command-line arguments used to configure the application
      */
-    public static void main(final String[] args) {
+    static void main(final String[] args) {
         try {
             Files.createDirectories(LOG_FOLDER);
         } catch (IOException e) {
+            LOGGER.error("Failed to create log directory!", e);
             System.out.println("Failed to create log directory!");
         }
 
+        LOGGER.info("Person CRUD App started");
         handleArgs(args);
         Cli cli = new Cli(new PersonController(personRepository));
         cli.run();
+        LOGGER.info("Person CRUD App stopped");
     }
 
     private static void handleArgs(final String[] args) {
@@ -78,8 +84,10 @@ public final class App {
 
         if (useMemRepo) {
             personRepository = new MemPersonRepository();
+            LOGGER.info("Memory repository selected");
         } else {
             personRepository = new CsvPersonRepository(PATH_TO_CSV);
+            LOGGER.info("CSV repository selected");
         }
     }
 }
