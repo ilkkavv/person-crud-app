@@ -6,6 +6,10 @@ import fi.tuni.tamk.tiko.wahalailkka.repository.MemPersonRepository;
 import fi.tuni.tamk.tiko.wahalailkka.repository.PersonRepository;
 import fi.tuni.tamk.tiko.wahalailkka.ui.Cli;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 /**
  * Entry point of the Person CRUD application.
  * <p>
@@ -20,6 +24,7 @@ import fi.tuni.tamk.tiko.wahalailkka.ui.Cli;
  * overridden with command-line arguments.
  */
 public final class App {
+    private static final Path LOG_FOLDER = Path.of("logs");
     private static final String PATH_TO_CSV = "data/person.csv";
     private static PersonRepository personRepository;
 
@@ -47,6 +52,12 @@ public final class App {
      * @param args command-line arguments used to configure the application
      */
     public static void main(final String[] args) {
+        try {
+            Files.createDirectories(LOG_FOLDER);
+        } catch (IOException e) {
+            System.out.println("Failed to create log directory!");
+        }
+
         handleArgs(args);
         Cli cli = new Cli(new PersonController(personRepository));
         cli.run();
