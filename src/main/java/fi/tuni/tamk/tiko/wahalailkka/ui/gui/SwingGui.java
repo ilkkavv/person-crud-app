@@ -3,7 +3,7 @@ package fi.tuni.tamk.tiko.wahalailkka.ui.gui;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
 import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -18,6 +18,7 @@ public class SwingGui extends JFrame implements AppUi {
         this.controller = controller;
 
         initializeFrame();
+        initializeComponents();
     }
 
     @Override
@@ -31,5 +32,12 @@ public class SwingGui extends JFrame implements AppUi {
         this.setSize(minWindowWidth, minWindowHeight);
         this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
+    }
+
+    private void initializeComponents() {
+        JTable personTable = new JTable(new PersonTableModel(
+                controller.findAllPersons().personList()));
+        JScrollPane scrollPane = new JScrollPane(personTable);
+        this.add(scrollPane, BorderLayout.CENTER);
     }
 }
