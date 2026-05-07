@@ -41,12 +41,12 @@ public class CsvPersonRepository implements PersonRepository {
     private final int lastNameIndex = 2;
     private final int ageIndex = 3;
 
-    private final String initErrorMsg = "Failed to initialize CSV file!";
-    private final String dataWriteErrorMsg = "Failed to write Person data to"
-            + " CSV file!";
-    private final String dataReadErrorMsg = "Failed to read from CSV file!";
-    private final String listWriteErrorMsg = "Failed to write Person list to"
-            + " CSV file!";
+    private final String initErrorMsg = "Failed to initialize CSV file";
+    private final String dataWriteErrorMsg = "Failed to write person data to"
+            + " CSV file";
+    private final String dataReadErrorMsg = "Failed to read from CSV file";
+    private final String listWriteErrorMsg = "Failed to write person list to"
+            + " CSV file";
 
     /**
      * Constructs a CsvPersonRepository using the given file path.
