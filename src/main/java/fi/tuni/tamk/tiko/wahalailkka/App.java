@@ -4,7 +4,7 @@ import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
 import fi.tuni.tamk.tiko.wahalailkka.repository.CsvPersonRepository;
 import fi.tuni.tamk.tiko.wahalailkka.repository.MemPersonRepository;
 import fi.tuni.tamk.tiko.wahalailkka.repository.PersonRepository;
-import fi.tuni.tamk.tiko.wahalailkka.ui.Cli;
+import fi.tuni.tamk.tiko.wahalailkka.ui.cli.Cli;
 
 import java.io.IOException;
 import java.nio.file.Files;
