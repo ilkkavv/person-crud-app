@@ -38,4 +38,7 @@ Thumbs.db
 .kotlin
 
 # Data
-person.csv
+data/
+
+# Logs
+logs/
