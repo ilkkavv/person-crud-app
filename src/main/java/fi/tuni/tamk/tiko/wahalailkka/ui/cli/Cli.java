@@ -1,4 +1,4 @@
-package fi.tuni.tamk.tiko.wahalailkka.ui;
+package fi.tuni.tamk.tiko.wahalailkka.ui.cli;
 
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonListResult;
