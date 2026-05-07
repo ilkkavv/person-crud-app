@@ -10,6 +10,8 @@ import fi.tuni.tamk.tiko.wahalailkka.ui.cli.Cli;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import fi.tuni.tamk.tiko.wahalailkka.ui.gui.SwingGui;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,16 +23,18 @@ import org.apache.logging.log4j.Logger;
  *     <li>Initializing application logging</li>
  *     <li>Parsing command-line arguments</li>
  *     <li>Configuring the repository implementation</li>
- *     <li>Creating the controller and user interface</li>
+ *     <li>Selecting the user interface implementation</li>
+ *     <li>Creating the controller and launching the application UI</li>
  * </ul>
  * <p>
- * By default, the application uses a CSV-based repository. This can be
- * overridden with command-line arguments.
+ * By default, the application uses a CSV-based repository and the Swing GUI.
+ * Both the repository and UI implementation can be changed with command-line
+ * arguments.
  */
 public final class App {
     private static final Path LOG_FOLDER = Path.of("logs");
     private static final String PATH_TO_CSV = "data/person.csv";
-    private static PersonRepository personRepository;
+    private static AppUi appUi;
     private static final Logger LOGGER = LogManager.getLogger(App.class);
 
     /** Usage instructions displayed when invalid arguments are provided. */
@@ -40,10 +44,13 @@ public final class App {
 
         Options:
             --repo=mem        Use in-memory repository
+            --ui=cli          Use command-line interface
 
         Examples:
             java -jar person-crud-app.jar
             java -jar person-crud-app.jar --repo=mem
+            java -jar person-crud-app.jar --ui=cli
+            java -jar person-crud-app.jar --repo=mem --ui=cli
         """;
 
     private App() { }
@@ -51,8 +58,9 @@ public final class App {
     /**
      * Starts the application.
      * <p>
-     * The method processes command-line arguments, initializes the appropriate
-     * repository, and launches the CLI user interface.
+     * The method processes command-line arguments, initializes the selected
+     * repository and user interface implementation, and launches the
+     * application.
      *
      * @param args command-line arguments used to configure the application
      */
@@ -66,17 +74,19 @@ public final class App {
 
         LOGGER.info("Person CRUD App started");
         handleArgs(args);
-        AppUi appUi = new Cli(new PersonController(personRepository));
         appUi.run();
         LOGGER.info("Person CRUD App stopped");
     }
 
     private static void handleArgs(final String[] args) {
         boolean useMemRepo = false;
+        boolean useCliUi = false;
 
         for (String arg : args) {
             if (arg.equals("--repo=mem")) {
                 useMemRepo = true;
+            } else if (arg.equals("--ui=cli")) {
+                useCliUi = true;
             } else {
                 System.err.println("Invalid command line argument given.");
                 System.out.println(USAGE_MSG);
@@ -84,12 +94,22 @@ public final class App {
             }
         }
 
+        PersonRepository personRepository;
+
         if (useMemRepo) {
             personRepository = new MemPersonRepository();
             LOGGER.info("Memory repository selected");
         } else {
             personRepository = new CsvPersonRepository(PATH_TO_CSV);
             LOGGER.info("CSV repository selected");
+        }
+
+        if (useCliUi) {
+            appUi = new Cli(new PersonController(personRepository));
+            LOGGER.info("CLI selected");
+        } else {
+            appUi = new SwingGui(new PersonController(personRepository));
+            LOGGER.info("GUI selected");
         }
     }
 }
