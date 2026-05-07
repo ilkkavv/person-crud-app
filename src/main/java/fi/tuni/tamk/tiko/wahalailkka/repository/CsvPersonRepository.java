@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * CSV-based implementation of the PersonRepository interface.
@@ -22,6 +24,9 @@ import java.util.Optional;
  * It supports basic CRUD operations (create, read, update, delete).
  */
 public class CsvPersonRepository implements PersonRepository {
+    private static final Logger LOGGER = LogManager.getLogger(
+            CsvPersonRepository.class);
+
     private final String pathToFile;
 
     private final String csvDelimiter = ",";
@@ -35,6 +40,13 @@ public class CsvPersonRepository implements PersonRepository {
     private final int firstNameIndex = 1;
     private final int lastNameIndex = 2;
     private final int ageIndex = 3;
+
+    private final String initErrorMsg = "Failed to initialize CSV file!";
+    private final String dataWriteErrorMsg = "Failed to write Person data to"
+            + " CSV file!";
+    private final String dataReadErrorMsg = "Failed to read from CSV file!";
+    private final String listWriteErrorMsg = "Failed to write Person list to"
+            + " CSV file!";
 
     /**
      * Constructs a CsvPersonRepository using the given file path.
@@ -221,8 +233,8 @@ public class CsvPersonRepository implements PersonRepository {
                 readPersonsFromCsv();
             }
         } catch (IOException e) {
-            throw new CsvRepositoryException("Failed to initialize CSV file!",
-                    e);
+            LOGGER.error(initErrorMsg, e);
+            throw new CsvRepositoryException(initErrorMsg, e);
         }
     }
 
@@ -236,8 +248,8 @@ public class CsvPersonRepository implements PersonRepository {
                     person.age()));
             writer.newLine();
         } catch (IOException e) {
-            throw new CsvRepositoryException("Failed to write Person data to "
-                    + "CSV file!", e);
+            LOGGER.error(dataWriteErrorMsg, e);
+            throw new CsvRepositoryException(dataWriteErrorMsg, e);
         }
     }
 
@@ -262,8 +274,8 @@ public class CsvPersonRepository implements PersonRepository {
                 }
             }
         } catch (IOException e) {
-            throw new CsvRepositoryException("Failed to read from CSV file!",
-                    e);
+            LOGGER.error(dataReadErrorMsg, e);
+            throw new CsvRepositoryException(dataReadErrorMsg, e);
         }
     }
 
@@ -282,8 +294,8 @@ public class CsvPersonRepository implements PersonRepository {
                 writer.newLine();
             }
         } catch (IOException e) {
-            throw new CsvRepositoryException("Failed to write Person list to "
-                    + "CSV file!", e);
+            LOGGER.error(listWriteErrorMsg, e);
+            throw new CsvRepositoryException(listWriteErrorMsg, e);
         }
     }
 }
