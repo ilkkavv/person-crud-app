@@ -341,7 +341,7 @@ public class Cli {
         if (showChoices("Are you sure you want to delete person with ID " + id
                 + "?", "Yes", "No")) {
             PersonResult result = controller.deletePersonById(id);
-            printPersonResult(result, "Person data deleted!");
+            printPersonResult(result, "Person data deleted:");
             waitForEnter();
         }
     }
