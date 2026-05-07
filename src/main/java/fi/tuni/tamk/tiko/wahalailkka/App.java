@@ -4,6 +4,7 @@ import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
 import fi.tuni.tamk.tiko.wahalailkka.repository.CsvPersonRepository;
 import fi.tuni.tamk.tiko.wahalailkka.repository.MemPersonRepository;
 import fi.tuni.tamk.tiko.wahalailkka.repository.PersonRepository;
+import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
 import fi.tuni.tamk.tiko.wahalailkka.ui.cli.Cli;
 
 import java.io.IOException;
@@ -65,8 +66,8 @@ public final class App {
 
         LOGGER.info("Person CRUD App started");
         handleArgs(args);
-        Cli cli = new Cli(new PersonController(personRepository));
-        cli.run();
+        AppUi appUi = new Cli(new PersonController(personRepository));
+        appUi.run();
         LOGGER.info("Person CRUD App stopped");
     }
 
