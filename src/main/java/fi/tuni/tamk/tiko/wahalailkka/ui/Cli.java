@@ -31,26 +31,33 @@ public class Cli {
     /** List of persons used for displaying and sorting results in the CLI. */
     private MyList<Person> currentList;
 
+    private static final String CMD_1 = "1";
     private static final String CMD_C = "c";
     private static final String CMD_CREATE = "create";
+    private static final String CMD_2 = "2";
     private static final String CMD_L = "l";
     private static final String CMD_LIST = "list";
+    private static final String CMD_3 = "3";
     private static final String CMD_F = "f";
     private static final String CMD_FIND = "find";
+    private static final String CMD_4 = "4";
     private static final String CMD_N = "n";
     private static final String CMD_NAME = "name";
+    private static final String CMD_5 = "5";
     private static final String CMD_A = "a";
     private static final String CMD_AGE = "age";
+    private static final String CMD_6 = "6";
     private static final String CMD_U = "u";
     private static final String CMD_UPDATE = "update";
+    private static final String CMD_7 = "7";
     private static final String CMD_D = "d";
     private static final String CMD_DELETE = "delete";
+    private static final String CMD_8 = "8";
     private static final String CMD_H = "h";
     private static final String CMD_HELP = "help";
+    private static final String CMD_9 = "9";
     private static final String CMD_E = "e";
     private static final String CMD_EXIT = "exit";
-    private static final String CMD_1 = "1";
-    private static final String CMD_2 = "2";
 
     private static final String HELP_MSG = """
         NAME
@@ -103,15 +110,15 @@ public class Cli {
 
     private void showMenu() {
         System.out.println();
-        System.out.println("(C)reate new person");
-        System.out.println("(L)ist all persons");
-        System.out.println("(F)ind person by ID");
-        System.out.println("Search persons by (N)ame");
-        System.out.println("Search persons by (A)ge range");
-        System.out.println("(U)pdate person data by ID");
-        System.out.println("(D)elete person by ID");
-        System.out.println("(H)elp");
-        System.out.println("(E)xit");
+        System.out.println("1) Create new person");
+        System.out.println("2) List all persons");
+        System.out.println("3) Find person by ID");
+        System.out.println("4) Search persons by Name");
+        System.out.println("5) Search persons by Age range");
+        System.out.println("6) Update person data by ID");
+        System.out.println("7) Delete person by ID");
+        System.out.println("8) Help");
+        System.out.println("9) Exit");
         System.out.println();
         System.out.print("Enter command: ");
     }
@@ -120,31 +127,31 @@ public class Cli {
         String input = scanner.nextLine().toLowerCase().trim();
 
         switch (input) {
-            case CMD_C, CMD_CREATE:
+            case CMD_1, CMD_C, CMD_CREATE:
                 create();
                 break;
-            case CMD_L, CMD_LIST:
+            case CMD_2, CMD_L, CMD_LIST:
                 list();
                 break;
-            case CMD_F, CMD_FIND:
+            case CMD_3, CMD_F, CMD_FIND:
                 find();
                 break;
-            case CMD_N, CMD_NAME:
+            case CMD_4, CMD_N, CMD_NAME:
                 searchByName();
                 break;
-            case CMD_A, CMD_AGE:
+            case CMD_5, CMD_A, CMD_AGE:
                 searchByAge();
                 break;
-            case CMD_U, CMD_UPDATE:
+            case CMD_6, CMD_U, CMD_UPDATE:
                 update();
                 break;
-            case CMD_D, CMD_DELETE:
+            case CMD_7, CMD_D, CMD_DELETE:
                 delete();
                 break;
-            case CMD_H, CMD_HELP:
+            case CMD_8, CMD_H, CMD_HELP:
                 help();
                 break;
-            case CMD_E, CMD_EXIT:
+            case CMD_9, CMD_E, CMD_EXIT:
                 exit();
                 break;
             default:
