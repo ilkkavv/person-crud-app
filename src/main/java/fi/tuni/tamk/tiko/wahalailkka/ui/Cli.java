@@ -10,6 +10,8 @@ import fi.tuni.tamk.tiko.wahalailkka.repository.CsvRepositoryException;
 import fi.tuni.tamk.tiko.wahalailkka.util.PersonSorter;
 
 import java.util.Scanner;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Command-line user interface for the Person CRUD App.
@@ -19,6 +21,7 @@ import java.util.Scanner;
  * results.
  */
 public class Cli {
+    private static final Logger LOGGER = LogManager.getLogger(Cli.class);
     /** Flag indicating whether the CLI main loop is running. */
     private boolean isRunning = false;
     /** Scanner used for reading user input from standard input. */
@@ -92,6 +95,7 @@ public class Cli {
             } catch (CsvRepositoryException e) {
                 System.err.println(e.getMessage());
             } catch (Exception e) {
+                LOGGER.error("Unexpected error", e);
                 System.out.println("Unexpected error.");
             }
         }
