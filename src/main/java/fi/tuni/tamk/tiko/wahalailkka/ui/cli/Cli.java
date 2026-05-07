@@ -7,6 +7,7 @@ import fi.tuni.tamk.tiko.wahalailkka.controller.PersonUpdateResult;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.repository.CsvRepositoryException;
+import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
 import fi.tuni.tamk.tiko.wahalailkka.util.PersonSorter;
 
 import java.util.Scanner;
@@ -20,7 +21,7 @@ import org.apache.logging.log4j.Logger;
  * It shows the menu, reads user input, calls the controller, and prints
  * results.
  */
-public class Cli {
+public class Cli implements AppUi {
     private static final Logger LOGGER = LogManager.getLogger(Cli.class);
     /** Flag indicating whether the CLI main loop is running. */
     private boolean isRunning = false;
