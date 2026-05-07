@@ -90,6 +90,7 @@ public class Cli implements AppUi {
      * This method runs the main application loop until the user chooses to
      * exit. It repeatedly shows the menu, reads a command, and handles it.
      */
+    @Override
     public void run() {
         isRunning = true;
 
