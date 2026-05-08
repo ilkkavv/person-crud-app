@@ -13,8 +13,12 @@ import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidator.
         validatePersonId;
 import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidator.
         validateAgeRange;
+import static fi.tuni.tamk.tiko.wahalailkka.validation.SearchField.SEARCH;
 
 import java.util.Optional;
+
+import fi.tuni.tamk.tiko.wahalailkka.validation.SearchValidationError;
+import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,7 +67,8 @@ public class PersonController {
     public PersonResult createPerson(final String firstName,
                                      final String lastName, final int age) {
         PersonData newPersonData = new PersonData(firstName, lastName, age);
-        MyList<String> validationErrors = validatePersonData(newPersonData);
+        MyList<ValidationError> validationErrors = new MyArrayList<>();
+        validationErrors.addAll(validatePersonData(newPersonData));
 
         if (validationErrors.isEmpty()) {
             PersonResult success = PersonResult.success(personRepository.create(
@@ -142,7 +147,8 @@ public class PersonController {
      * </ul>
      */
     public PersonResult findPersonById(final int id) {
-        MyList<String> validationErrors = validatePersonId(id);
+        MyList<ValidationError> validationErrors = new MyArrayList<>();
+        validationErrors.addAll(validatePersonId(id));
 
         if (validationErrors.isEmpty()) {
             Optional<Person> person = personRepository.findById(id);
@@ -174,8 +180,10 @@ public class PersonController {
      */
     public PersonListResult searchPersonsByName(final String searchInput) {
         if (searchInput == null || searchInput.trim().isEmpty()) {
-            MyList<String> validationErrors = new MyArrayList<>();
-            validationErrors.add("Search input cannot be empty.");
+            MyList<ValidationError> validationErrors =
+                    new MyArrayList<>();
+            validationErrors.add(new SearchValidationError(SEARCH,
+                    "Search input cannot be empty."));
             return PersonListResult.failure(validationErrors);
         }
 
@@ -187,7 +195,7 @@ public class PersonController {
      * Searches for persons whose age falls within the given range.
      * <p>
      * The input range is validated before performing the search. If validation
-     * fails, the result contains validation error messages. Otherwise, the
+     * fails, the result contains validation errors. Otherwise, the
      * search is delegated to the repository layer.
      *
      * @param min the minimum age (inclusive)
@@ -199,7 +207,8 @@ public class PersonController {
      * </ul>
      */
     public PersonListResult searchPersonsByAge(final int min, final int max) {
-        MyList<String> validationErrors = validateAgeRange(min, max);
+        MyList<ValidationError> validationErrors = new MyArrayList<>();
+        validationErrors.addAll(validateAgeRange(min, max));
 
         if (validationErrors.isEmpty()) {
             return PersonListResult.success(personRepository.searchByAge(
@@ -237,7 +246,8 @@ public class PersonController {
                                          final String firstName,
                                          final String lastName,
                                          final int age) {
-        MyList<String> validationErrors = validatePersonId(id);
+        MyList<ValidationError> validationErrors = new MyArrayList<>();
+        validationErrors.addAll(validatePersonId(id));
         PersonData newPersonData = new PersonData(firstName, lastName, age);
         validationErrors.addAll(validatePersonData(newPersonData));
 
@@ -297,7 +307,8 @@ public class PersonController {
      * </ul>
      */
     public PersonResult deletePersonById(final int id) {
-        MyList<String> validationErrors = validatePersonId(id);
+        MyList<ValidationError> validationErrors = new MyArrayList<>();
+        validationErrors.addAll(validatePersonId(id));
 
         if (validationErrors.isEmpty()) {
             Optional<Person> deletedPerson = personRepository.deleteById(id);
