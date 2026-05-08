@@ -6,5 +6,6 @@ package fi.tuni.tamk.tiko.wahalailkka.validation;
  * @param input the search field associated with the validation error
  * @param message the validation error message
  */
-public record SearchValidationError(SearchField input, String message) {
+public record SearchValidationError (SearchField input, String message)
+        implements ValidationError {
 }
