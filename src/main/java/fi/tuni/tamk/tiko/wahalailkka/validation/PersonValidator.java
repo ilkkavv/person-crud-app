@@ -11,13 +11,15 @@ import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonField.AGE;
 import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonField.FIRST_NAME;
 import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonField.ID;
 import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonField.LAST_NAME;
+import static fi.tuni.tamk.tiko.wahalailkka.validation.SearchField.MAX_AGE;
+import static fi.tuni.tamk.tiko.wahalailkka.validation.SearchField.MIN_AGE;
 
 public final class PersonValidator {
     private static final String NAME_PATTERN = "^[A-ZÅÄÖ][a-zåäö]+"
             + "(-[A-ZÅÄÖ][a-zåäö]+)*$";
     private static final Pattern NAME_REGEX = Pattern.compile(NAME_PATTERN);
 
-    private static final int MAX_AGE = 150;
+    private static final int MAX_PERSON_AGE = 150;
 
     private PersonValidator() { }
 
@@ -78,31 +80,37 @@ public final class PersonValidator {
      *
      * @param min the minimum age value
      * @param max the maximum age value
-     * @return a list of validation error messages; empty if the range is valid
+     * @return a {@link MyList} containing {@link SearchValidationError}
+     *         objects; the list is empty if the range is valid
      */
-    public static MyList<String> validateAgeRange(final int min,
-                                                  final int max) {
-        MyList<String> validationErrors = new MyArrayList<>();
+    public static MyList<SearchValidationError> validateAgeRange(final int min,
+                                                                 final int max)
+    {
+        MyList<SearchValidationError> validationErrors = new MyArrayList<>();
 
         if (min < 0) {
-            validationErrors.add("Minimum value must be at least 0.");
+            validationErrors.add(new SearchValidationError(MIN_AGE,
+                    "Minimum value must be at least 0."));
         }
 
-        if (max > MAX_AGE) {
-            validationErrors.add("Maximum value must not exceed " + MAX_AGE
-                    + ".");
+        if (max > MAX_PERSON_AGE) {
+            validationErrors.add(new SearchValidationError(MAX_AGE,
+                    "Maximum value must not exceed " + MAX_PERSON_AGE
+                    + "."));
         }
 
         if (max < min) {
-            validationErrors.add("Maximum value must be at least the minimum"
-                    + "value.");
+            validationErrors.add(new SearchValidationError(MAX_AGE,
+                    "Maximum value must be at least the minimum"
+                    + " value."));
         }
 
         return validationErrors;
     }
 
     private static void validateFirstName(final String firstName,
-                                   final MyList<PersonValidationError> errorList) {
+                                   final MyList<PersonValidationError>
+                                           errorList) {
         final int maxLength = 50;
 
         if (firstName.isEmpty() || firstName.length() > maxLength) {
@@ -131,7 +139,7 @@ public final class PersonValidator {
             Matcher matcher = NAME_REGEX.matcher(lastName);
             if (!matcher.matches()) {
                 errorList.add(new PersonValidationError(LAST_NAME,
-                        "The first letter of the Last name must be "
+                        "The first letter of the last name must be "
                         + "uppercase and it can be followed by one or more "
                         + "lowercase letters. One hyphen is allowed."));
             }
@@ -141,7 +149,7 @@ public final class PersonValidator {
     private static void validateAge(final int age,
                                     final MyList<PersonValidationError>
                                             errorList) {
-        if (age < 0 || age > MAX_AGE) {
+        if (age < 0 || age > MAX_PERSON_AGE) {
             errorList.add(new PersonValidationError(AGE,
                     "Age must be between 0 and 150."));
         }
