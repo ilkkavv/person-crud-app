@@ -11,6 +11,12 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
+/**
+ * Modal dialog used for creating and updating Person objects.
+ * <p>
+ * This dialog contains form fields for first name, last name, and age.
+ * The dialog delegates form submission handling through a callback interface.
+ */
 public class PersonFormDialog extends JDialog {
     private final JButton cancelButton = new JButton("Cancel");
     private final JButton confirmButton;
@@ -26,6 +32,17 @@ public class PersonFormDialog extends JDialog {
     private static final int borderMargin = 10;
     private static final int gridMargin = 5;
 
+    /**
+     * Constructs a new person form dialog.
+     *
+     * @param owner the parent frame of this dialog
+     * @param confirmButtonText the text displayed on the confirm button
+     * @param formTitle the title of the dialog window
+     * @param firstName the initial first name value
+     * @param lastName the initial last name value
+     * @param age the initial age value
+     * @param onConfirm callback executed when the confirm button is pressed
+     */
     public PersonFormDialog(final JFrame owner, final String confirmButtonText,
                             final String formTitle, final String firstName,
                             final String lastName, final String age,
@@ -47,14 +64,29 @@ public class PersonFormDialog extends JDialog {
         setLocationRelativeTo(owner);
     }
 
+    /**
+     * Returns the first name entered in the form.
+     *
+     * @return the entered first name
+     */
     public String getFirstName() {
         return firstNameField.getText();
     }
 
+    /**
+     * Returns the last name entered in the form.
+     *
+     * @return the entered last name
+     */
     public String getLastName() {
         return lastNameField.getText();
     }
 
+    /**
+     * Returns the age entered in the form as text.
+     *
+     * @return the entered age text
+     */
     public String getAgeText() {
         return ageField.getText();
     }
