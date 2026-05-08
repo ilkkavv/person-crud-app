@@ -3,6 +3,7 @@ package fi.tuni.tamk.tiko.wahalailkka.controller;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
+import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
 
 /**
  * Represents the result of an operation that returns a list of persons.
@@ -12,10 +13,10 @@ import fi.tuni.tamk.tiko.wahalailkka.model.Person;
  *
  * @param isSuccess true if the operation succeeded, false otherwise
  * @param personList the resulting list of persons
- * @param validationErrors validation error messages, empty if none
+ * @param validationErrors structured validation errors, empty if none
  */
 public record PersonListResult(boolean isSuccess, MyList<Person> personList,
-                               MyList<String> validationErrors) {
+                               MyList<PersonValidationError> validationErrors) {
     /**
      * Creates a successful result containing the given list of persons.
      *
@@ -24,18 +25,18 @@ public record PersonListResult(boolean isSuccess, MyList<Person> personList,
      */
     public static PersonListResult success(final MyList<Person> personList) {
         return new PersonListResult(true, personList,
-                new MyArrayList<String>());
+                new MyArrayList<>());
     }
 
     /**
      * Creates a failed result containing validation errors.
      *
-     * @param validationErrors the validation error messages
+     * @param validationErrors the structured validation errors
      * @return a failed result containing validation errors
      */
     public static PersonListResult failure(
-            final MyList<String> validationErrors) {
-        return new PersonListResult(false, new MyArrayList<Person>(),
+            final MyList<PersonValidationError> validationErrors) {
+        return new PersonListResult(false, new MyArrayList<>(),
                 validationErrors);
     }
 }
