@@ -14,6 +14,12 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
+/**
+ * Swing-based graphical user interface for the Person CRUD application.
+ * <p>
+ * This class is responsible for displaying person data in a table and
+ * handling user interactions through GUI components.
+ */
 public class SwingGui extends JFrame implements AppUi {
     /** Controller used to handle person-related application logic. */
     private final PersonController controller;
@@ -25,6 +31,11 @@ public class SwingGui extends JFrame implements AppUi {
 
     private JButton createButton;
 
+    /**
+     * Constructs a new Swing GUI with the given controller.
+     *
+     * @param controller the controller used by this UI
+     */
     public SwingGui(final PersonController controller) {
         super("Person CRUD App");
         this.controller = controller;
@@ -34,6 +45,9 @@ public class SwingGui extends JFrame implements AppUi {
         initializeListeners();
     }
 
+    /**
+     * Starts the graphical user interface.
+     */
     @Override
     public void run() {
         this.setVisible(true);
