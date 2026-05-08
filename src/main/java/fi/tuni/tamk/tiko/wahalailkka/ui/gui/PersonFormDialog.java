@@ -1,10 +1,15 @@
 package fi.tuni.tamk.tiko.wahalailkka.ui.gui;
 
-import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
 public class PersonFormDialog extends JDialog {
     private final JButton cancelButton = new JButton("Cancel");
@@ -16,10 +21,10 @@ public class PersonFormDialog extends JDialog {
     private final JTextField lastNameField;
     private final JTextField ageField;
 
-    private final int gridCols = 2;
-    private final int gridRows = 3;
-    private final int borderMargin = 10;
-    private final int gridMargin = 5;
+    private static final int gridCols = 2;
+    private static final int gridRows = 3;
+    private static final int borderMargin = 10;
+    private static final int gridMargin = 5;
 
     public PersonFormDialog(final JFrame owner, final String confirmButtonText,
                             final String formTitle, final String firstName,
@@ -55,11 +60,16 @@ public class PersonFormDialog extends JDialog {
     }
 
     private void initializeComponents() {
+        createFormPanel();
+        createBottomPanel();
+    }
+
+    private void createFormPanel() {
         JPanel formPanel = new JPanel();
         formPanel.setBorder(new EmptyBorder(borderMargin, borderMargin,
-                                            borderMargin, borderMargin));
+                borderMargin, borderMargin));
         formPanel.setLayout(new GridLayout(gridRows, gridCols, gridMargin,
-                                           gridMargin));
+                gridMargin));
         formPanel.add(new JLabel("First Name:"));
         formPanel.add(firstNameField);
         formPanel.add(new JLabel("Last Name:"));
@@ -67,7 +77,9 @@ public class PersonFormDialog extends JDialog {
         formPanel.add(new JLabel("Age:"));
         formPanel.add(ageField);
         this.add(formPanel, BorderLayout.CENTER);
+    }
 
+    private void createBottomPanel() {
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout());
 
@@ -77,19 +89,11 @@ public class PersonFormDialog extends JDialog {
     }
 
     private void initializeListeners() {
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        cancelButton.addActionListener(e -> dispose());
 
-        confirmButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (onConfirm.handle(PersonFormDialog.this)) {
-                    dispose();
-                }
+        confirmButton.addActionListener(e -> {
+            if (onConfirm.handle(PersonFormDialog.this)) {
+                dispose();
             }
         });
     }
