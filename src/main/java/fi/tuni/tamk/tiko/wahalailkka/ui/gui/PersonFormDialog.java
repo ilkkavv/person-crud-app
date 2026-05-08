@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
@@ -22,6 +23,10 @@ public class PersonFormDialog extends JDialog {
     private final JButton confirmButton;
 
     private final FormSubmitHandler onConfirm;
+
+    private final JLabel firstNameLabel = new JLabel("First Name:");
+    private final JLabel lastNameLabel = new JLabel("Last Name:");
+    private final JLabel ageLabel = new JLabel("Age:");
 
     private final JTextField firstNameField;
     private final JTextField lastNameField;
@@ -91,6 +96,36 @@ public class PersonFormDialog extends JDialog {
         return ageField.getText();
     }
 
+    /**
+     * Highlights the first name label in red.
+     */
+    public void highlightFirstNameLabel() {
+        firstNameLabel.setForeground(Color.RED);
+    }
+
+    /**
+     * Highlights the last name label in red.
+     */
+    public void highlightLastNameLabel() {
+        lastNameLabel.setForeground(Color.RED);
+    }
+
+    /**
+     * Highlights the age label in red.
+     */
+    public void highlightAgeLabel() {
+        ageLabel.setForeground(Color.RED);
+    }
+
+    /**
+     * Resets all form label colors to black.
+     */
+    public void resetLabelColors() {
+        firstNameLabel.setForeground(Color.BLACK);
+        lastNameLabel.setForeground(Color.BLACK);
+        ageLabel.setForeground(Color.BLACK);
+    }
+
     private void initializeComponents() {
         createFormPanel();
         createBottomPanel();
@@ -102,11 +137,11 @@ public class PersonFormDialog extends JDialog {
                 borderMargin, borderMargin));
         formPanel.setLayout(new GridLayout(gridRows, gridCols, gridMargin,
                 gridMargin));
-        formPanel.add(new JLabel("First Name:"));
+        formPanel.add(firstNameLabel);
         formPanel.add(firstNameField);
-        formPanel.add(new JLabel("Last Name:"));
+        formPanel.add(lastNameLabel);
         formPanel.add(lastNameField);
-        formPanel.add(new JLabel("Age:"));
+        formPanel.add(ageLabel);
         formPanel.add(ageField);
         this.add(formPanel, BorderLayout.CENTER);
     }
