@@ -157,13 +157,13 @@ public class SwingGui extends JFrame implements AppUi {
                 if (error instanceof PersonValidationError personError) {
                     switch (personError.field()) {
                         case FIRST_NAME:
-                            dialog.setFirstNameLabelColor(Color.RED);
+                            dialog.highlightFirstNameLabel();
                             break;
                         case LAST_NAME:
-                            dialog.setLastNameLabelColor(Color.RED);
+                            dialog.highlightLastNameLabel();
                             break;
                         case AGE:
-                            dialog.setAgeLabelColor(Color.RED);
+                            dialog.highlightAgeLabel();
                             break;
                         default:
                             break;
