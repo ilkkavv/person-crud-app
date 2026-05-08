@@ -3,8 +3,11 @@ package fi.tuni.tamk.tiko.wahalailkka.ui.gui;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonListResult;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonResult;
+import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
+import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
+import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -102,29 +106,74 @@ public class SwingGui extends JFrame implements AppUi {
                         person.id(), person.firstName(), person.lastName(),
                         person.age());
 
-                showMessage(SwingGui.this,"New person created:\n"
-                        + personData, "Success",
+                showMessage(SwingGui.this, "New person created:"
+                        + "\n" + personData, "Success",
                         JOptionPane.INFORMATION_MESSAGE);
 
                 refreshPersonList();
                 return true;
             } else {
-                StringBuilder errors = new StringBuilder();
-
-                for (int i = 0; i < result.validationErrors().size(); i++) {
-                    errors.append(result.validationErrors().get(i));
-                    if (i != result.validationErrors().size() - 1) {
-                        errors.append("\n");
-                    }
-                }
-
-                showMessage(dialog, errors.toString(), "Invalid input",
-                        JOptionPane.WARNING_MESSAGE);
+                handleErrors(result, dialog);
                 return false;
             }
         });
 
         createDialog.setVisible(true);
+    }
+
+    /**
+     * Handles validation and repository errors from a person operation result.
+     * <p>
+     * Validation errors are displayed in a warning dialog and the corresponding
+     * form labels are highlighted in red. Repository errors are displayed in an
+     * error dialog.
+     *
+     * @param result the result containing validation or repository errors
+     * @param dialog the dialog associated with the form
+     */
+    private void handleErrors(final PersonResult result,
+                              final PersonFormDialog dialog) {
+        StringBuilder errors = new StringBuilder();
+
+        if (result.repositoryError() != null) {
+            errors.append(result.repositoryError());
+
+            showMessage(dialog, errors.toString(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            MyList<ValidationError> validationErrors =
+                    result.validationErrors();
+
+            dialog.resetLabelColors();
+
+            for (int i = 0; i < validationErrors.size(); i++) {
+                ValidationError error = validationErrors.get(i);
+                errors.append(error.getMessage());
+
+                if (i != validationErrors.size() - 1) {
+                    errors.append("\n");
+                }
+
+                if (error instanceof PersonValidationError personError) {
+                    switch (personError.field()) {
+                        case FIRST_NAME:
+                            dialog.setFirstNameLabelColor(Color.RED);
+                            break;
+                        case LAST_NAME:
+                            dialog.setLastNameLabelColor(Color.RED);
+                            break;
+                        case AGE:
+                            dialog.setAgeLabelColor(Color.RED);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            showMessage(dialog, errors.toString(), "Invalid input",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     /**
@@ -144,11 +193,23 @@ public class SwingGui extends JFrame implements AppUi {
         }
     }
 
+    /**
+     * Refreshes the table model with the latest person data from the
+     * controller.
+     */
     private void refreshPersonList() {
         PersonListResult listResult = controller.findAllPersons();
         personTableModel.setCurrentList(listResult.personList());
     }
 
+    /**
+     * Displays a message dialog.
+     *
+     * @param parent the parent component of the dialog
+     * @param message the message to display
+     * @param title the dialog title
+     * @param type the message type defined by {@link JOptionPane}
+     */
     private void showMessage(final Component parent, final String message,
                              final String title, final int type) {
         JOptionPane.showMessageDialog(parent, message, title, type);
