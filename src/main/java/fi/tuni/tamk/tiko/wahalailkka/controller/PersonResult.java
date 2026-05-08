@@ -3,6 +3,7 @@ package fi.tuni.tamk.tiko.wahalailkka.controller;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
+import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
 
 /**
  * Represents the result of a controller operation.
@@ -11,19 +12,19 @@ import fi.tuni.tamk.tiko.wahalailkka.model.Person;
  * <ul>
  *     <li>whether the operation was successful</li>
  *     <li>the resulting {@link Person}, if successful</li>
- *     <li>a list of validation errors, if validation failed</li>
+ *     <li>a list of structured validation errors, if validation failed</li>
  *     <li>a repository error message, if the operation failed at the data layer
  *     </li>
  * </ul>
  *
  * @param isSuccess true if the operation succeeded, false otherwise
  * @param person the resulting person, or null if the operation failed
- * @param validationErrors validation error messages, or an empty list if none
+ * @param validationErrors structured validation errors, or an empty list if none
  * @param repositoryError an error message related to repository operations,
  *                        or null if none
  */
 public record PersonResult(boolean isSuccess, Person person,
-                           MyList<String> validationErrors,
+                           MyList<PersonValidationError> validationErrors,
                            String repositoryError) {
     /**
      * Creates a successful result containing the given person.
@@ -37,21 +38,21 @@ public record PersonResult(boolean isSuccess, Person person,
      */
     public static PersonResult success(final Person person) {
         return new PersonResult(true, person,
-                new MyArrayList<String>(), null);
+                new MyArrayList<>(), null);
     }
 
     /**
      * Creates a result representing validation failure.
      * <p>
      * This method should be used when input validation fails. The returned
-     * result contains the validation error messages and no person or
-     * repository error.
+     * result contains structured validation errors and no person or repository
+     * error.
      *
-     * @param validationErrors a list of validation error messages
+     * @param validationErrors a list of structured validation errors
      * @return a failed {@link PersonResult} containing validation errors
      */
     public static PersonResult validationFailure(
-            final MyList<String> validationErrors) {
+            final MyList<PersonValidationError> validationErrors) {
         return new PersonResult(false, null,
                 validationErrors, null);
     }
@@ -69,6 +70,6 @@ public record PersonResult(boolean isSuccess, Person person,
      */
     public static PersonResult notFound(final String notFoundMsg) {
         return new PersonResult(false, null,
-                new MyArrayList<String>(), notFoundMsg);
+                new MyArrayList<>(), notFoundMsg);
     }
 }
