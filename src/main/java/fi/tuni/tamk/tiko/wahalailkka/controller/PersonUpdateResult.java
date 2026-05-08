@@ -3,6 +3,7 @@ package fi.tuni.tamk.tiko.wahalailkka.controller;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
+import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
 
 /**
  * Represents the result of an update operation in the controller layer.
@@ -12,7 +13,7 @@ import fi.tuni.tamk.tiko.wahalailkka.model.Person;
  *     <li>whether the operation was successful</li>
  *     <li>the updated {@link Person}, if successful</li>
  *     <li>a list of changed fields describing what was modified</li>
- *     <li>a list of validation errors, if validation failed</li>
+ *     <li>a list of structured validation errors, if validation failed</li>
  *     <li>a repository error message, if the operation failed at the data
  *         layer</li>
  * </ul>
@@ -22,13 +23,14 @@ import fi.tuni.tamk.tiko.wahalailkka.model.Person;
  * @param person the updated person, or {@code null} if the operation failed
  * @param changedFields a list describing which fields were changed,
  *                      or an empty list if none or if the operation failed
- * @param validationErrors validation error messages, or an empty list if none
+ * @param validationErrors structured validation errors,
+ *                         or an empty list if none
  * @param repositoryError an error message related to repository operations,
  *                        or {@code null} if none
  */
 public record PersonUpdateResult(boolean isSuccess, Person person,
                            MyList<String> changedFields,
-                           MyList<String> validationErrors,
+                           MyList<PersonValidationError> validationErrors,
                            String repositoryError) {
     /**
      * Creates a successful update result containing the updated person
@@ -52,14 +54,14 @@ public record PersonUpdateResult(boolean isSuccess, Person person,
      * Creates a result representing validation failure.
      * <p>
      * This method should be used when input validation fails. The returned
-     * result contains the validation error messages and no updated person
+     * result contains structured validation errors and no updated person
      * or repository error.
      *
-     * @param validationErrors a list of validation error messages
+     * @param validationErrors a list of structured validation errors
      * @return a failed {@link PersonUpdateResult} containing validation errors
      */
     public static PersonUpdateResult validationFailure(
-            final MyList<String> validationErrors) {
+            final MyList<PersonValidationError> validationErrors) {
         return new PersonUpdateResult(false, null,
                 new MyArrayList<>(), validationErrors, null);
     }
