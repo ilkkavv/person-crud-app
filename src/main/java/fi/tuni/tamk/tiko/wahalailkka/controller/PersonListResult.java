@@ -3,7 +3,7 @@ package fi.tuni.tamk.tiko.wahalailkka.controller;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
-import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
+import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 
 /**
  * Represents the result of an operation that returns a list of persons.
@@ -16,7 +16,7 @@ import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
  * @param validationErrors structured validation errors, empty if none
  */
 public record PersonListResult(boolean isSuccess, MyList<Person> personList,
-                               MyList<PersonValidationError> validationErrors) {
+                               MyList<ValidationError> validationErrors) {
     /**
      * Creates a successful result containing the given list of persons.
      *
@@ -35,7 +35,7 @@ public record PersonListResult(boolean isSuccess, MyList<Person> personList,
      * @return a failed result containing validation errors
      */
     public static PersonListResult failure(
-            final MyList<PersonValidationError> validationErrors) {
+            final MyList<ValidationError> validationErrors) {
         return new PersonListResult(false, new MyArrayList<>(),
                 validationErrors);
     }
