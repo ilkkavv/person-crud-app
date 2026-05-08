@@ -4,8 +4,7 @@ import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
 import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
 
 import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.*;
 
 public class SwingGui extends JFrame implements AppUi {
     /** Controller used to handle person-related application logic. */
@@ -39,5 +38,11 @@ public class SwingGui extends JFrame implements AppUi {
                 controller.findAllPersons().personList()));
         JScrollPane scrollPane = new JScrollPane(personTable);
         this.add(scrollPane, BorderLayout.CENTER);
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+        JButton createButton = new JButton("Create");
+        bottomPanel.add(createButton);
+        this.add(bottomPanel, BorderLayout.SOUTH);
     }
 }
