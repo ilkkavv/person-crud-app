@@ -7,10 +7,12 @@ import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
@@ -85,12 +87,7 @@ public class SwingGui extends JFrame implements AppUi {
         PersonFormDialog createDialog = new PersonFormDialog(
                 SwingGui.this, "Create", "Create new person",
                 "", "", "", dialog -> {
-            Integer age = parseAge(dialog.getAgeText());
-
-            if (age == null) {
-                // Show error message
-                return false;
-            }
+            int age = parseAge(dialog.getAgeText());
 
             PersonResult result = controller.createPerson(
                     dialog.getFirstName(),
@@ -101,7 +98,17 @@ public class SwingGui extends JFrame implements AppUi {
                 refreshPersonList();
                 return true;
             } else {
-                // Show error message
+                StringBuilder errors = new StringBuilder();
+
+                for (int i = 0; i < result.validationErrors().size(); i++) {
+                    errors.append(result.validationErrors().get(i));
+                    if (i != result.validationErrors().size() - 1) {
+                        errors.append("\n");
+                    }
+                }
+
+                showMessage(dialog, errors.toString(), "Invalid input",
+                        JOptionPane.WARNING_MESSAGE);
                 return false;
             }
         });
@@ -109,16 +116,30 @@ public class SwingGui extends JFrame implements AppUi {
         createDialog.setVisible(true);
     }
 
-    private Integer parseAge(final String ageText) {
+    /**
+     * Parses age text into an integer value.
+     * <p>
+     * Returns -1 if parsing fails so that validation can be handled by the
+     * controller layer.
+     *
+     * @param ageText the age text to parse
+     * @return the parsed age, or -1 if parsing fails
+     */
+    private int parseAge(final String ageText) {
         try {
             return Integer.parseInt(ageText);
         } catch (NumberFormatException e) {
-            return null;
+            return -1;
         }
     }
 
     private void refreshPersonList() {
         PersonListResult listResult = controller.findAllPersons();
         personTableModel.setCurrentList(listResult.personList());
+    }
+
+    private void showMessage(final Component parent, final String message,
+                             final String title, final int type) {
+        JOptionPane.showMessageDialog(parent, message, title, type);
     }
 }
