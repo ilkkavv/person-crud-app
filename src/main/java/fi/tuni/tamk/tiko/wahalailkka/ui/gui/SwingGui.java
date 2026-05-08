@@ -5,8 +5,14 @@ import fi.tuni.tamk.tiko.wahalailkka.controller.PersonListResult;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonResult;
 import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 
 public class SwingGui extends JFrame implements AppUi {
     /** Controller used to handle person-related application logic. */
@@ -58,20 +64,16 @@ public class SwingGui extends JFrame implements AppUi {
     }
 
     private void initializeListeners() {
-        createButton.addActionListener(e -> {
-            handleCreate();
-        });
+        createButton.addActionListener(e -> handleCreate());
     }
 
     private void handleCreate() {
         PersonFormDialog createDialog = new PersonFormDialog(
                 SwingGui.this, "Create", "Create new person",
                 "", "", "", dialog -> {
-            int age;
+            Integer age = parseAge(dialog.getAgeText());
 
-            try {
-                age = Integer.parseInt(dialog.getAgeText());
-            } catch (NumberFormatException e1) {
+            if (age == null) {
                 // Show error message
                 return false;
             }
@@ -91,6 +93,14 @@ public class SwingGui extends JFrame implements AppUi {
         });
 
         createDialog.setVisible(true);
+    }
+
+    private Integer parseAge(final String ageText) {
+        try {
+            return Integer.parseInt(ageText);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     private void refreshPersonList() {
