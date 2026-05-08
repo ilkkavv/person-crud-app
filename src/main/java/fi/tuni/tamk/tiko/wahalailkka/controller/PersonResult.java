@@ -3,7 +3,7 @@ package fi.tuni.tamk.tiko.wahalailkka.controller;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
-import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
+import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 
 /**
  * Represents the result of a controller operation.
@@ -19,12 +19,13 @@ import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
  *
  * @param isSuccess true if the operation succeeded, false otherwise
  * @param person the resulting person, or null if the operation failed
- * @param validationErrors structured validation errors, or an empty list if none
+ * @param validationErrors structured validation errors, or an empty list if
+ *                         none
  * @param repositoryError an error message related to repository operations,
  *                        or null if none
  */
 public record PersonResult(boolean isSuccess, Person person,
-                           MyList<PersonValidationError> validationErrors,
+                           MyList<ValidationError> validationErrors,
                            String repositoryError) {
     /**
      * Creates a successful result containing the given person.
@@ -52,7 +53,7 @@ public record PersonResult(boolean isSuccess, Person person,
      * @return a failed {@link PersonResult} containing validation errors
      */
     public static PersonResult validationFailure(
-            final MyList<PersonValidationError> validationErrors) {
+            final MyList<ValidationError> validationErrors) {
         return new PersonResult(false, null,
                 validationErrors, null);
     }
