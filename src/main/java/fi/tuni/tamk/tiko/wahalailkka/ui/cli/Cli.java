@@ -11,6 +11,8 @@ import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
 import fi.tuni.tamk.tiko.wahalailkka.util.PersonSorter;
 
 import java.util.Scanner;
+
+import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -427,9 +429,10 @@ public class Cli implements AppUi {
         );
     }
 
-    private void printValidationErrors(final MyList<String> errorList) {
+    private void printValidationErrors(final MyList<ValidationError> errorList)
+    {
         for (int i = 0; i < errorList.size(); i++) {
-            System.out.println(errorList.get(i));
+            System.out.println(errorList.get(i).getMessage());
         }
     }
 
