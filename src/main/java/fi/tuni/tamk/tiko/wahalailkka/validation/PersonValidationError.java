@@ -6,5 +6,6 @@ package fi.tuni.tamk.tiko.wahalailkka.validation;
  * @param field the field associated with the validation error
  * @param message the validation error message
  */
-public record PersonValidationError(PersonField field, String message) {
+public record PersonValidationError(PersonField field, String message)
+        implements ValidationError {
 }
