@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonField.AGE;
 import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonField.FIRST_NAME;
+import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonField.ID;
 import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonField.LAST_NAME;
 
 public final class PersonValidator {
@@ -51,14 +52,15 @@ public final class PersonValidator {
      * The ID must be a positive integer (greater than 0).
      *
      * @param id the ID to validate
-     * @return a {@link MyList} containing validation error messages;
+     * @return a {@link MyList} containing structured validation errors;
      *         the list is empty if the ID is valid
      */
-    public static MyList<String> validatePersonId(final int id) {
-        MyList<String> validationErrors = new MyArrayList<>();
+    public static MyList<PersonValidationError> validatePersonId(final int id) {
+        MyList<PersonValidationError> validationErrors = new MyArrayList<>();
 
         if (id < 1) {
-            validationErrors.add("Person ID must be a positive integer.");
+            validationErrors.add(new PersonValidationError(ID,
+                    "Person ID must be a positive integer."));
         }
 
         return validationErrors;
