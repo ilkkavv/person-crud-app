@@ -3,7 +3,7 @@ package fi.tuni.tamk.tiko.wahalailkka.controller;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
-import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
+import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 
 /**
  * Represents the result of an update operation in the controller layer.
@@ -30,7 +30,7 @@ import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
  */
 public record PersonUpdateResult(boolean isSuccess, Person person,
                            MyList<String> changedFields,
-                           MyList<PersonValidationError> validationErrors,
+                           MyList<ValidationError> validationErrors,
                            String repositoryError) {
     /**
      * Creates a successful update result containing the updated person
@@ -61,7 +61,7 @@ public record PersonUpdateResult(boolean isSuccess, Person person,
      * @return a failed {@link PersonUpdateResult} containing validation errors
      */
     public static PersonUpdateResult validationFailure(
-            final MyList<PersonValidationError> validationErrors) {
+            final MyList<ValidationError> validationErrors) {
         return new PersonUpdateResult(false, null,
                 new MyArrayList<>(), validationErrors, null);
     }
