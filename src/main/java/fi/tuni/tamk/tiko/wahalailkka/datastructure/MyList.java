@@ -11,7 +11,7 @@ public interface MyList<T> {
      *
      * @param otherList the list whose elements are to be added
      */
-    default void addAll(MyList<T> otherList) {
+    default void addAll(MyList<? extends T> otherList) {
         for (int i = 0; i < otherList.size(); i++) {
             this.add(otherList.get(i));
         }
