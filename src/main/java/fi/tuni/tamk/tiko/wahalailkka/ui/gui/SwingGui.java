@@ -3,6 +3,7 @@ package fi.tuni.tamk.tiko.wahalailkka.ui.gui;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonListResult;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonResult;
+import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
 
 import javax.swing.JButton;
@@ -95,6 +96,16 @@ public class SwingGui extends JFrame implements AppUi {
                     age);
 
             if (result.isSuccess()) {
+                Person person = result.person();
+
+                String personData = String.format("ID: %d | %s %s | Age: %d%n",
+                        person.id(), person.firstName(), person.lastName(),
+                        person.age());
+
+                showMessage(SwingGui.this,"New person created:\n"
+                        + personData, "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+
                 refreshPersonList();
                 return true;
             } else {
