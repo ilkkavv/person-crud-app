@@ -7,6 +7,10 @@ import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonField.AGE;
+import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonField.FIRST_NAME;
+import static fi.tuni.tamk.tiko.wahalailkka.validation.PersonField.LAST_NAME;
+
 public final class PersonValidator {
     private static final String NAME_PATTERN = "^[A-ZÅÄÖ][a-zåäö]+"
             + "(-[A-ZÅÄÖ][a-zåäö]+)*$";
@@ -23,12 +27,12 @@ public final class PersonValidator {
      * All validation errors are collected into a list.
      *
      * @param personData the data to validate
-     * @return a {@link MyList} containing validation error messages;
-     *         the list is empty if the data is valid
+     * @return a {@link MyList} containing {@link PersonValidationError}
+     *         objects; the list is empty if the data is valid
      */
-    public static MyList<String> validatePersonData(
+    public static MyList<PersonValidationError> validatePersonData(
             final PersonData personData) {
-        MyList<String> validationErrors = new MyArrayList<>();
+        MyList<PersonValidationError> validationErrors = new MyArrayList<>();
 
         String firstName = personData.firstName();
         String lastName = personData.lastName();
@@ -88,49 +92,56 @@ public final class PersonValidator {
         }
 
         if (max < min) {
-            validationErrors.add(
-                    "Maximum value must be at least the minimum value.");
+            validationErrors.add("Maximum value must be at least the minimum"
+                    + "value.");
         }
 
         return validationErrors;
     }
 
     private static void validateFirstName(final String firstName,
-                                   final MyList<String> errorList) {
+                                   final MyList<PersonValidationError> errorList) {
         final int maxLength = 50;
 
         if (firstName.isEmpty() || firstName.length() > maxLength) {
-            errorList.add("First name must be 1 - 50 characters long.");
+            errorList.add(new PersonValidationError(FIRST_NAME,
+                    "First name must be 1 - 50 characters long."));
         } else {
             Matcher matcher = NAME_REGEX.matcher(firstName);
             if (!matcher.matches()) {
-                errorList.add("The first letter of the first name must be "
+                errorList.add(new PersonValidationError(FIRST_NAME,
+                        "The first letter of the first name must be "
                         + "uppercase and it can be followed by one or more "
-                        + "lowercase letters. One hyphen is allowed.");
+                        + "lowercase letters. One hyphen is allowed."));
             }
         }
     }
 
     private static void validateLastName(final String lastName,
-                                         final MyList<String> errorList) {
+                                         final MyList<PersonValidationError>
+                                                 errorList) {
         final int maxLength = 50;
 
         if (lastName.isEmpty() || lastName.length() > maxLength) {
-            errorList.add("Last name must be 1 - 50 characters long.");
+            errorList.add(new PersonValidationError(LAST_NAME,
+                    "Last name must be 1 - 50 characters long."));
         } else {
             Matcher matcher = NAME_REGEX.matcher(lastName);
             if (!matcher.matches()) {
-                errorList.add("The first letter of the Last name must be "
+                errorList.add(new PersonValidationError(LAST_NAME,
+                        "The first letter of the Last name must be "
                         + "uppercase and it can be followed by one or more "
-                        + "lowercase letters. One hyphen is allowed.");
+                        + "lowercase letters. One hyphen is allowed."));
             }
         }
     }
 
     private static void validateAge(final int age,
-                                    final MyList<String> errorList) {
+                                    final MyList<PersonValidationError>
+                                            errorList) {
         if (age < 0 || age > MAX_AGE) {
-            errorList.add("Age must be between 0 and 150.");
+            errorList.add(new PersonValidationError(AGE,
+                    "Age must be between 0 and 150."));
         }
     }
 }
