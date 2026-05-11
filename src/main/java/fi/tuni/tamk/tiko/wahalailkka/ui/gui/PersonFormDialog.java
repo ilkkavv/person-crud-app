@@ -10,7 +10,9 @@ import javax.swing.JTextField;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 /**
  * Modal dialog used for creating and updating Person objects.
@@ -32,10 +34,8 @@ public class PersonFormDialog extends JDialog {
     private final JTextField lastNameField;
     private final JTextField ageField;
 
-    private static final int gridCols = 2;
-    private static final int gridRows = 3;
-    private static final int borderMargin = 10;
-    private static final int gridMargin = 5;
+    private static final int FIELD_WEIGHT = 25;
+    private static final int MARGIN = 5;
 
     /**
      * Constructs a new person form dialog.
@@ -60,6 +60,10 @@ public class PersonFormDialog extends JDialog {
         firstNameField = new JTextField(firstName);
         lastNameField = new JTextField(lastName);
         ageField = new JTextField(age);
+
+        firstNameField.setColumns(FIELD_WEIGHT);
+        lastNameField.setColumns(FIELD_WEIGHT);
+        ageField.setColumns(FIELD_WEIGHT);
 
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setLayout(new BorderLayout());
@@ -132,17 +136,34 @@ public class PersonFormDialog extends JDialog {
     }
 
     private void createFormPanel() {
-        JPanel formPanel = new JPanel();
-        formPanel.setBorder(new EmptyBorder(borderMargin, borderMargin,
-                borderMargin, borderMargin));
-        formPanel.setLayout(new GridLayout(gridRows, gridCols, gridMargin,
-                gridMargin));
-        formPanel.add(firstNameLabel);
-        formPanel.add(firstNameField);
-        formPanel.add(lastNameLabel);
-        formPanel.add(lastNameField);
-        formPanel.add(ageLabel);
-        formPanel.add(ageField);
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBorder(new EmptyBorder(MARGIN, MARGIN, MARGIN, MARGIN));
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(MARGIN, MARGIN, MARGIN, MARGIN);
+        constraints.anchor = GridBagConstraints.EAST;
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        formPanel.add(firstNameLabel, constraints);
+
+        constraints.gridx = 1;
+        formPanel.add(firstNameField, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        formPanel.add(lastNameLabel, constraints);
+
+        constraints.gridx = 1;
+        formPanel.add(lastNameField, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        formPanel.add(ageLabel, constraints);
+
+        constraints.gridx = 1;
+        formPanel.add(ageField, constraints);
+
         this.add(formPanel, BorderLayout.CENTER);
     }
 
