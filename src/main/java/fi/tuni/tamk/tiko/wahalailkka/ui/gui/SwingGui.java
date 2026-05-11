@@ -2,7 +2,9 @@ package fi.tuni.tamk.tiko.wahalailkka.ui.gui;
 
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonListResult;
+import fi.tuni.tamk.tiko.wahalailkka.controller.PersonOperationResult;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonResult;
+import fi.tuni.tamk.tiko.wahalailkka.controller.PersonUpdateResult;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
@@ -16,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -34,9 +35,11 @@ public class SwingGui extends JFrame implements AppUi {
     private static final int minWindowWidth = 800;
     private static final int minWindowHeight = 600;
 
+    private JTable personTable;
     private PersonTableModel personTableModel;
 
     private JButton createButton;
+    private JButton updateButton;
 
     /**
      * Constructs a new Swing GUI with the given controller.
@@ -71,21 +74,30 @@ public class SwingGui extends JFrame implements AppUi {
     private void initializeComponents() {
         personTableModel = new PersonTableModel(controller.findAllPersons().
                 personList());
-        JTable personTable = new JTable(personTableModel);
+        personTable = new JTable(personTableModel);
         JScrollPane scrollPane = new JScrollPane(personTable);
 
         this.add(scrollPane, BorderLayout.CENTER);
 
         JPanel bottomPanel = new JPanel();
         createButton = new JButton("Create");
+        updateButton = new JButton("Update");
+        updateButton.setEnabled(false);
 
         bottomPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
         bottomPanel.add(createButton);
+        bottomPanel.add(updateButton);
         this.add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private void initializeListeners() {
         createButton.addActionListener(e -> handleCreate());
+        updateButton.addActionListener(e -> handleUpdate());
+
+        personTable.getSelectionModel().addListSelectionListener(e -> {
+            int selectedRow = personTable.getSelectedRow();
+            updateButton.setEnabled(selectedRow > -1);
+        });
     }
 
     private void handleCreate() {
@@ -121,6 +133,54 @@ public class SwingGui extends JFrame implements AppUi {
         createDialog.setVisible(true);
     }
 
+    private void handleUpdate() {
+        Person person = personTableModel.getPersonAt(
+                personTable.getSelectedRow());
+
+        PersonFormDialog updateDialog = new PersonFormDialog(
+                SwingGui.this, "Update", "Update person data",
+                person.firstName(), person.lastName(),
+                Integer.toString(person.age()), dialog -> {
+            int age = parseAge(dialog.getAgeText());
+
+            PersonUpdateResult result = controller.updatePersonById(
+                    person.id(),
+                    dialog.getFirstName(),
+                    dialog.getLastName(),
+                    age);
+
+            if (result.isSuccess()) {
+                MyList<String> changedFields = result.changedFields();
+                String updatedFields = "No fields were changed.";
+                String title = "Update canceled";
+
+                if (!changedFields.isEmpty()) {
+                    StringBuilder stringBuilder = new StringBuilder(
+                            "Updated fields:");
+
+                    for (int i = 0; i < result.changedFields().size(); i++) {
+                        stringBuilder.append("\n")
+                                .append(result.changedFields().get(i));
+                    }
+
+                    updatedFields = stringBuilder.toString();
+                    title = "Success";
+                }
+
+                showMessage(SwingGui.this, updatedFields, title,
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                refreshPersonList();
+                return true;
+            } else {
+                handleErrors(result, dialog);
+                return false;
+            }
+        });
+
+        updateDialog.setVisible(true);
+    }
+
     /**
      * Handles validation and repository errors from a person operation result.
      * <p>
@@ -131,7 +191,7 @@ public class SwingGui extends JFrame implements AppUi {
      * @param result the result containing validation or repository errors
      * @param dialog the dialog associated with the form
      */
-    private void handleErrors(final PersonResult result,
+    private void handleErrors(final PersonOperationResult result,
                               final PersonFormDialog dialog) {
         StringBuilder errors = new StringBuilder();
 
