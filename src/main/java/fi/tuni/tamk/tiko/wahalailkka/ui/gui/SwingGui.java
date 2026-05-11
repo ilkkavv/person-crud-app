@@ -11,12 +11,7 @@ import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
 import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
 import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -40,6 +35,7 @@ public class SwingGui extends JFrame implements AppUi {
 
     private JButton createButton;
     private JButton updateButton;
+    private JButton deleteButton;
 
     /**
      * Constructs a new Swing GUI with the given controller.
@@ -82,21 +78,26 @@ public class SwingGui extends JFrame implements AppUi {
         JPanel bottomPanel = new JPanel();
         createButton = new JButton("Create");
         updateButton = new JButton("Update");
+        deleteButton = new JButton("Delete");
         updateButton.setEnabled(false);
+        deleteButton.setEnabled(false);
 
         bottomPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
         bottomPanel.add(createButton);
         bottomPanel.add(updateButton);
+        bottomPanel.add(deleteButton);
         this.add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private void initializeListeners() {
         createButton.addActionListener(e -> handleCreate());
         updateButton.addActionListener(e -> handleUpdate());
+        deleteButton.addActionListener(e -> handleDelete());
 
         personTable.getSelectionModel().addListSelectionListener(e -> {
             int selectedRow = personTable.getSelectedRow();
             updateButton.setEnabled(selectedRow > -1);
+            deleteButton.setEnabled(selectedRow > -1);
         });
     }
 
@@ -126,6 +127,7 @@ public class SwingGui extends JFrame implements AppUi {
                 return true;
             } else {
                 handleErrors(result, dialog);
+                highlightInvalidFields(result, dialog);
                 return false;
             }
         });
@@ -174,6 +176,7 @@ public class SwingGui extends JFrame implements AppUi {
                 return true;
             } else {
                 handleErrors(result, dialog);
+                highlightInvalidFields(result, dialog);
                 return false;
             }
         });
@@ -181,30 +184,60 @@ public class SwingGui extends JFrame implements AppUi {
         updateDialog.setVisible(true);
     }
 
+    private void handleDelete() {
+        Person person = personTableModel.getPersonAt(
+                personTable.getSelectedRow());
+
+        int option = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to delete this person?",
+                "Confirm deletion",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (option == JOptionPane.YES_OPTION) {
+            PersonOperationResult result = controller.deletePersonById(
+                    person.id());
+
+            if (result.isSuccess()) {
+                Person deletedPerson = result.person();
+
+                String message = String.format("Person deleted:\nID: %d | %s %s"
+                        + " | Age: %d%n", deletedPerson.id(),
+                        deletedPerson.firstName(), deletedPerson.lastName(),
+                        deletedPerson.age());
+
+                refreshPersonList();
+
+                showMessage(SwingGui.this, message,"Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                handleErrors(result, SwingGui.this);
+            }
+        }
+    }
+
     /**
-     * Handles validation and repository errors from a person operation result.
+     * Displays validation or repository errors from a person operation result.
      * <p>
-     * Validation errors are displayed in a warning dialog and the corresponding
-     * form labels are highlighted in red. Repository errors are displayed in an
-     * error dialog.
+     * Repository errors are displayed in an error dialog. Validation errors are
+     * combined into a single message and displayed in a warning dialog.
      *
      * @param result the result containing validation or repository errors
-     * @param dialog the dialog associated with the form
+     * @param parent the parent component for the dialog
      */
     private void handleErrors(final PersonOperationResult result,
-                              final PersonFormDialog dialog) {
+                              final Component parent) {
         StringBuilder errors = new StringBuilder();
 
         if (result.repositoryError() != null) {
             errors.append(result.repositoryError());
 
-            showMessage(dialog, errors.toString(), "Error",
+            showMessage(parent, errors.toString(), "Error",
                     JOptionPane.ERROR_MESSAGE);
         } else {
             MyList<ValidationError> validationErrors =
                     result.validationErrors();
-
-            dialog.resetLabelColors();
 
             for (int i = 0; i < validationErrors.size(); i++) {
                 ValidationError error = validationErrors.get(i);
@@ -213,26 +246,46 @@ public class SwingGui extends JFrame implements AppUi {
                 if (i != validationErrors.size() - 1) {
                     errors.append("\n");
                 }
-
-                if (error instanceof PersonValidationError personError) {
-                    switch (personError.field()) {
-                        case FIRST_NAME:
-                            dialog.highlightFirstNameLabel();
-                            break;
-                        case LAST_NAME:
-                            dialog.highlightLastNameLabel();
-                            break;
-                        case AGE:
-                            dialog.highlightAgeLabel();
-                            break;
-                        default:
-                            break;
-                    }
-                }
             }
 
-            showMessage(dialog, errors.toString(), "Invalid input",
+            showMessage(parent, errors.toString(), "Invalid input",
                     JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    /**
+     * Highlights invalid form fields based on validation errors.
+     * <p>
+     * All label colors are first reset to black. Labels associated with
+     * validation errors are then highlighted in red.
+     *
+     * @param result the result containing validation errors
+     * @param dialog the dialog whose labels are updated
+     */
+    private void highlightInvalidFields(final PersonOperationResult result,
+                                        final PersonFormDialog dialog) {
+        dialog.resetLabelColors();
+
+        MyList<ValidationError> validationErrors = result.validationErrors();
+
+        for (int i = 0; i < validationErrors.size(); i++) {
+            ValidationError error = validationErrors.get(i);
+
+            if (error instanceof PersonValidationError personError) {
+                switch (personError.field()) {
+                    case FIRST_NAME:
+                        dialog.highlightFirstNameLabel();
+                        break;
+                    case LAST_NAME:
+                        dialog.highlightLastNameLabel();
+                        break;
+                    case AGE:
+                        dialog.highlightAgeLabel();
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 
