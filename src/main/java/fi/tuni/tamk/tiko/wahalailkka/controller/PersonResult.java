@@ -26,7 +26,8 @@ import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
  */
 public record PersonResult(boolean isSuccess, Person person,
                            MyList<ValidationError> validationErrors,
-                           String repositoryError) {
+                           String repositoryError)
+                           implements PersonOperationResult {
     /**
      * Creates a successful result containing the given person.
      * <p>
