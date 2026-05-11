@@ -1,6 +1,7 @@
 package fi.tuni.tamk.tiko.wahalailkka.controller;
 
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
+import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 
 /**
@@ -10,6 +11,21 @@ import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
  * controller operations such as create, update, and delete.
  */
 public interface PersonOperationResult {
+    /**
+     * Returns whether the operation completed successfully.
+     *
+     * @return {@code true} if the operation succeeded,
+     *         {@code false} otherwise
+     */
+    boolean isSuccess();
+
+    /**
+     * Returns the person associated with the operation result.
+     *
+     * @return the resulting person, or {@code null} if none
+     */
+    Person person();
+
     /**
      * Returns the validation errors associated with the operation.
      *
