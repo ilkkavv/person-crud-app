@@ -103,4 +103,14 @@ public final class PersonTableModel extends AbstractTableModel {
 
         return columnNames.get(columnIndex);
     }
+
+    /**
+     * Returns the person at the specified row index.
+     *
+     * @param rowIndex the index of the row
+     * @return the person at the given row index
+     */
+    public Person getPersonAt(final int rowIndex) {
+        return currentList.get(rowIndex);
+    }
 }
