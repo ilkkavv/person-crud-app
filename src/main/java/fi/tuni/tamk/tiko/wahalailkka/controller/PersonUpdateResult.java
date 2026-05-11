@@ -31,7 +31,8 @@ import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 public record PersonUpdateResult(boolean isSuccess, Person person,
                            MyList<String> changedFields,
                            MyList<ValidationError> validationErrors,
-                           String repositoryError) {
+                           String repositoryError)
+                           implements PersonOperationResult {
     /**
      * Creates a successful update result containing the updated person
      * and a list of changed fields.
