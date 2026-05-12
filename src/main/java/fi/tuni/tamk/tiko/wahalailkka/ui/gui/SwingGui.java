@@ -5,13 +5,21 @@ import fi.tuni.tamk.tiko.wahalailkka.controller.PersonListResult;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonOperationResult;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonResult;
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonUpdateResult;
+import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
 import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
 import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -27,11 +35,17 @@ public class SwingGui extends JFrame implements AppUi {
     /** Controller used to handle person-related application logic. */
     private final PersonController controller;
 
-    private static final int minWindowWidth = 800;
-    private static final int minWindowHeight = 600;
+    private static final int ID_FIELD_WIDTH = 3;
+
+    private static final int MIN_WINDOW_WIDTH = 800;
+    private static final int MIN_WINDOW_HEIGHT = 600;
 
     private JTable personTable;
     private PersonTableModel personTableModel;
+
+    private final JLabel idLabel = new JLabel("ID:");
+    private JTextField findByIdField;
+    private JButton findByIdButton;
 
     private JButton createButton;
     private JButton updateButton;
@@ -61,13 +75,24 @@ public class SwingGui extends JFrame implements AppUi {
 
     private void initializeFrame() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setMinimumSize(new Dimension(minWindowWidth, minWindowHeight));
-        this.setSize(minWindowWidth, minWindowHeight);
+        this.setMinimumSize(new Dimension(MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT));
+        this.setSize(MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT);
         this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
     }
 
     private void initializeComponents() {
+        JPanel topPanel = new JPanel();
+        findByIdButton = new JButton("Find");
+        findByIdField = new JTextField();
+        findByIdField.setColumns(ID_FIELD_WIDTH);
+
+        topPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+        topPanel.add(idLabel);
+        topPanel.add(findByIdField);
+        topPanel.add(findByIdButton);
+        this.add(topPanel, BorderLayout.NORTH);
+
         personTableModel = new PersonTableModel(controller.findAllPersons().
                 personList());
         personTable = new JTable(personTableModel);
@@ -90,15 +115,43 @@ public class SwingGui extends JFrame implements AppUi {
     }
 
     private void initializeListeners() {
-        createButton.addActionListener(e -> handleCreate());
-        updateButton.addActionListener(e -> handleUpdate());
-        deleteButton.addActionListener(e -> handleDelete());
+        findByIdButton.addActionListener(e -> handleFindById());
 
         personTable.getSelectionModel().addListSelectionListener(e -> {
             int selectedRow = personTable.getSelectedRow();
             updateButton.setEnabled(selectedRow > -1);
             deleteButton.setEnabled(selectedRow > -1);
         });
+
+        createButton.addActionListener(e -> handleCreate());
+        updateButton.addActionListener(e -> handleUpdate());
+        deleteButton.addActionListener(e -> handleDelete());
+    }
+
+    private void handleFindById() {
+        String idText = findByIdField.getText();
+        int id = parseId(idText);
+
+        if (id == -1) {
+            return;
+        }
+
+        MyList<Person> personList = new MyArrayList<>();
+        PersonResult result = controller.findPersonById(id);
+
+        if (result.isSuccess()) {
+            personList.add(result.person());
+            personTableModel.setCurrentList(personList);
+        } else {
+            if (result.validationErrors().isEmpty()) {
+                showMessage(this, result.repositoryError(),
+                        "Person not found", JOptionPane.WARNING_MESSAGE);
+            } else {
+                showMessage(this,
+                        formatValidationErrors(result.validationErrors()),
+                        "Invalid input", JOptionPane.WARNING_MESSAGE);
+            }
+        }
     }
 
     private void handleCreate() {
@@ -209,7 +262,7 @@ public class SwingGui extends JFrame implements AppUi {
 
                 refreshPersonList();
 
-                showMessage(SwingGui.this, message,"Success",
+                showMessage(SwingGui.this, message, "Success",
                         JOptionPane.INFORMATION_MESSAGE);
             } else {
                 handleErrors(result, SwingGui.this);
@@ -304,6 +357,38 @@ public class SwingGui extends JFrame implements AppUi {
         } catch (NumberFormatException e) {
             return -1;
         }
+    }
+
+    private int parseId(final String idText) {
+        try {
+            int id = Integer.parseInt(idText);
+
+            if (id > 0) {
+                return id;
+            }
+        } catch (NumberFormatException _) {
+        }
+
+        showMessage(this,
+                "Person ID must be a positive integer.",
+                "Invalid input",
+                JOptionPane.WARNING_MESSAGE);
+
+        return -1;
+    }
+
+    private String formatValidationErrors(
+            final MyList<ValidationError> errors) {
+        StringBuilder errorList = new StringBuilder();
+
+        for (int i = 0; i < errors.size(); i++) {
+            errorList.append(errors.get(i).getMessage());
+            if (i != errors.size() - 1) {
+                errorList.append("\n");
+            }
+        }
+
+        return errorList.toString();
     }
 
     /**
