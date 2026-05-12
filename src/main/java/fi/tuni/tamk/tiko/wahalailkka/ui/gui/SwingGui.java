@@ -161,9 +161,7 @@ public class SwingGui extends JFrame implements AppUi {
                 showMessage(this, result.repositoryError(),
                         "Person not found", JOptionPane.WARNING_MESSAGE);
             } else {
-                showMessage(this,
-                        formatValidationErrors(result.validationErrors()),
-                        "Invalid input", JOptionPane.WARNING_MESSAGE);
+                handleValidationErrors(result.validationErrors());
             }
         }
     }
