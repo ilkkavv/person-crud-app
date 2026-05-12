@@ -12,6 +12,7 @@ import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
 import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
 import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,7 +37,7 @@ public class SwingGui extends JFrame implements AppUi {
     private final PersonController controller;
 
     private static final int ID_FIELD_WIDTH = 3;
-    private static final int NAME_FIELD_WIDTH = 8;
+    private static final int NAME_FIELD_WIDTH = 10;
     private static final int AGE_FIELD_WIDTH = 3;
     private static final int MIN_WINDOW_WIDTH = 800;
     private static final int MIN_WINDOW_HEIGHT = 600;
@@ -91,35 +92,96 @@ public class SwingGui extends JFrame implements AppUi {
         this.setLocationRelativeTo(null);
     }
 
-    private void initializeComponents() {
+    private JPanel initializeTopPanel() {
         JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+
+        topPanel.add(initializeFilterPanel());
+
+        return topPanel;
+    }
+
+    private JPanel initializeFilterPanel() {
+        JPanel filterPanel = new JPanel();
+        filterPanel.setLayout(new BorderLayout());
+
+        JPanel westPanel = new JPanel(new FlowLayout());
+        JPanel eastPanel = new JPanel(new FlowLayout());
+
+        westPanel.add(initializeIdPanel());
+        westPanel.add(initializeNamePanel());
+        westPanel.add(initializeAgePanel());
+
+        eastPanel.add(initializeShowPanel());
+
+        filterPanel.add(westPanel, BorderLayout.WEST);
+        filterPanel.add(eastPanel, BorderLayout.EAST);
+
+        return filterPanel;
+    }
+
+    private JPanel initializeIdPanel() {
+        JPanel idPanel = new JPanel();
+        idPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+
         findByIdButton = new JButton("Find");
         findByIdField = new JTextField();
         findByIdField.setColumns(ID_FIELD_WIDTH);
+
+        idPanel.add(idLabel);
+        idPanel.add(findByIdField);
+        idPanel.add(findByIdButton);
+
+        return idPanel;
+    }
+
+    private JPanel initializeNamePanel() {
+        JPanel namePanel = new JPanel();
+        namePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+
         searchByNameButton = new JButton("Search");
         searchByNameField = new JTextField();
         searchByNameField.setColumns(NAME_FIELD_WIDTH);
+
+        namePanel.add(nameLabel);
+        namePanel.add(searchByNameField);
+        namePanel.add(searchByNameButton);
+
+        return namePanel;
+    }
+
+    private JPanel initializeAgePanel() {
+        JPanel agePanel = new JPanel();
+        agePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+
         filterByAgeRangeButton = new JButton("Filter");
         ageRangeMinField = new JTextField();
         ageRangeMinField.setColumns(AGE_FIELD_WIDTH);
         ageRangeMaxField = new JTextField();
         ageRangeMaxField.setColumns(AGE_FIELD_WIDTH);
+
+        agePanel.add(ageRangeLabel);
+        agePanel.add(ageRangeMinField);
+        agePanel.add(ageRangeDashLabel);
+        agePanel.add(ageRangeMaxField);
+        agePanel.add(filterByAgeRangeButton);
+
+        return agePanel;
+    }
+
+    private JPanel initializeShowPanel() {
+        JPanel showPanel = new JPanel();
+        showPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
+
         showAll = new JButton("Show all");
 
-        topPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-        topPanel.add(idLabel);
-        topPanel.add(findByIdField);
-        topPanel.add(findByIdButton);
-        topPanel.add(nameLabel);
-        topPanel.add(searchByNameField);
-        topPanel.add(searchByNameButton);
-        topPanel.add(ageRangeLabel);
-        topPanel.add(ageRangeMinField);
-        topPanel.add(ageRangeDashLabel);
-        topPanel.add(ageRangeMaxField);
-        topPanel.add(filterByAgeRangeButton);
-        topPanel.add(showAll);
-        this.add(topPanel, BorderLayout.NORTH);
+        showPanel.add(showAll);
+
+        return showPanel;
+    }
+
+    private void initializeComponents() {
+        this.add(initializeTopPanel(), BorderLayout.NORTH);
 
         personTableModel = new PersonTableModel(controller.findAllPersons().
                 personList());
