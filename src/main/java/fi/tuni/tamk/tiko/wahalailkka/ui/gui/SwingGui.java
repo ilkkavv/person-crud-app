@@ -36,7 +36,7 @@ public class SwingGui extends JFrame implements AppUi {
     private final PersonController controller;
 
     private static final int ID_FIELD_WIDTH = 3;
-
+    private static final int NAME_FIELD_WIDTH = 8;
     private static final int MIN_WINDOW_WIDTH = 800;
     private static final int MIN_WINDOW_HEIGHT = 600;
 
@@ -46,6 +46,9 @@ public class SwingGui extends JFrame implements AppUi {
     private final JLabel idLabel = new JLabel("ID:");
     private JTextField findByIdField;
     private JButton findByIdButton;
+    private final JLabel nameLabel = new JLabel("Name:");
+    private JTextField searchByNameField;
+    private JButton searchByNameButton;
     private JButton showAll;
 
     private JButton createButton;
@@ -87,12 +90,18 @@ public class SwingGui extends JFrame implements AppUi {
         findByIdButton = new JButton("Find");
         findByIdField = new JTextField();
         findByIdField.setColumns(ID_FIELD_WIDTH);
+        searchByNameButton = new JButton("Search");
+        searchByNameField = new JTextField();
+        searchByNameField.setColumns(NAME_FIELD_WIDTH);
         showAll = new JButton("Show all");
 
         topPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
         topPanel.add(idLabel);
         topPanel.add(findByIdField);
         topPanel.add(findByIdButton);
+        topPanel.add(nameLabel);
+        topPanel.add(searchByNameField);
+        topPanel.add(searchByNameButton);
         topPanel.add(showAll);
         this.add(topPanel, BorderLayout.NORTH);
 
@@ -119,6 +128,7 @@ public class SwingGui extends JFrame implements AppUi {
 
     private void initializeListeners() {
         findByIdButton.addActionListener(e -> handleFindById());
+        searchByNameButton.addActionListener(e -> handleSearchByName());
         showAll.addActionListener(e -> handleShowAll());
 
         personTable.getSelectionModel().addListSelectionListener(e -> {
@@ -156,6 +166,25 @@ public class SwingGui extends JFrame implements AppUi {
                         "Invalid input", JOptionPane.WARNING_MESSAGE);
             }
         }
+    }
+
+    private void handleSearchByName() {
+        String searchInput = searchByNameField.getText();
+
+        MyList<Person> personList;
+        PersonListResult result = controller.searchPersonsByName(searchInput);
+
+        if (result.isSuccess()) {
+            personList = result.personList();
+            personTableModel.setCurrentList(personList);
+        } else {
+            handleValidationErrors(result.validationErrors());
+        }
+    }
+
+    private void handleValidationErrors(final MyList<ValidationError> errors) {
+        showMessage(this, formatValidationErrors(errors), "Invalid input",
+                JOptionPane.WARNING_MESSAGE);
     }
 
     private void handleShowAll() {
