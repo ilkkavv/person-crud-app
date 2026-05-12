@@ -37,6 +37,7 @@ public class SwingGui extends JFrame implements AppUi {
 
     private static final int ID_FIELD_WIDTH = 3;
     private static final int NAME_FIELD_WIDTH = 8;
+    private static final int AGE_FIELD_WIDTH = 3;
     private static final int MIN_WINDOW_WIDTH = 800;
     private static final int MIN_WINDOW_HEIGHT = 600;
 
@@ -49,6 +50,11 @@ public class SwingGui extends JFrame implements AppUi {
     private final JLabel nameLabel = new JLabel("Name:");
     private JTextField searchByNameField;
     private JButton searchByNameButton;
+    private final JLabel ageRangeLabel = new JLabel("Age range:");
+    private JTextField ageRangeMinField;
+    private final JLabel ageRangeDashLabel = new JLabel("–");
+    private JTextField ageRangeMaxField;
+    private JButton filterByAgeRangeButton;
     private JButton showAll;
 
     private JButton createButton;
@@ -93,6 +99,11 @@ public class SwingGui extends JFrame implements AppUi {
         searchByNameButton = new JButton("Search");
         searchByNameField = new JTextField();
         searchByNameField.setColumns(NAME_FIELD_WIDTH);
+        filterByAgeRangeButton = new JButton("Filter");
+        ageRangeMinField = new JTextField();
+        ageRangeMinField.setColumns(AGE_FIELD_WIDTH);
+        ageRangeMaxField = new JTextField();
+        ageRangeMaxField.setColumns(AGE_FIELD_WIDTH);
         showAll = new JButton("Show all");
 
         topPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
@@ -102,6 +113,11 @@ public class SwingGui extends JFrame implements AppUi {
         topPanel.add(nameLabel);
         topPanel.add(searchByNameField);
         topPanel.add(searchByNameButton);
+        topPanel.add(ageRangeLabel);
+        topPanel.add(ageRangeMinField);
+        topPanel.add(ageRangeDashLabel);
+        topPanel.add(ageRangeMaxField);
+        topPanel.add(filterByAgeRangeButton);
         topPanel.add(showAll);
         this.add(topPanel, BorderLayout.NORTH);
 
@@ -129,6 +145,7 @@ public class SwingGui extends JFrame implements AppUi {
     private void initializeListeners() {
         findByIdButton.addActionListener(e -> handleFindById());
         searchByNameButton.addActionListener(e -> handleSearchByName());
+        filterByAgeRangeButton.addActionListener(e -> handleFilterByAgeRange());
         showAll.addActionListener(e -> handleShowAll());
 
         personTable.getSelectionModel().addListSelectionListener(e -> {
@@ -175,6 +192,29 @@ public class SwingGui extends JFrame implements AppUi {
         if (result.isSuccess()) {
             personList = result.personList();
             personTableModel.setCurrentList(personList);
+        } else {
+            handleValidationErrors(result.validationErrors());
+        }
+    }
+
+    private void handleFilterByAgeRange() {
+        String minAgeText = ageRangeMinField.getText();
+        String maxAgeText = ageRangeMaxField.getText();
+
+        int minAge = parseAge(minAgeText);
+        int maxAge = parseAge(maxAgeText);
+
+        if (minAge == -1 || maxAge == -1) {
+            showMessage(this,
+                    "Please enter valid numbers for minimum and maximum age.",
+                    "Invalid input", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        PersonListResult result = controller.searchPersonsByAge(minAge, maxAge);
+
+        if (result.isSuccess()) {
+            personTableModel.setCurrentList(result.personList());
         } else {
             handleValidationErrors(result.validationErrors());
         }
