@@ -180,28 +180,47 @@ public class SwingGui extends JFrame implements AppUi {
         return showPanel;
     }
 
-    private void initializeComponents() {
-        this.add(initializeTopPanel(), BorderLayout.NORTH);
-
+    private JScrollPane initializePersonTable() {
         personTableModel = new PersonTableModel(controller.findAllPersons().
                 personList());
+
         personTable = new JTable(personTableModel);
-        JScrollPane scrollPane = new JScrollPane(personTable);
 
-        this.add(scrollPane, BorderLayout.CENTER);
+        return new JScrollPane(personTable);
+    }
 
+    private JPanel initializeBottomPanel() {
         JPanel bottomPanel = new JPanel();
+
+        bottomPanel.setLayout(new BorderLayout());
+
+        bottomPanel.add(initializeCrudPanel(), BorderLayout.WEST);
+
+        return bottomPanel;
+    }
+
+    private JPanel initializeCrudPanel() {
+        JPanel crudPanel = new JPanel();
+        crudPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+
         createButton = new JButton("Create");
         updateButton = new JButton("Update");
         deleteButton = new JButton("Delete");
+
         updateButton.setEnabled(false);
         deleteButton.setEnabled(false);
 
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-        bottomPanel.add(createButton);
-        bottomPanel.add(updateButton);
-        bottomPanel.add(deleteButton);
-        this.add(bottomPanel, BorderLayout.SOUTH);
+        crudPanel.add(createButton);
+        crudPanel.add(updateButton);
+        crudPanel.add(deleteButton);
+
+        return crudPanel;
+    }
+
+    private void initializeComponents() {
+        this.add(initializeTopPanel(), BorderLayout.NORTH);
+        this.add(initializePersonTable(), BorderLayout.CENTER);
+        this.add(initializeBottomPanel(), BorderLayout.SOUTH);
     }
 
     private void initializeListeners() {
