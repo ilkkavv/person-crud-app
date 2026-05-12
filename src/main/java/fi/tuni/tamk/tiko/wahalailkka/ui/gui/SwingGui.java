@@ -46,6 +46,7 @@ public class SwingGui extends JFrame implements AppUi {
     private final JLabel idLabel = new JLabel("ID:");
     private JTextField findByIdField;
     private JButton findByIdButton;
+    private JButton showAll;
 
     private JButton createButton;
     private JButton updateButton;
@@ -86,11 +87,13 @@ public class SwingGui extends JFrame implements AppUi {
         findByIdButton = new JButton("Find");
         findByIdField = new JTextField();
         findByIdField.setColumns(ID_FIELD_WIDTH);
+        showAll = new JButton("Show all");
 
         topPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
         topPanel.add(idLabel);
         topPanel.add(findByIdField);
         topPanel.add(findByIdButton);
+        topPanel.add(showAll);
         this.add(topPanel, BorderLayout.NORTH);
 
         personTableModel = new PersonTableModel(controller.findAllPersons().
@@ -116,6 +119,7 @@ public class SwingGui extends JFrame implements AppUi {
 
     private void initializeListeners() {
         findByIdButton.addActionListener(e -> handleFindById());
+        showAll.addActionListener(e -> handleShowAll());
 
         personTable.getSelectionModel().addListSelectionListener(e -> {
             int selectedRow = personTable.getSelectedRow();
@@ -152,6 +156,10 @@ public class SwingGui extends JFrame implements AppUi {
                         "Invalid input", JOptionPane.WARNING_MESSAGE);
             }
         }
+    }
+
+    private void handleShowAll() {
+        refreshPersonList();
     }
 
     private void handleCreate() {
