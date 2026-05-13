@@ -9,11 +9,13 @@ import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
+import fi.tuni.tamk.tiko.wahalailkka.util.PersonSorter;
 import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
 import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -21,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -39,8 +42,17 @@ public class SwingGui extends JFrame implements AppUi {
     private static final int ID_FIELD_WIDTH = 3;
     private static final int NAME_FIELD_WIDTH = 10;
     private static final int AGE_FIELD_WIDTH = 3;
+
+    private static final int BORDER_MARGIN = 5;
+
     private static final int MIN_WINDOW_WIDTH = 800;
     private static final int MIN_WINDOW_HEIGHT = 600;
+
+    private static final String FIRST_NAME = "First Name";
+    private static final String LAST_NAME = "Last Name";
+    private static final String AGE = "Age";
+    private static final String ASCENDING_ORDER = "Ascending Order";
+    private static final String DESCENDING_ODER = "Descending Order";
 
     private JTable personTable;
     private PersonTableModel personTableModel;
@@ -48,15 +60,23 @@ public class SwingGui extends JFrame implements AppUi {
     private final JLabel idLabel = new JLabel("ID:");
     private JTextField findByIdField;
     private JButton findByIdButton;
+
     private final JLabel nameLabel = new JLabel("Name:");
     private JTextField searchByNameField;
     private JButton searchByNameButton;
+
     private final JLabel ageRangeLabel = new JLabel("Age range:");
     private JTextField ageRangeMinField;
     private final JLabel ageRangeDashLabel = new JLabel("–");
     private JTextField ageRangeMaxField;
     private JButton filterByAgeRangeButton;
+
     private JButton showAll;
+
+    private final JLabel sortLabel = new JLabel("Sort by:");
+    private JComboBox<String> sortByComboBox;
+    private JComboBox<String> sortOrderComboBox;
+    private JButton sortButton;
 
     private JButton createButton;
     private JButton updateButton;
@@ -92,11 +112,18 @@ public class SwingGui extends JFrame implements AppUi {
         this.setLocationRelativeTo(null);
     }
 
+    private void initializeComponents() {
+        this.add(initializeTopPanel(), BorderLayout.NORTH);
+        this.add(initializePersonTable(), BorderLayout.CENTER);
+        this.add(initializeBottomPanel(), BorderLayout.SOUTH);
+    }
+
     private JPanel initializeTopPanel() {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
 
         topPanel.add(initializeFilterPanel());
+        topPanel.add(initializeSortPanel());
 
         return topPanel;
     }
@@ -180,6 +207,41 @@ public class SwingGui extends JFrame implements AppUi {
         return showPanel;
     }
 
+    private JPanel initializeSortPanel() {
+        JPanel sortPanel = new JPanel();
+        sortPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
+        sortPanel.setBorder(new EmptyBorder(0, BORDER_MARGIN, BORDER_MARGIN,
+                BORDER_MARGIN));
+
+        sortByComboBox = new JComboBox<>();
+        sortOrderComboBox = new JComboBox<>();
+        sortButton = new JButton("Sort");
+
+        MyList<String> sortOptions = new MyArrayList<>();
+        sortOptions.add(FIRST_NAME);
+        sortOptions.add(LAST_NAME);
+        sortOptions.add(AGE);
+
+        for (int i = 0; i < sortOptions.size(); i++) {
+            sortByComboBox.addItem(sortOptions.get(i));
+        }
+
+        MyList<String> orderOptions = new MyArrayList<>();
+        orderOptions.add(ASCENDING_ORDER);
+        orderOptions.add(DESCENDING_ODER);
+
+        for (int i = 0; i < orderOptions.size(); i++) {
+            sortOrderComboBox.addItem(orderOptions.get(i));
+        }
+
+        sortPanel.add(sortLabel);
+        sortPanel.add(sortByComboBox);
+        sortPanel.add(sortOrderComboBox);
+        sortPanel.add(sortButton);
+
+        return sortPanel;
+    }
+
     private JScrollPane initializePersonTable() {
         personTableModel = new PersonTableModel(controller.findAllPersons().
                 personList());
@@ -217,17 +279,13 @@ public class SwingGui extends JFrame implements AppUi {
         return crudPanel;
     }
 
-    private void initializeComponents() {
-        this.add(initializeTopPanel(), BorderLayout.NORTH);
-        this.add(initializePersonTable(), BorderLayout.CENTER);
-        this.add(initializeBottomPanel(), BorderLayout.SOUTH);
-    }
-
     private void initializeListeners() {
         findByIdButton.addActionListener(e -> handleFindById());
         searchByNameButton.addActionListener(e -> handleSearchByName());
         filterByAgeRangeButton.addActionListener(e -> handleFilterByAgeRange());
         showAll.addActionListener(e -> handleShowAll());
+
+        sortButton.addActionListener(e -> handleSort());
 
         personTable.getSelectionModel().addListSelectionListener(e -> {
             int selectedRow = personTable.getSelectedRow();
@@ -298,6 +356,38 @@ public class SwingGui extends JFrame implements AppUi {
             personTableModel.setCurrentList(result.personList());
         } else {
             handleValidationErrors(result.validationErrors());
+        }
+    }
+
+    private void handleSort() {
+        if (sortByComboBox.getSelectedItem() == null ||
+                sortOrderComboBox.getSelectedItem() == null) {
+            return;
+        }
+
+        String sortBy = sortByComboBox.getSelectedItem().toString();
+        boolean ascending = sortOrderComboBox.getSelectedItem().toString()
+                .equals(ASCENDING_ORDER);
+
+        PersonListResult result;
+        MyList<Person> currentList = personTableModel.getCurrentList();
+        PersonSorter.NameField nameField;
+
+        if (sortBy.equals(AGE)) {
+            result = controller.sortPersonsByAge(currentList, ascending);
+        } else {
+            if (sortBy.equals(FIRST_NAME)) {
+                nameField = PersonSorter.NameField.FIRST_NAME;
+            } else {
+                nameField = PersonSorter.NameField.LAST_NAME;
+            }
+
+            result = controller.sortPersonsByName(currentList, nameField,
+                    ascending);
+        }
+
+        if (result.isSuccess()) {
+            personTableModel.setCurrentList(result.personList());
         }
     }
 
