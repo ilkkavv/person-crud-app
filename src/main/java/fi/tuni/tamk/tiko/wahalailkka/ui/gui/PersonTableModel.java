@@ -42,6 +42,15 @@ public final class PersonTableModel extends AbstractTableModel {
     }
 
     /**
+     * Returns the list currently displayed in the table model.
+     *
+     * @return the current list of persons shown in the table
+     */
+    public MyList<Person> getCurrentList() {
+        return currentList;
+    }
+
+    /**
      * Returns the number of rows in the table.
      *
      * @return the number of persons in the current list
