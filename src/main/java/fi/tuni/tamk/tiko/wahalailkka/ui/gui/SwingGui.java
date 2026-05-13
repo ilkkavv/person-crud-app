@@ -13,16 +13,7 @@ import fi.tuni.tamk.tiko.wahalailkka.util.PersonSorter;
 import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
 import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -59,6 +50,58 @@ public class SwingGui extends JFrame implements AppUi {
     private static final String ASCENDING_ORDER = "Ascending Order";
     private static final String DESCENDING_ODER = "Descending Order";
 
+    private static final String HELP_MSG = """
+    NAME
+        person-crud-app
+
+    DESCRIPTION
+        person-crud-app is a desktop application for managing
+        a collection of persons.
+
+        Each person contains:
+            - ID
+            - First name
+            - Last name
+            - Age
+
+        IDs are assigned automatically by the application.
+
+    FEATURES
+        Create
+            Adds a new person to the collection.
+
+        Update
+            Updates the selected person's information.
+
+        Delete
+            Deletes the selected person after confirmation.
+
+        Find by ID
+            Displays a person with the given ID.
+
+        Search by Name
+            Searches persons by first and last name.
+
+        Filter by Age Range
+            Displays persons whose age is within the given range.
+
+        Sort
+            Sorts the current list by:
+                - First name
+                - Last name
+                - Age
+
+            Sorting can be ascending or descending.
+
+        Reset View
+            Restores the full person list and clears
+            filtering and sorting results.
+
+    USAGE
+        Select a row from the table before using
+        Update or Delete operations.
+    """;
+
     private JTable personTable;
     private PersonTableModel personTableModel;
 
@@ -87,6 +130,7 @@ public class SwingGui extends JFrame implements AppUi {
     private JButton updateButton;
     private JButton deleteButton;
 
+    private JButton helpButton;
     private JButton exitButton;
 
     /**
@@ -302,10 +346,15 @@ public class SwingGui extends JFrame implements AppUi {
         JPanel exitPanel = new JPanel();
         exitPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
 
+        helpButton = new JButton("Help");
         exitButton = new JButton("Exit");
 
-        exitButton.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
+        Dimension buttonDimension = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
 
+        helpButton.setPreferredSize(buttonDimension);
+        exitButton.setPreferredSize(buttonDimension);
+
+        exitPanel.add(helpButton);
         exitPanel.add(exitButton);
 
         return exitPanel;
@@ -336,6 +385,7 @@ public class SwingGui extends JFrame implements AppUi {
         updateButton.addActionListener(e -> handleUpdate());
         deleteButton.addActionListener(e -> handleDelete());
 
+        helpButton.addActionListener(e -> handleHelp());
         exitButton.addActionListener(e -> handleExit());
     }
 
@@ -593,6 +643,10 @@ public class SwingGui extends JFrame implements AppUi {
         }
     }
 
+    private void handleHelp() {
+        showHelp();
+    }
+
     private void handleExit() {
         int option = JOptionPane.showConfirmDialog(
                 this,
@@ -711,5 +765,15 @@ public class SwingGui extends JFrame implements AppUi {
     private void showMessage(final Component parent, final String message,
                              final String title, final int type) {
         JOptionPane.showMessageDialog(parent, message, title, type);
+    }
+
+    private void showHelp() {
+        JTextArea helpText = new JTextArea(HELP_MSG);
+        helpText.setOpaque(false);
+        helpText.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(helpText);
+        scrollPane.setPreferredSize(new Dimension(400, 300));
+        JOptionPane.showMessageDialog(this, scrollPane,
+                "Help", JOptionPane.INFORMATION_MESSAGE);
     }
 }
