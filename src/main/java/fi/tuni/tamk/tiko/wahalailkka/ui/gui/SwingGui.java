@@ -71,7 +71,7 @@ public class SwingGui extends JFrame implements AppUi {
     private JTextField ageRangeMaxField;
     private JButton filterByAgeRangeButton;
 
-    private JButton showAll;
+    private JButton resetViewButton;
 
     private final JLabel sortLabel = new JLabel("Sort by:");
     private JComboBox<String> sortByComboBox;
@@ -200,9 +200,9 @@ public class SwingGui extends JFrame implements AppUi {
         JPanel showPanel = new JPanel();
         showPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
 
-        showAll = new JButton("Show all");
+        resetViewButton = new JButton("Reset view");
 
-        showPanel.add(showAll);
+        showPanel.add(resetViewButton);
 
         return showPanel;
     }
@@ -283,7 +283,7 @@ public class SwingGui extends JFrame implements AppUi {
         findByIdButton.addActionListener(e -> handleFindById());
         searchByNameButton.addActionListener(e -> handleSearchByName());
         filterByAgeRangeButton.addActionListener(e -> handleFilterByAgeRange());
-        showAll.addActionListener(e -> handleShowAll());
+        resetViewButton.addActionListener(e -> handleResetView());
 
         sortButton.addActionListener(e -> handleSort());
 
@@ -396,7 +396,7 @@ public class SwingGui extends JFrame implements AppUi {
                 JOptionPane.WARNING_MESSAGE);
     }
 
-    private void handleShowAll() {
+    private void handleResetView() {
         refreshPersonList();
     }
 
