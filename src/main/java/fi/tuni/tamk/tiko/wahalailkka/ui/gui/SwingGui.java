@@ -28,6 +28,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * Swing-based graphical user interface for the Person CRUD application.
@@ -44,6 +46,9 @@ public class SwingGui extends JFrame implements AppUi {
     private static final int AGE_FIELD_WIDTH = 3;
 
     private static final int BORDER_MARGIN = 5;
+
+    private static final int BUTTON_HEIGHT = 40;
+    private static final int BUTTON_WIDTH = 100;
 
     private static final int MIN_WINDOW_WIDTH = 800;
     private static final int MIN_WINDOW_HEIGHT = 600;
@@ -82,6 +87,8 @@ public class SwingGui extends JFrame implements AppUi {
     private JButton updateButton;
     private JButton deleteButton;
 
+    private JButton exitButton;
+
     /**
      * Constructs a new Swing GUI with the given controller.
      *
@@ -105,7 +112,7 @@ public class SwingGui extends JFrame implements AppUi {
     }
 
     private void initializeFrame() {
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setMinimumSize(new Dimension(MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT));
         this.setSize(MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT);
         this.setLayout(new BorderLayout());
@@ -253,10 +260,16 @@ public class SwingGui extends JFrame implements AppUi {
 
     private JPanel initializeBottomPanel() {
         JPanel bottomPanel = new JPanel();
-
         bottomPanel.setLayout(new BorderLayout());
 
-        bottomPanel.add(initializeCrudPanel(), BorderLayout.WEST);
+        JPanel westPanel = new JPanel(new FlowLayout());
+        JPanel eastPanel = new JPanel(new FlowLayout());
+
+        westPanel.add(initializeCrudPanel());
+        eastPanel.add(initializeExitPanel());
+
+        bottomPanel.add(westPanel, BorderLayout.WEST);
+        bottomPanel.add(eastPanel, BorderLayout.EAST);
 
         return bottomPanel;
     }
@@ -269,6 +282,12 @@ public class SwingGui extends JFrame implements AppUi {
         updateButton = new JButton("Update");
         deleteButton = new JButton("Delete");
 
+        Dimension buttonDimension = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
+
+        createButton.setPreferredSize(buttonDimension);
+        updateButton.setPreferredSize(buttonDimension);
+        deleteButton.setPreferredSize(buttonDimension);
+
         updateButton.setEnabled(false);
         deleteButton.setEnabled(false);
 
@@ -279,7 +298,27 @@ public class SwingGui extends JFrame implements AppUi {
         return crudPanel;
     }
 
+    private JPanel initializeExitPanel() {
+        JPanel exitPanel = new JPanel();
+        exitPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
+
+        exitButton = new JButton("Exit");
+
+        exitButton.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
+
+        exitPanel.add(exitButton);
+
+        return exitPanel;
+    }
+
     private void initializeListeners() {
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                handleExit();
+            }
+        });
+
         findByIdButton.addActionListener(e -> handleFindById());
         searchByNameButton.addActionListener(e -> handleSearchByName());
         filterByAgeRangeButton.addActionListener(e -> handleFilterByAgeRange());
@@ -296,6 +335,8 @@ public class SwingGui extends JFrame implements AppUi {
         createButton.addActionListener(e -> handleCreate());
         updateButton.addActionListener(e -> handleUpdate());
         deleteButton.addActionListener(e -> handleDelete());
+
+        exitButton.addActionListener(e -> handleExit());
     }
 
     private void handleFindById() {
@@ -549,6 +590,19 @@ public class SwingGui extends JFrame implements AppUi {
 
             showMessage(parent, errors.toString(), "Invalid input",
                     JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void handleExit() {
+        int option = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to exit Person CRUD App?",
+                "Exit",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (option == JOptionPane.YES_OPTION) {
+            System.exit(0);
         }
     }
 
