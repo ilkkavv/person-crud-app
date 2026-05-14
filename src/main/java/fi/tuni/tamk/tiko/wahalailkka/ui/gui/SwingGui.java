@@ -13,7 +13,17 @@ import fi.tuni.tamk.tiko.wahalailkka.util.PersonSorter;
 import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
 import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -48,7 +58,10 @@ public class SwingGui extends JFrame implements AppUi {
     private static final String LAST_NAME = "Last Name";
     private static final String AGE = "Age";
     private static final String ASCENDING_ORDER = "Ascending Order";
-    private static final String DESCENDING_ODER = "Descending Order";
+    private static final String DESCENDING_ORDER = "Descending Order";
+
+    private static final String INVALID_INPUT = "Invalid input";
+    private static final String SUCCESS = "Success";
 
     private static final String HELP_MSG = """
     NAME
@@ -105,23 +118,18 @@ public class SwingGui extends JFrame implements AppUi {
     private JTable personTable;
     private PersonTableModel personTableModel;
 
-    private final JLabel idLabel = new JLabel("ID:");
     private JTextField findByIdField;
     private JButton findByIdButton;
 
-    private final JLabel nameLabel = new JLabel("Name:");
     private JTextField searchByNameField;
     private JButton searchByNameButton;
 
-    private final JLabel ageRangeLabel = new JLabel("Age range:");
     private JTextField ageRangeMinField;
-    private final JLabel ageRangeDashLabel = new JLabel("–");
     private JTextField ageRangeMaxField;
     private JButton filterByAgeRangeButton;
 
     private JButton resetViewButton;
 
-    private final JLabel sortLabel = new JLabel("Sort by:");
     private JComboBox<String> sortByComboBox;
     private JComboBox<String> sortOrderComboBox;
     private JButton sortButton;
@@ -206,7 +214,7 @@ public class SwingGui extends JFrame implements AppUi {
         findByIdField = new JTextField();
         findByIdField.setColumns(ID_FIELD_WIDTH);
 
-        idPanel.add(idLabel);
+        idPanel.add(new JLabel("ID:"));
         idPanel.add(findByIdField);
         idPanel.add(findByIdButton);
 
@@ -221,7 +229,7 @@ public class SwingGui extends JFrame implements AppUi {
         searchByNameField = new JTextField();
         searchByNameField.setColumns(NAME_FIELD_WIDTH);
 
-        namePanel.add(nameLabel);
+        namePanel.add(new JLabel("Name:"));
         namePanel.add(searchByNameField);
         namePanel.add(searchByNameButton);
 
@@ -238,9 +246,9 @@ public class SwingGui extends JFrame implements AppUi {
         ageRangeMaxField = new JTextField();
         ageRangeMaxField.setColumns(AGE_FIELD_WIDTH);
 
-        agePanel.add(ageRangeLabel);
+        agePanel.add(new JLabel("Age range:"));
         agePanel.add(ageRangeMinField);
-        agePanel.add(ageRangeDashLabel);
+        agePanel.add(new JLabel("–"));
         agePanel.add(ageRangeMaxField);
         agePanel.add(filterByAgeRangeButton);
 
@@ -279,13 +287,13 @@ public class SwingGui extends JFrame implements AppUi {
 
         MyList<String> orderOptions = new MyArrayList<>();
         orderOptions.add(ASCENDING_ORDER);
-        orderOptions.add(DESCENDING_ODER);
+        orderOptions.add(DESCENDING_ORDER);
 
         for (int i = 0; i < orderOptions.size(); i++) {
             sortOrderComboBox.addItem(orderOptions.get(i));
         }
 
-        sortPanel.add(sortLabel);
+        sortPanel.add(new JLabel("Sort by:"));
         sortPanel.add(sortByComboBox);
         sortPanel.add(sortOrderComboBox);
         sortPanel.add(sortButton);
@@ -408,7 +416,7 @@ public class SwingGui extends JFrame implements AppUi {
                 showMessage(this, result.repositoryError(),
                         "Person not found", JOptionPane.WARNING_MESSAGE);
             } else {
-                handleValidationErrors(result.validationErrors());
+                showValidationErrors(result.validationErrors());
             }
         }
     }
@@ -423,7 +431,7 @@ public class SwingGui extends JFrame implements AppUi {
             personList = result.personList();
             personTableModel.setCurrentList(personList);
         } else {
-            handleValidationErrors(result.validationErrors());
+            showValidationErrors(result.validationErrors());
         }
     }
 
@@ -437,7 +445,7 @@ public class SwingGui extends JFrame implements AppUi {
         if (minAge == -1 || maxAge == -1) {
             showMessage(this,
                     "Please enter valid numbers for minimum and maximum age.",
-                    "Invalid input", JOptionPane.WARNING_MESSAGE);
+                    INVALID_INPUT, JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -446,7 +454,7 @@ public class SwingGui extends JFrame implements AppUi {
         if (result.isSuccess()) {
             personTableModel.setCurrentList(result.personList());
         } else {
-            handleValidationErrors(result.validationErrors());
+            showValidationErrors(result.validationErrors());
         }
     }
 
@@ -482,8 +490,8 @@ public class SwingGui extends JFrame implements AppUi {
         }
     }
 
-    private void handleValidationErrors(final MyList<ValidationError> errors) {
-        showMessage(this, formatValidationErrors(errors), "Invalid input",
+    private void showValidationErrors(final MyList<ValidationError> errors) {
+        showMessage(this, formatValidationErrors(errors), INVALID_INPUT,
                 JOptionPane.WARNING_MESSAGE);
     }
 
@@ -510,13 +518,13 @@ public class SwingGui extends JFrame implements AppUi {
                         person.age());
 
                 showMessage(SwingGui.this, "New person created:"
-                        + "\n" + personData, "Success",
+                        + "\n" + personData, SUCCESS,
                         JOptionPane.INFORMATION_MESSAGE);
 
                 refreshPersonList();
                 return true;
             } else {
-                handleErrors(result, dialog);
+                showOperationErrorDialog(result, dialog);
                 highlightInvalidFields(result, dialog);
                 return false;
             }
@@ -556,7 +564,7 @@ public class SwingGui extends JFrame implements AppUi {
                     }
 
                     updatedFields = stringBuilder.toString();
-                    title = "Success";
+                    title = SUCCESS;
                 }
 
                 showMessage(SwingGui.this, updatedFields, title,
@@ -565,7 +573,7 @@ public class SwingGui extends JFrame implements AppUi {
                 refreshPersonList();
                 return true;
             } else {
-                handleErrors(result, dialog);
+                showOperationErrorDialog(result, dialog);
                 highlightInvalidFields(result, dialog);
                 return false;
             }
@@ -599,10 +607,10 @@ public class SwingGui extends JFrame implements AppUi {
 
                 refreshPersonList();
 
-                showMessage(SwingGui.this, message, "Success",
+                showMessage(SwingGui.this, message, SUCCESS,
                         JOptionPane.INFORMATION_MESSAGE);
             } else {
-                handleErrors(result, SwingGui.this);
+                showOperationErrorDialog(result, SwingGui.this);
             }
         }
     }
@@ -616,7 +624,7 @@ public class SwingGui extends JFrame implements AppUi {
      * @param result the result containing validation or repository errors
      * @param parent the parent component for the dialog
      */
-    private void handleErrors(final PersonOperationResult result,
+    private void showOperationErrorDialog(final PersonOperationResult result,
                               final Component parent) {
         StringBuilder errors = new StringBuilder();
 
@@ -638,7 +646,7 @@ public class SwingGui extends JFrame implements AppUi {
                 }
             }
 
-            showMessage(parent, errors.toString(), "Invalid input",
+            showMessage(parent, errors.toString(), INVALID_INPUT,
                     JOptionPane.WARNING_MESSAGE);
         }
     }
@@ -723,10 +731,8 @@ public class SwingGui extends JFrame implements AppUi {
         } catch (NumberFormatException _) {
         }
 
-        showMessage(this,
-                "Person ID must be a positive integer.",
-                "Invalid input",
-                JOptionPane.WARNING_MESSAGE);
+        showMessage(this, "Person ID must be a positive integer.",
+                INVALID_INPUT, JOptionPane.WARNING_MESSAGE);
 
         return -1;
     }
