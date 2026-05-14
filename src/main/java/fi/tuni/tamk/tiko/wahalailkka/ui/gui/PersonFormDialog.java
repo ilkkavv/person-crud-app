@@ -1,12 +1,11 @@
 package fi.tuni.tamk.tiko.wahalailkka.ui.gui;
 
+import fi.tuni.tamk.tiko.wahalailkka.repository.CsvRepositoryException;
+import static fi.tuni.tamk.tiko.wahalailkka.ui.gui.GuiExceptionHandler
+        .logException;
+
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -177,11 +176,17 @@ public class PersonFormDialog extends JDialog {
     }
 
     private void initializeListeners() {
-        cancelButton.addActionListener(e -> dispose());
+        cancelButton.addActionListener(_ -> dispose());
 
-        confirmButton.addActionListener(e -> {
-            if (onConfirm.handle(PersonFormDialog.this)) {
-                dispose();
+        confirmButton.addActionListener(_ -> {
+            try {
+                if (onConfirm.handle(PersonFormDialog.this)) {
+                    dispose();
+                }
+            } catch (CsvRepositoryException e) {
+                logException(e);
+                DialogHelper.showMessage(PersonFormDialog.this, e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
