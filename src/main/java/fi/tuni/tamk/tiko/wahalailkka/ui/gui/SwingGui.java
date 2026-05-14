@@ -23,7 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -41,10 +40,6 @@ import java.awt.event.WindowEvent;
 public class SwingGui extends JFrame implements AppUi {
     /** Controller used to handle person-related application logic. */
     private final PersonController controller;
-
-    private static final int ID_FIELD_WIDTH = 3;
-    private static final int NAME_FIELD_WIDTH = 10;
-    private static final int AGE_FIELD_WIDTH = 3;
 
     private static final int BORDER_MARGIN = 5;
 
@@ -115,20 +110,10 @@ public class SwingGui extends JFrame implements AppUi {
         Update or Delete operations.
     """;
 
+    private PersonFilterPanel filterPanel;
+
     private JTable personTable;
     private PersonTableModel personTableModel;
-
-    private JTextField findByIdField;
-    private JButton findByIdButton;
-
-    private JTextField searchByNameField;
-    private JButton searchByNameButton;
-
-    private JTextField ageRangeMinField;
-    private JTextField ageRangeMaxField;
-    private JButton filterByAgeRangeButton;
-
-    private JButton resetViewButton;
 
     private JComboBox<String> sortByComboBox;
     private JComboBox<String> sortOrderComboBox;
@@ -181,90 +166,14 @@ public class SwingGui extends JFrame implements AppUi {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
 
-        topPanel.add(initializeFilterPanel());
+        filterPanel = new PersonFilterPanel();
+
+        topPanel.add(filterPanel);
         topPanel.add(initializeSortPanel());
 
         return topPanel;
     }
 
-    private JPanel initializeFilterPanel() {
-        JPanel filterPanel = new JPanel();
-        filterPanel.setLayout(new BorderLayout());
-
-        JPanel westPanel = new JPanel(new FlowLayout());
-        JPanel eastPanel = new JPanel(new FlowLayout());
-
-        westPanel.add(initializeIdPanel());
-        westPanel.add(initializeNamePanel());
-        westPanel.add(initializeAgePanel());
-
-        eastPanel.add(initializeShowPanel());
-
-        filterPanel.add(westPanel, BorderLayout.WEST);
-        filterPanel.add(eastPanel, BorderLayout.EAST);
-
-        return filterPanel;
-    }
-
-    private JPanel initializeIdPanel() {
-        JPanel idPanel = new JPanel();
-        idPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-
-        findByIdButton = new JButton("Find");
-        findByIdField = new JTextField();
-        findByIdField.setColumns(ID_FIELD_WIDTH);
-
-        idPanel.add(new JLabel("ID:"));
-        idPanel.add(findByIdField);
-        idPanel.add(findByIdButton);
-
-        return idPanel;
-    }
-
-    private JPanel initializeNamePanel() {
-        JPanel namePanel = new JPanel();
-        namePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-
-        searchByNameButton = new JButton("Search");
-        searchByNameField = new JTextField();
-        searchByNameField.setColumns(NAME_FIELD_WIDTH);
-
-        namePanel.add(new JLabel("Name:"));
-        namePanel.add(searchByNameField);
-        namePanel.add(searchByNameButton);
-
-        return namePanel;
-    }
-
-    private JPanel initializeAgePanel() {
-        JPanel agePanel = new JPanel();
-        agePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-
-        filterByAgeRangeButton = new JButton("Filter");
-        ageRangeMinField = new JTextField();
-        ageRangeMinField.setColumns(AGE_FIELD_WIDTH);
-        ageRangeMaxField = new JTextField();
-        ageRangeMaxField.setColumns(AGE_FIELD_WIDTH);
-
-        agePanel.add(new JLabel("Age range:"));
-        agePanel.add(ageRangeMinField);
-        agePanel.add(new JLabel("–"));
-        agePanel.add(ageRangeMaxField);
-        agePanel.add(filterByAgeRangeButton);
-
-        return agePanel;
-    }
-
-    private JPanel initializeShowPanel() {
-        JPanel showPanel = new JPanel();
-        showPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
-
-        resetViewButton = new JButton("Reset view");
-
-        showPanel.add(resetViewButton);
-
-        return showPanel;
-    }
 
     private JPanel initializeSortPanel() {
         JPanel sortPanel = new JPanel();
@@ -376,10 +285,10 @@ public class SwingGui extends JFrame implements AppUi {
             }
         });
 
-        findByIdButton.addActionListener(e -> handleFindById());
-        searchByNameButton.addActionListener(e -> handleSearchByName());
-        filterByAgeRangeButton.addActionListener(e -> handleFilterByAgeRange());
-        resetViewButton.addActionListener(e -> handleResetView());
+        filterPanel.getFindByIdButton().addActionListener(e -> handleFindById());
+        filterPanel.getSearchByNameButton().addActionListener(e -> handleSearchByName());
+        filterPanel.getFilterByAgeRangeButton().addActionListener(e -> handleFilterByAgeRange());
+        filterPanel.getResetViewButton().addActionListener(e -> handleResetView());
 
         sortButton.addActionListener(e -> handleSort());
 
@@ -398,7 +307,7 @@ public class SwingGui extends JFrame implements AppUi {
     }
 
     private void handleFindById() {
-        String idText = findByIdField.getText();
+        String idText = filterPanel.getFindByIdField().getText();
         int id = parseId(idText);
 
         if (id == -1) {
@@ -422,7 +331,7 @@ public class SwingGui extends JFrame implements AppUi {
     }
 
     private void handleSearchByName() {
-        String searchInput = searchByNameField.getText();
+        String searchInput = filterPanel.getSearchByNameField().getText();
 
         MyList<Person> personList;
         PersonListResult result = controller.searchPersonsByName(searchInput);
@@ -436,8 +345,8 @@ public class SwingGui extends JFrame implements AppUi {
     }
 
     private void handleFilterByAgeRange() {
-        String minAgeText = ageRangeMinField.getText();
-        String maxAgeText = ageRangeMaxField.getText();
+        String minAgeText = filterPanel.getAgeRangeMinField().getText();
+        String maxAgeText = filterPanel.getAgeRangeMaxField().getText();
 
         int minAge = parseAge(minAgeText);
         int maxAge = parseAge(maxAgeText);
