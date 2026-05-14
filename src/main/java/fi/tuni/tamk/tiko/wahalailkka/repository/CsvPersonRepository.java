@@ -275,7 +275,7 @@ public class CsvPersonRepository implements PersonRepository {
                 }
             }
         } catch (IOException | NumberFormatException
-                 | ArrayIndexOutOfBoundsException e){
+                 | ArrayIndexOutOfBoundsException e) {
             LOGGER.error(DATA_READ_ERR_MSG, e);
             throw new CsvRepositoryException(DATA_READ_ERR_MSG, e);
         }
