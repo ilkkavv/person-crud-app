@@ -21,7 +21,10 @@ import java.awt.Dimension;
  *     <li>The application help dialog</li>
  * </ul>
  */
-public class DialogHelper {
+public final class DialogHelper {
+    private static final int SCROLL_PANE_WIDTH = 400;
+    private static final int SCROLL_PANE_HEIGHT = 300;
+
     private static final String INVALID_INPUT = "Invalid input";
 
     private static final String HELP_MSG = """
@@ -125,7 +128,7 @@ public class DialogHelper {
      * @param type the message type defined by {@link JOptionPane}
      */
     public static void showMessage(final Component parent, final String message,
-                                   final String title,final int type) {
+                                   final String title, final int type) {
         JOptionPane.showMessageDialog(parent, message, title, type);
     }
 
@@ -139,7 +142,8 @@ public class DialogHelper {
         helpText.setOpaque(false);
         helpText.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(helpText);
-        scrollPane.setPreferredSize(new Dimension(400, 300));
+        scrollPane.setPreferredSize(new Dimension(SCROLL_PANE_WIDTH,
+                                                  SCROLL_PANE_HEIGHT));
         JOptionPane.showMessageDialog(parent, scrollPane,
                 "Help", JOptionPane.INFORMATION_MESSAGE);
     }
