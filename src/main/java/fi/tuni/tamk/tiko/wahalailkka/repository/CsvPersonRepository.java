@@ -36,17 +36,18 @@ public class CsvPersonRepository implements PersonRepository {
     private MyList<Person> personList = new MyArrayList<>();
     private int nextId = 1;
 
-    private final int idIndex = 0;
-    private final int firstNameIndex = 1;
-    private final int lastNameIndex = 2;
-    private final int ageIndex = 3;
+    private static final int ID_INDEX = 0;
+    private static final int FIRST_NAME_INDEX = 1;
+    private static final int LAST_NAME_INDEX = 2;
+    private static final int AGE_INDEX = 3;
 
-    private final String initErrorMsg = "Failed to initialize CSV file";
-    private final String dataWriteErrorMsg = "Failed to write person data to"
-            + " CSV file";
-    private final String dataReadErrorMsg = "Failed to read from CSV file";
-    private final String listWriteErrorMsg = "Failed to write person list to"
-            + " CSV file";
+    private static final String INIT_ERR_MSG = "Failed to initialize CSV file.";
+    private static final String DATA_WRITE_ERR_MSG = "Failed to write person"
+            + " data to CSV file.";
+    private static final String DATA_READ_ERR_MSG = "Failed to read from CSV"
+            + " file.";
+    private static final String LIST_WRITE_ERR_MSG = "Failed to write person"
+            + "list to CSV file.";
 
     /**
      * Constructs a CsvPersonRepository using the given file path.
@@ -233,8 +234,8 @@ public class CsvPersonRepository implements PersonRepository {
                 readPersonsFromCsv();
             }
         } catch (IOException e) {
-            LOGGER.error(initErrorMsg, e);
-            throw new CsvRepositoryException(initErrorMsg, e);
+            LOGGER.error(INIT_ERR_MSG, e);
+            throw new CsvRepositoryException(INIT_ERR_MSG, e);
         }
     }
 
@@ -248,8 +249,8 @@ public class CsvPersonRepository implements PersonRepository {
                     person.age()));
             writer.newLine();
         } catch (IOException e) {
-            LOGGER.error(dataWriteErrorMsg, e);
-            throw new CsvRepositoryException(dataWriteErrorMsg, e);
+            LOGGER.error(DATA_WRITE_ERR_MSG, e);
+            throw new CsvRepositoryException(DATA_WRITE_ERR_MSG, e);
         }
     }
 
@@ -264,18 +265,19 @@ public class CsvPersonRepository implements PersonRepository {
             while ((line = reader.readLine()) != null) {
                 if (!line.isBlank()) {
                     String[] data = line.split(csvDelimiter);
-                    int id = Integer.parseInt(data[idIndex]);
-                    int age = Integer.parseInt(data[ageIndex]);
+                    int id = Integer.parseInt(data[ID_INDEX]);
+                    int age = Integer.parseInt(data[AGE_INDEX]);
                     if (nextId <= id) {
                         nextId = id + 1;
                     }
-                    personList.add(new Person(id, data[firstNameIndex],
-                            data[lastNameIndex], age));
+                    personList.add(new Person(id, data[FIRST_NAME_INDEX],
+                            data[LAST_NAME_INDEX], age));
                 }
             }
-        } catch (IOException e) {
-            LOGGER.error(dataReadErrorMsg, e);
-            throw new CsvRepositoryException(dataReadErrorMsg, e);
+        } catch (IOException | NumberFormatException
+                 | ArrayIndexOutOfBoundsException e){
+            LOGGER.error(DATA_READ_ERR_MSG, e);
+            throw new CsvRepositoryException(DATA_READ_ERR_MSG, e);
         }
     }
 
@@ -294,8 +296,8 @@ public class CsvPersonRepository implements PersonRepository {
                 writer.newLine();
             }
         } catch (IOException e) {
-            LOGGER.error(listWriteErrorMsg, e);
-            throw new CsvRepositoryException(listWriteErrorMsg, e);
+            LOGGER.error(LIST_WRITE_ERR_MSG, e);
+            throw new CsvRepositoryException(LIST_WRITE_ERR_MSG, e);
         }
     }
 }
