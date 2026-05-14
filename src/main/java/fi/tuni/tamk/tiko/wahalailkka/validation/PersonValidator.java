@@ -83,9 +83,8 @@ public final class PersonValidator {
      * @return a {@link MyList} containing {@link SearchValidationError}
      *         objects; the list is empty if the range is valid
      */
-    public static MyList<SearchValidationError> validateAgeRange(final int min,
-                                                                 final int max)
-    {
+    public static MyList<SearchValidationError>
+        validateAgeRange(final int min, final int max) {
         MyList<SearchValidationError> validationErrors = new MyArrayList<>();
 
         if (min < 0) {
