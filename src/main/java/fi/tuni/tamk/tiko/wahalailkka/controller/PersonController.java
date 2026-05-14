@@ -314,7 +314,8 @@ public class PersonController {
             Optional<Person> deletedPerson = personRepository.deleteById(id);
 
             if (deletedPerson.isEmpty()) {
-                PersonResult notFound =  PersonResult.notFound(notFoundMsg + id);
+                PersonResult notFound =  PersonResult.notFound(notFoundMsg
+                        + id);
                 logNotFound(id);
                 return notFound;
             } else {
