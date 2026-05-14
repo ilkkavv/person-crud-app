@@ -416,7 +416,7 @@ public class SwingGui extends JFrame implements AppUi {
                 showMessage(this, result.repositoryError(),
                         "Person not found", JOptionPane.WARNING_MESSAGE);
             } else {
-                showValidationErrors(result.validationErrors());
+                showValidationErrors(result.validationErrors(), this);
             }
         }
     }
@@ -431,7 +431,7 @@ public class SwingGui extends JFrame implements AppUi {
             personList = result.personList();
             personTableModel.setCurrentList(personList);
         } else {
-            showValidationErrors(result.validationErrors());
+            showValidationErrors(result.validationErrors(), this);
         }
     }
 
@@ -454,7 +454,7 @@ public class SwingGui extends JFrame implements AppUi {
         if (result.isSuccess()) {
             personTableModel.setCurrentList(result.personList());
         } else {
-            showValidationErrors(result.validationErrors());
+            showValidationErrors(result.validationErrors(), this);
         }
     }
 
@@ -488,11 +488,6 @@ public class SwingGui extends JFrame implements AppUi {
         if (result.isSuccess()) {
             personTableModel.setCurrentList(result.personList());
         }
-    }
-
-    private void showValidationErrors(final MyList<ValidationError> errors) {
-        showMessage(this, formatValidationErrors(errors), INVALID_INPUT,
-                JOptionPane.WARNING_MESSAGE);
     }
 
     private void handleResetView() {
@@ -634,8 +629,28 @@ public class SwingGui extends JFrame implements AppUi {
             showMessage(parent, errors.toString(), "Error",
                     JOptionPane.ERROR_MESSAGE);
         } else {
-            showValidationErrors(result.validationErrors());
+            showValidationErrors(result.validationErrors(), parent);
         }
+    }
+
+    private void showValidationErrors(final MyList<ValidationError> errors,
+                                      final Component parent) {
+        showMessage(parent, formatValidationErrors(errors), INVALID_INPUT,
+                JOptionPane.WARNING_MESSAGE);
+    }
+
+    private String formatValidationErrors(
+            final MyList<ValidationError> errors) {
+        StringBuilder errorList = new StringBuilder();
+
+        for (int i = 0; i < errors.size(); i++) {
+            errorList.append(errors.get(i).getMessage());
+            if (i != errors.size() - 1) {
+                errorList.append("\n");
+            }
+        }
+
+        return errorList.toString();
     }
 
     private void handleHelp() {
@@ -724,19 +739,7 @@ public class SwingGui extends JFrame implements AppUi {
         return -1;
     }
 
-    private String formatValidationErrors(
-            final MyList<ValidationError> errors) {
-        StringBuilder errorList = new StringBuilder();
 
-        for (int i = 0; i < errors.size(); i++) {
-            errorList.append(errors.get(i).getMessage());
-            if (i != errors.size() - 1) {
-                errorList.append("\n");
-            }
-        }
-
-        return errorList.toString();
-    }
 
     /**
      * Refreshes the table model with the latest person data from the
