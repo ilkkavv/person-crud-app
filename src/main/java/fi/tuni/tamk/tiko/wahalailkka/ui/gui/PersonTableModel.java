@@ -87,11 +87,13 @@ public final class PersonTableModel extends AbstractTableModel {
 
         Person person = currentList.get(rowIndex);
 
+        final int ageIndex = 3;
+
         return switch (columnIndex) {
             case 0 -> person.id();
             case 1 -> person.firstName();
             case 2 -> person.lastName();
-            case 3 -> person.age();
+            case ageIndex -> person.age();
             default -> null;
         };
     }
