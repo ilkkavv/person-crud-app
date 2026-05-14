@@ -3,9 +3,12 @@ package fi.tuni.tamk.tiko.wahalailkka.ui.gui;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.FlowLayout;
 
 /**
  * Panel containing controls for sorting the person table.
