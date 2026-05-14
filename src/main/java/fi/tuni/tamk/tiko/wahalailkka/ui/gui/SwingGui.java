@@ -634,20 +634,7 @@ public class SwingGui extends JFrame implements AppUi {
             showMessage(parent, errors.toString(), "Error",
                     JOptionPane.ERROR_MESSAGE);
         } else {
-            MyList<ValidationError> validationErrors =
-                    result.validationErrors();
-
-            for (int i = 0; i < validationErrors.size(); i++) {
-                ValidationError error = validationErrors.get(i);
-                errors.append(error.getMessage());
-
-                if (i != validationErrors.size() - 1) {
-                    errors.append("\n");
-                }
-            }
-
-            showMessage(parent, errors.toString(), INVALID_INPUT,
-                    JOptionPane.WARNING_MESSAGE);
+            showValidationErrors(result.validationErrors());
         }
     }
 
