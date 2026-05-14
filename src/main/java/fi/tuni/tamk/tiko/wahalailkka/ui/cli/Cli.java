@@ -460,8 +460,8 @@ public class Cli implements AppUi {
         );
     }
 
-    private void printValidationErrors(final MyList<ValidationError> errorList)
-    {
+    private void printValidationErrors(
+            final MyList<ValidationError> errorList) {
         for (int i = 0; i < errorList.size(); i++) {
             System.out.println(errorList.get(i).getMessage());
         }
