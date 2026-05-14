@@ -124,7 +124,7 @@ public class SwingGui extends JFrame implements AppUi {
 
         personTable = new JTable(personTableModel);
 
-        refreshPersonList();
+        runSafely(this, this::refreshPersonList);
 
         return new JScrollPane(personTable);
     }
@@ -335,6 +335,8 @@ public class SwingGui extends JFrame implements AppUi {
                     age);
 
             if (result.isSuccess()) {
+                refreshPersonList();
+
                 Person person = result.person();
 
                 String personData = String.format("ID: %d | %s %s | Age: %d%n",
@@ -345,7 +347,6 @@ public class SwingGui extends JFrame implements AppUi {
                         + "\n" + personData, SUCCESS,
                         JOptionPane.INFORMATION_MESSAGE);
 
-                refreshPersonList();
                 return true;
             } else {
                 showOperationErrorDialog(result, dialog);
@@ -539,9 +540,7 @@ public class SwingGui extends JFrame implements AppUi {
      * controller.
      */
     private void refreshPersonList() {
-        runSafely(this, () -> {
-            PersonListResult listResult = controller.findAllPersons();
-            personTableModel.setCurrentList(listResult.personList());
-        });
+        PersonListResult listResult = controller.findAllPersons();
+        personTableModel.setCurrentList(listResult.personList());
     }
 }
