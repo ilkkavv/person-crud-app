@@ -12,6 +12,12 @@ import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
 import fi.tuni.tamk.tiko.wahalailkka.util.PersonSorter;
 import fi.tuni.tamk.tiko.wahalailkka.validation.PersonValidationError;
 import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
+import static fi.tuni.tamk.tiko.wahalailkka.ui.gui.DialogHelper.showHelp;
+import static fi.tuni.tamk.tiko.wahalailkka.ui.gui.DialogHelper.showMessage;
+import static fi.tuni.tamk.tiko.wahalailkka.ui.gui.DialogHelper
+        .showOperationErrorDialog;
+import static fi.tuni.tamk.tiko.wahalailkka.ui.gui.DialogHelper
+        .showValidationErrors;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -20,9 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.WindowAdapter;
@@ -50,58 +54,6 @@ public class SwingGui extends JFrame implements AppUi {
 
     private static final String INVALID_INPUT = "Invalid input";
     private static final String SUCCESS = "Success";
-
-    private static final String HELP_MSG = """
-    NAME
-        person-crud-app
-
-    DESCRIPTION
-        person-crud-app is a desktop application for managing
-        a collection of persons.
-
-        Each person contains:
-            - ID
-            - First name
-            - Last name
-            - Age
-
-        IDs are assigned automatically by the application.
-
-    FEATURES
-        Create
-            Adds a new person to the collection.
-
-        Update
-            Updates the selected person's information.
-
-        Delete
-            Deletes the selected person after confirmation.
-
-        Find by ID
-            Displays a person with the given ID.
-
-        Search by Name
-            Searches persons by first and last name.
-
-        Filter by Age Range
-            Displays persons whose age is within the given range.
-
-        Sort
-            Sorts the current list by:
-                - First name
-                - Last name
-                - Age
-
-            Sorting can be ascending or descending.
-
-        Reset View
-            Restores the full person list and clears
-            filtering and sorting results.
-
-    USAGE
-        Select a row from the table before using
-        Update or Delete operations.
-    """;
 
     private PersonFilterPanel filterPanel;
     private PersonSortPanel sortPanel;
@@ -476,51 +428,8 @@ public class SwingGui extends JFrame implements AppUi {
         }
     }
 
-    /**
-     * Displays validation or repository errors from a person operation result.
-     * <p>
-     * Repository errors are displayed in an error dialog. Validation errors are
-     * combined into a single message and displayed in a warning dialog.
-     *
-     * @param result the result containing validation or repository errors
-     * @param parent the parent component for the dialog
-     */
-    private void showOperationErrorDialog(final PersonOperationResult result,
-                              final Component parent) {
-        StringBuilder errors = new StringBuilder();
-
-        if (result.repositoryError() != null) {
-            errors.append(result.repositoryError());
-
-            showMessage(parent, errors.toString(), "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        } else {
-            showValidationErrors(result.validationErrors(), parent);
-        }
-    }
-
-    private void showValidationErrors(final MyList<ValidationError> errors,
-                                      final Component parent) {
-        showMessage(parent, formatValidationErrors(errors), INVALID_INPUT,
-                JOptionPane.WARNING_MESSAGE);
-    }
-
-    private String formatValidationErrors(
-            final MyList<ValidationError> errors) {
-        StringBuilder errorList = new StringBuilder();
-
-        for (int i = 0; i < errors.size(); i++) {
-            errorList.append(errors.get(i).getMessage());
-            if (i != errors.size() - 1) {
-                errorList.append("\n");
-            }
-        }
-
-        return errorList.toString();
-    }
-
     private void handleHelp() {
-        showHelp();
+        showHelp(this);
     }
 
     private void handleExit() {
@@ -614,26 +523,5 @@ public class SwingGui extends JFrame implements AppUi {
         personTableModel.setCurrentList(listResult.personList());
     }
 
-    /**
-     * Displays a message dialog.
-     *
-     * @param parent the parent component of the dialog
-     * @param message the message to display
-     * @param title the dialog title
-     * @param type the message type defined by {@link JOptionPane}
-     */
-    private void showMessage(final Component parent, final String message,
-                             final String title, final int type) {
-        JOptionPane.showMessageDialog(parent, message, title, type);
-    }
 
-    private void showHelp() {
-        JTextArea helpText = new JTextArea(HELP_MSG);
-        helpText.setOpaque(false);
-        helpText.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(helpText);
-        scrollPane.setPreferredSize(new Dimension(400, 300));
-        JOptionPane.showMessageDialog(this, scrollPane,
-                "Help", JOptionPane.INFORMATION_MESSAGE);
-    }
 }
