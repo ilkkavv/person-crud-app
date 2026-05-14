@@ -49,4 +49,13 @@ public final class GuiExceptionHandler {
                     JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    /**
+     * Logs the given exception using the application logger.
+     *
+     * @param e the exception to log
+     */
+    public static void logException(final Exception e) {
+        LOGGER.error(e.getMessage(), e);
+    }
 }
