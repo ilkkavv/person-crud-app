@@ -15,15 +15,12 @@ import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -41,8 +38,6 @@ public class SwingGui extends JFrame implements AppUi {
     /** Controller used to handle person-related application logic. */
     private final PersonController controller;
 
-    private static final int BORDER_MARGIN = 5;
-
     private static final int BUTTON_HEIGHT = 40;
     private static final int BUTTON_WIDTH = 100;
 
@@ -50,10 +45,8 @@ public class SwingGui extends JFrame implements AppUi {
     private static final int MIN_WINDOW_HEIGHT = 600;
 
     private static final String FIRST_NAME = "First Name";
-    private static final String LAST_NAME = "Last Name";
     private static final String AGE = "Age";
     private static final String ASCENDING_ORDER = "Ascending Order";
-    private static final String DESCENDING_ORDER = "Descending Order";
 
     private static final String INVALID_INPUT = "Invalid input";
     private static final String SUCCESS = "Success";
@@ -111,13 +104,10 @@ public class SwingGui extends JFrame implements AppUi {
     """;
 
     private PersonFilterPanel filterPanel;
+    private PersonSortPanel sortPanel;
 
     private JTable personTable;
     private PersonTableModel personTableModel;
-
-    private JComboBox<String> sortByComboBox;
-    private JComboBox<String> sortOrderComboBox;
-    private JButton sortButton;
 
     private JButton createButton;
     private JButton updateButton;
@@ -167,47 +157,12 @@ public class SwingGui extends JFrame implements AppUi {
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
 
         filterPanel = new PersonFilterPanel();
+        sortPanel = new PersonSortPanel();
 
         topPanel.add(filterPanel);
-        topPanel.add(initializeSortPanel());
+        topPanel.add(sortPanel);
 
         return topPanel;
-    }
-
-
-    private JPanel initializeSortPanel() {
-        JPanel sortPanel = new JPanel();
-        sortPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
-        sortPanel.setBorder(new EmptyBorder(0, BORDER_MARGIN, BORDER_MARGIN,
-                BORDER_MARGIN));
-
-        sortByComboBox = new JComboBox<>();
-        sortOrderComboBox = new JComboBox<>();
-        sortButton = new JButton("Sort");
-
-        MyList<String> sortOptions = new MyArrayList<>();
-        sortOptions.add(FIRST_NAME);
-        sortOptions.add(LAST_NAME);
-        sortOptions.add(AGE);
-
-        for (int i = 0; i < sortOptions.size(); i++) {
-            sortByComboBox.addItem(sortOptions.get(i));
-        }
-
-        MyList<String> orderOptions = new MyArrayList<>();
-        orderOptions.add(ASCENDING_ORDER);
-        orderOptions.add(DESCENDING_ORDER);
-
-        for (int i = 0; i < orderOptions.size(); i++) {
-            sortOrderComboBox.addItem(orderOptions.get(i));
-        }
-
-        sortPanel.add(new JLabel("Sort by:"));
-        sortPanel.add(sortByComboBox);
-        sortPanel.add(sortOrderComboBox);
-        sortPanel.add(sortButton);
-
-        return sortPanel;
     }
 
     private JScrollPane initializePersonTable() {
@@ -290,7 +245,7 @@ public class SwingGui extends JFrame implements AppUi {
         filterPanel.getFilterByAgeRangeButton().addActionListener(e -> handleFilterByAgeRange());
         filterPanel.getResetViewButton().addActionListener(e -> handleResetView());
 
-        sortButton.addActionListener(e -> handleSort());
+        sortPanel.getSortButton().addActionListener(e -> handleSort());
 
         personTable.getSelectionModel().addListSelectionListener(e -> {
             int selectedRow = personTable.getSelectedRow();
@@ -368,14 +323,16 @@ public class SwingGui extends JFrame implements AppUi {
     }
 
     private void handleSort() {
-        if (sortByComboBox.getSelectedItem() == null ||
-                sortOrderComboBox.getSelectedItem() == null) {
+        Object sortSelection = sortPanel.getSortByComboBox().getSelectedItem();
+        Object orderSelection = sortPanel.getSortOrderComboBox()
+                .getSelectedItem();
+
+        if (sortSelection == null || orderSelection == null) {
             return;
         }
 
-        String sortBy = sortByComboBox.getSelectedItem().toString();
-        boolean ascending = sortOrderComboBox.getSelectedItem().toString()
-                .equals(ASCENDING_ORDER);
+        String sortBy = sortSelection.toString();
+        boolean ascending = orderSelection.toString().equals(ASCENDING_ORDER);
 
         PersonListResult result;
         MyList<Person> currentList = personTableModel.getCurrentList();
@@ -647,8 +604,6 @@ public class SwingGui extends JFrame implements AppUi {
 
         return -1;
     }
-
-
 
     /**
      * Refreshes the table model with the latest person data from the
