@@ -107,7 +107,7 @@ public class Cli implements AppUi {
                 System.err.println(e.getMessage());
             } catch (Exception e) {
                 LOGGER.error("Unexpected error", e);
-                System.out.println("Unexpected error.");
+                System.err.println("Unexpected error.");
             }
         }
     }
@@ -324,18 +324,49 @@ public class Cli implements AppUi {
     private void update() {
         int id = askForId();
 
-        System.out.println();
-        System.out.println("Enter new values:");
-        System.out.println();
-        System.out.print("Enter person first name: ");
-        String firstName = scanner.nextLine().trim();
-        System.out.print("Enter person last name: ");
-        String lastName = scanner.nextLine().trim();
-        int age = askForAge();
+        PersonResult result = controller.findPersonById(id);
 
-        PersonUpdateResult result = controller.updatePersonById(id, firstName,
-                lastName, age);
-        printPersonUpdateResult(result);
+        if (!result.isSuccess()) {
+            printPersonResult(result, null);
+        } else {
+            System.out.println();
+            System.out.println("Enter new values (Leave empty for no update):");
+            System.out.println();
+            System.out.print("Enter person first name: ");
+            String firstName = scanner.nextLine().trim();
+            System.out.print("Enter person last name: ");
+            String lastName = scanner.nextLine().trim();
+            System.out.print("Enter person age: ");
+            String stringAge = scanner.nextLine().trim();
+
+            Person person = result.person();
+
+            if (firstName.isEmpty()) {
+                firstName = person.firstName();
+            }
+
+            if (lastName.isEmpty()) {
+                lastName = person.lastName();
+            }
+
+            if (stringAge.isEmpty()) {
+                stringAge = String.valueOf(person.age());
+            }
+
+            int age;
+
+            try {
+                age = Integer.parseInt(stringAge);
+
+                PersonUpdateResult updateResult = controller.updatePersonById(
+                        id, firstName, lastName, age);
+                printPersonUpdateResult(updateResult);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Age must be a valid"
+                        + " integer.");
+            }
+        }
+
         waitForEnter();
     }
 
@@ -464,7 +495,8 @@ public class Cli implements AppUi {
             try {
                 return Integer.parseInt(stringAge);
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Age must be a number.");
+                System.out.println("Invalid input. Age must be a valid"
+                        + " integer.");
             }
         }
     }
