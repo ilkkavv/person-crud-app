@@ -187,30 +187,34 @@ public class SwingGui extends JFrame implements AppUi {
     private void initializeListeners() {
         this.addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e) {
+            public void windowClosing(final WindowEvent e) {
                 handleExit();
             }
         });
 
-        filterPanel.getFindByIdButton().addActionListener(e -> handleFindById());
-        filterPanel.getSearchByNameButton().addActionListener(e -> handleSearchByName());
-        filterPanel.getFilterByAgeRangeButton().addActionListener(e -> handleFilterByAgeRange());
-        filterPanel.getResetViewButton().addActionListener(e -> handleResetView());
+        filterPanel.getFindByIdButton().addActionListener(
+                _ -> handleFindById());
+        filterPanel.getSearchByNameButton().addActionListener(
+                _ -> handleSearchByName());
+        filterPanel.getFilterByAgeRangeButton().addActionListener(
+                _ -> handleFilterByAgeRange());
+        filterPanel.getResetViewButton().addActionListener(
+                _ -> handleResetView());
 
-        sortPanel.getSortButton().addActionListener(e -> handleSort());
+        sortPanel.getSortButton().addActionListener(_ -> handleSort());
 
-        personTable.getSelectionModel().addListSelectionListener(e -> {
+        personTable.getSelectionModel().addListSelectionListener(_ -> {
             int selectedRow = personTable.getSelectedRow();
             updateButton.setEnabled(selectedRow > -1);
             deleteButton.setEnabled(selectedRow > -1);
         });
 
-        createButton.addActionListener(e -> handleCreate());
-        updateButton.addActionListener(e -> handleUpdate());
-        deleteButton.addActionListener(e -> handleDelete());
+        createButton.addActionListener(_ -> handleCreate());
+        updateButton.addActionListener(_ -> handleUpdate());
+        deleteButton.addActionListener(_ -> handleDelete());
 
-        helpButton.addActionListener(e -> handleHelp());
-        exitButton.addActionListener(e -> handleExit());
+        helpButton.addActionListener(_ -> handleHelp());
+        exitButton.addActionListener(_ -> handleExit());
     }
 
     private void handleFindById() {
@@ -498,6 +502,15 @@ public class SwingGui extends JFrame implements AppUi {
         }
     }
 
+    /**
+     * Parses ID text into a positive integer value.
+     * <p>
+     * Returns -1 if parsing fails or if the ID is not a positive integer.
+     * An error dialog is displayed for invalid input.
+     *
+     * @param idText the ID text to parse
+     * @return the parsed ID, or -1 if the input is invalid
+     */
     private int parseId(final String idText) {
         try {
             int id = Integer.parseInt(idText);
