@@ -2,6 +2,7 @@ package fi.tuni.tamk.tiko.wahalailkka;
 
 import fi.tuni.tamk.tiko.wahalailkka.controller.PersonController;
 import fi.tuni.tamk.tiko.wahalailkka.repository.CsvPersonRepository;
+import fi.tuni.tamk.tiko.wahalailkka.repository.CsvRepositoryException;
 import fi.tuni.tamk.tiko.wahalailkka.repository.MemPersonRepository;
 import fi.tuni.tamk.tiko.wahalailkka.repository.PersonRepository;
 import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
@@ -67,15 +68,19 @@ public final class App {
     static void main(final String[] args) {
         try {
             Files.createDirectories(LOG_FOLDER);
+            LOGGER.info("Person CRUD App started");
+            handleArgs(args);
+            appUi.run();
+            LOGGER.info("Person CRUD App stopped");
         } catch (IOException e) {
-            LOGGER.error("Failed to create log directory!", e);
-            System.out.println("Failed to create log directory!");
+            LOGGER.error("Failed to initialize application files.", e);
+            System.err.println("Failed to initialize application files.");
+        } catch (CsvRepositoryException e) {
+            System.err.println(e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("Unexpected error", e);
+            System.err.println("Unexpected error.");
         }
-
-        LOGGER.info("Person CRUD App started");
-        handleArgs(args);
-        appUi.run();
-        LOGGER.info("Person CRUD App stopped");
     }
 
     private static void handleArgs(final String[] args) {
