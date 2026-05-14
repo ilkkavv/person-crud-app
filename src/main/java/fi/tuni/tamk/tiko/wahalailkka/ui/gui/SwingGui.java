@@ -18,6 +18,8 @@ import static fi.tuni.tamk.tiko.wahalailkka.ui.gui.DialogHelper
         .showOperationErrorDialog;
 import static fi.tuni.tamk.tiko.wahalailkka.ui.gui.DialogHelper
         .showValidationErrors;
+import static fi.tuni.tamk.tiko.wahalailkka.ui.gui.GuiExceptionHandler
+        .runSafely;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -118,10 +120,11 @@ public class SwingGui extends JFrame implements AppUi {
     }
 
     private JScrollPane initializePersonTable() {
-        personTableModel = new PersonTableModel(controller.findAllPersons().
-                personList());
+        personTableModel = new PersonTableModel(new MyArrayList<>());
 
         personTable = new JTable(personTableModel);
+
+        refreshPersonList();
 
         return new JScrollPane(personTable);
     }
@@ -193,15 +196,16 @@ public class SwingGui extends JFrame implements AppUi {
         });
 
         filterPanel.getFindByIdButton().addActionListener(
-                _ -> handleFindById());
+                _ -> runSafely(this, this::handleFindById));
         filterPanel.getSearchByNameButton().addActionListener(
-                _ -> handleSearchByName());
+                _ -> runSafely(this, this::handleSearchByName));
         filterPanel.getFilterByAgeRangeButton().addActionListener(
-                _ -> handleFilterByAgeRange());
+                _ -> runSafely(this, this::handleFilterByAgeRange));
         filterPanel.getResetViewButton().addActionListener(
-                _ -> handleResetView());
+                _ -> runSafely(this, this::handleResetView));
 
-        sortPanel.getSortButton().addActionListener(_ -> handleSort());
+        sortPanel.getSortButton().addActionListener(
+                _ -> runSafely(this, this::handleSort));
 
         personTable.getSelectionModel().addListSelectionListener(_ -> {
             int selectedRow = personTable.getSelectedRow();
@@ -209,9 +213,12 @@ public class SwingGui extends JFrame implements AppUi {
             deleteButton.setEnabled(selectedRow > -1);
         });
 
-        createButton.addActionListener(_ -> handleCreate());
-        updateButton.addActionListener(_ -> handleUpdate());
-        deleteButton.addActionListener(_ -> handleDelete());
+        createButton.addActionListener(
+                _ -> runSafely(this, this::handleCreate));
+        updateButton.addActionListener(
+                _ -> runSafely(this, this::handleUpdate));
+        deleteButton.addActionListener(
+                _ -> runSafely(this, this::handleDelete));
 
         helpButton.addActionListener(_ -> handleHelp());
         exitButton.addActionListener(_ -> handleExit());
@@ -532,9 +539,9 @@ public class SwingGui extends JFrame implements AppUi {
      * controller.
      */
     private void refreshPersonList() {
-        PersonListResult listResult = controller.findAllPersons();
-        personTableModel.setCurrentList(listResult.personList());
+        runSafely(this, () -> {
+            PersonListResult listResult = controller.findAllPersons();
+            personTableModel.setCurrentList(listResult.personList());
+        });
     }
-
-
 }
