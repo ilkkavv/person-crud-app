@@ -304,13 +304,14 @@ The options can also be combined:
 
 ---
 
-## 🧠 AI Usage
+## AI Usage
 
 **ChatGPT** (OpenAI GPT-5.3) was used during this project primarily as a learning aid. The tool was utilized to clarify
 course concepts, assist with understanding error messages, and improve the quality of documentation (README, code
 comments, and commit messages).
 
-AI was not used to generate code, but rather to support learning and enhance documentation quality.
+In addition, AI was used to study Java Swing and explore available Swing components and features, including how
+different GUI elements and event-handling mechanisms work in practice.
 
 ## 📄 License
 
