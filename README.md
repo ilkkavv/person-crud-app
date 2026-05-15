@@ -304,6 +304,17 @@ The options can also be combined:
 
 ---
 
+## Learning resources
+
+This project was primarily developed based on course lectures and previous assignments. In addition, the following
+external resources were used to support learning Java Swing development, layouts, event handling, and exception
+handling:
+
+- [A Visual Guide to Layout Managers](https://docs.oracle.com/javase/tutorial/uiswing/layout/visual.html)
+- [How to Write Window Listeners](https://docs.oracle.com/javase/tutorial/uiswing/events/windowlistener.html)
+- [JavaSpring.net](https://www.javaspring.net/blog/java-exceptions-handling-exceptions-without-try-catch/#1-understanding-the-problem-with-traditional-try-catch-in-swing)
+- [Stack Overflow](https://stackoverflow.com)
+
 ## AI Usage
 
 **ChatGPT** (OpenAI GPT-5.3) was used during this project primarily as a learning aid. The tool was utilized to clarify
