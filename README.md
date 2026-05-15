@@ -9,7 +9,7 @@
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 
-## 📑 Table of Contents
+## Table of Contents
 
 - [Person CRUD app](#person-crud-app)
   - [📑 Table of Contents](#-table-of-contents)
@@ -336,7 +336,7 @@ comments, and commit messages).
 In addition, AI was used to study Java Swing and explore available Swing components and features, including how
 different GUI elements and event-handling mechanisms work in practice.
 
-## 📄 License
+## License
 
 This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**.
 
