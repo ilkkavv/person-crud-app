@@ -96,71 +96,6 @@ Person records consist of:
 - Last name
 - Age
 
-> [!NOTE]
-> Run the startup scripts from the root directory of the distribution package.
-> This ensures that the `data` and `logs` directories are created in the correct location.
-
-### User Interface Options
-
-#### Swing GUI (default)
-
-Start the graphical user interface:
-
-**Linux / macOS**
-
-```bash
-./bin/person-crud-app
-```
-
-**Windows**
-
-```powershell
-bin\person-crud-app.bat
-```
-
-#### Command-Line Interface
-
-Start the command-line interface:
-
-**Linux / macOS**
-
-```bash
-./bin/person-crud-app --ui=cli
-```
-
-**Windows**
-
-```powershell
-bin\person-crud-app.bat --ui=cli
-```
-
-### Repository Options
-
-By default, the application uses CSV-based persistent storage and stores data in the `data` directory.
-
-You can also run the application using an in-memory repository:
-
-**Linux / macOS**
-
-```bash
-./bin/person-crud-app --repo=mem
-```
-
-**Windows**
-
-```powershell
-bin\person-crud-app.bat --repo=mem
-```
-
-The options can also be combined:
-
-```bash
-./bin/person-crud-app --repo=mem --ui=cli
-```
-
-> [!IMPORTANT]
-> In-memory mode does not save data after the program exits.
-
 ## About
 
 This project is developed as part of an **Object-Oriented Programming** course at **Tampere University of Applied
@@ -265,7 +200,7 @@ objects. This allows both the CLI and GUI to display errors consistently without
 Technical failures, such as CSV read/write errors or invalid CSV content, are handled with custom repository exceptions.
 These errors are logged using **Log4j2** and shown to the user through CLI error messages or GUI dialogs.
 
-## 🧰 How to Compile and Run
+## How to Compile and Run
 
 ### ❗ Requirements
 
@@ -279,30 +214,95 @@ git clone https://github.com/ilkkavv/person-crud-app
 cd person-crud-app
 ```
 
-### Compile
+### Build the application
 
 ```bash
-./gradlew clean build
+./gradlew distZip
 ```
 
-### Run
+The generated ZIP package can be found in:
+
+`build/distributions/`
+
+### Extract the distribution package
+
+Extract the generated ZIP file:
+
+`person-crud-app-<version>.zip`
+
+After extraction, open a terminal in the root directory of the extracted package.
+
+### User Interface Options
+
+> [!NOTE]
+> Run the startup scripts from the root directory of the distribution package.
+> This ensures that the `data` and `logs` directories are created in the correct location.
+
+#### Swing GUI (default)
+
+Start the graphical user interface:
+
+**Linux / macOS**
 
 ```bash
-java -jar build/libs/person-crud-app-1.0.0-beta.jar
+./bin/person-crud-app
 ```
 
-The application runs as an interactive CLI and will prompt for user input.
+**Windows**
 
-### Run with in-memory repository
+```cmd
+bin\person-crud-app.bat
+```
+
+#### Command-Line Interface
+
+Start the command-line interface:
+
+**Linux / macOS**
 
 ```bash
-java -jar build/libs/person-crud-app-1.0.0-beta.jar --repo=mem
+./bin/person-crud-app --ui=cli
 ```
+
+**Windows**
+
+```cmd
+bin\person-crud-app.bat --ui=cli
+```
+
+### Repository Options
+
+By default, the application uses CSV-based persistent storage and stores data in the `data` directory.
+
+You can also run the application using an in-memory repository:
+
+**Linux / macOS**
+
+```bash
+./bin/person-crud-app --repo=mem
+```
+
+**Windows**
+
+```cmd
+bin\person-crud-app.bat --repo=mem
+```
+
+The options can also be combined:
+
+```bash
+./bin/person-crud-app --repo=mem --ui=cli
+```
+
+> [!IMPORTANT]
+> In-memory mode does not save data after the program exits.
 
 ---
 
 > [!NOTE]
-> Alternatively, download the pre-built JAR from the GitHub Releases page.
+> Alternatively, download the pre-built distribution ZIP package from the GitHub Releases page.
+
+---
 
 ## 🧠 AI Usage
 
