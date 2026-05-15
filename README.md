@@ -178,67 +178,92 @@ and extensibility.
 Through this project, the aim is to develop skills in writing clear, maintainable, and well-structured code while
 following common software development practices such as modular design, logging, documentation, and version control.
 
-## 🏗️ Architecture
+## Architecture
 
 **Person CRUD app** follows a layered architecture with clear separation of concerns:
 
-UI → Controller → Repository → MyList (MyArrayList / MyLinkedList)
+```text
+App
+ ↓
+UI
+ ↓
+Controller
+ ↓
+Repository
+ ↓
+Data structure
+```
 
-The architecture allows switching between different UI and repository implementations without modifying other layers.
+The application is designed so that user interfaces and repository implementations can be changed without modifying the
+core application logic.
 
-### Components
+### Main Layers
 
-- **UI**
-  - Handles user interaction
-  - Reads input and displays output
+- Application entry point
 
-- **Controller**
-  - Acts as an intermediary between UI and repository
-  - Contains application logic
-  - Ensures separation between layers
+  - Parses startup options
+  - Selects the UI implementation
+  - Selects the repository implementation
+  - Starts the application
+  
+- UI layer
 
-- **Repository**
-  - Responsible for data access and persistence
-  - Two implementations:
-    - CSV-based repository (persistent storage)
-    - In-memory repository (for testing)
+  - Contains both the Swing GUI and CLI implementations
+  - Handles user interaction and displays results
+  - Delegates application logic to the controller
+  - Uses shared UI abstraction through `AppUi`
+  
+- Controller layer
 
-- **Data Structure**
-  - Custom list implementation
-  - Used to store and manage `Person` objects
-  - The implementation can be easily replaced without affecting other parts of the application
+  - Coordinates application operations
+  - Validates input before repository access
+  - Returns structured result objects to the UI
+  - Keeps UI code separated from repository logic
+  
+- Repository layer
+
+  - Provides data access through the `PersonRepository` interface
+  - Includes CSV-based persistent storage
+  - Includes in-memory storage for temporary use
+  - Hides persistence details from the controller
+  
+- Model layer
+
+  - Contains the person-related data objects
+  - Separates input data from stored entities
+  
+- Validation layer
+
+  - Provides structured validation errors
+  - Identifies invalid fields using typed validation objects
+  - Allows both CLI and GUI to display validation errors consistently
+  
+- Data structure layer
+
+  - Contains custom list implementations
+  - Provides a shared `MyList` abstraction
+  - Includes array-based and linked-list-based implementations
+  - `MyArrayList` is currently used as the default implementation because  
+    the application frequently relies on index-based access and sorting operations
 
 ### Design Principles
 
 - Separation of concerns between layers
-- Use of interfaces to allow interchangeable implementations
-- Loose coupling between components
-- Easy extensibility with new UI or repository implementations
+- Interface-based design for interchangeable implementations
+- Loose coupling between UI, controller, and repository
+- Encapsulation of internal repository data
+- Structured validation instead of plain error strings
+- Centralized exception handling for technical failures
 
-### Data Handling
+### Error Handling and Logging
 
-The application separates input data from persisted entities:
+The application separates expected application-level failures from technical failures.
 
-- `PersonData` is used for user input and validation
-- `Person` represents the stored entity with an assigned ID
+Expected failures, such as validation errors or missing persons, are returned from the controller as structured result
+objects. This allows both the CLI and GUI to display errors consistently without depending on repository details.
 
-The repository is responsible for assigning IDs and creating the final `Person` object.
-
-### Encapsulation
-
-The repository does not expose its internal data structures directly.  
-Instead, methods such as `findAll()` return a copy of the internal list  
-to preserve encapsulation and prevent unintended side effects.
-
-### Error Handling and Results
-
-The application uses result wrapper classes to handle success and failure cases:
-
-- `PersonResult` – used for single-person operations
-- `PersonListResult` – used for list-based operations
-
-This approach allows the controller to return both data and validation errors
-in a consistent and structured way.
+Technical failures, such as CSV read/write errors or invalid CSV content, are handled with custom repository exceptions.
+These errors are logged using **Log4j2** and shown to the user through CLI error messages or GUI dialogs.
 
 ## 🧰 How to Compile and Run
 
