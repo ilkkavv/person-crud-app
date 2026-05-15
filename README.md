@@ -73,79 +73,89 @@ demonstrating separation of concerns and object-oriented design principles.
 - Validation highlighting and dialogs in the GUI
 - Logging support and repository error handling
 
-## 🎓 How to Use
+## Usage
 
-When the application starts, it opens an interactive command-line menu.  
-You can choose an operation by entering either the full command or its short form shown in parentheses.  
-The application guides the user with prompts and validation messages during input.
+By default, the application starts with the Swing-based graphical user interface.  
+A command-line interface is also available through a startup option.
 
-Available commands:
+The application allows you to:
 
-- `c` or `create` – create a new person
-- `l` or `list` – list all persons
-- `f` or `find` – find a person by ID
-- `n` or `name` – search persons by name
-- `a` or `age` – search persons by age range
-- `u` or `update` – update a person by ID
-- `d` or `delete` – delete a person by ID
-- `h` or `help` – show help information
-- `e` or `exit` – exit the application
+- Create new persons
+- View all stored persons
+- Find persons by ID or search by name
+- Filter persons by age range
+- Sort results by first name, last name, or age
+- Update existing persons
+- Delete persons
+- View validation and error messages during input
 
-### Creating a person
+Person records consist of:
 
-Choose `create` and enter:
+- ID (generated automatically)
+- First name
+- Last name
+- Age
 
-- first name
-- last name
-- age
+> [!NOTE]
+> Run the startup scripts from the root directory of the distribution package.
+> This ensures that the `data` and `logs` directories are created in the correct location.
 
-The application automatically assigns a unique ID to the new person.
+### User Interface Options
 
-### Listing persons
+#### Swing GUI (default)
 
-Choose `list` to display all stored persons.
+Start the graphical user interface:
 
-### Finding a person
-
-Choose `find` and enter a person ID to view that person's details.
-
-### Searching for persons
-
-Choose `name` to search by first or last name (case-insensitive),  
-or `age` to search within a specified age range.
-
-### Sorting results
-
-After listing or searching persons, the application allows sorting the results interactively by:
-
-- first name
-- last name
-- age
-
-Both ascending and descending order are supported.
-
----
-
-![CLI Results sorting](assets/cli-sorting.gif)
-
----
-
-### Updating a person
-
-Choose `update` and enter the ID of the person you want to modify.  
-Then enter the new first name, last name, and age.
-
-### Deleting a person
-
-Choose `delete` and enter the ID of the person you want to remove.
-
-### Repository option
-
-By default, the application uses a CSV-based repository for persistent storage.  
-You can also run the application with an in-memory repository:
+**Linux / macOS**
 
 ```bash
-java -jar person-crud-app.jar --repo=mem
+./bin/person-crud-app
+```
+
+**Windows**
+
+```powershell
+bin\person-crud-app.bat
+```
+
+#### Command-Line Interface
+
+Start the command-line interface:
+
+**Linux / macOS**
+
+```bash
+./bin/person-crud-app --ui=cli
+```
+
+**Windows**
+
+```powershell
+bin\person-crud-app.bat --ui=cli
+```
+
+### Repository Options
+
+By default, the application uses CSV-based persistent storage and stores data in the `data` directory.
+
+You can also run the application using an in-memory repository:
+
+**Linux / macOS**
+
+```bash
+./bin/person-crud-app --repo=mem
+```
+
+**Windows**
+
+```powershell
+bin\person-crud-app.bat --repo=mem
+```
+
+The options can also be combined:
+
+```bash
+./bin/person-crud-app --repo=mem --ui=cli
 ```
 
 > [!IMPORTANT]
