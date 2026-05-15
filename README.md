@@ -1,4 +1,4 @@
-# 👥 Person CRUD app
+# 👥 Person CRUD App
 
 ![Version](https://img.shields.io/badge/version-1.0.0--rc-yellow)
 ![License](https://img.shields.io/badge/license-GPLv3-blue)
