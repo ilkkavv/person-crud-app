@@ -303,21 +303,25 @@ You can also run the application using an in-memory repository:
 bin\person-crud-app.bat --repo=mem
 ```
 
+> [!IMPORTANT]
+> In-memory mode does not save data after the program exits.
+
 The options can also be combined:
+
+**Linux / macOS**
 
 ```bash
 ./bin/person-crud-app --repo=mem --ui=cli
 ```
 
-> [!IMPORTANT]
-> In-memory mode does not save data after the program exits.
+**Windows**
 
----
+```cmd
+bin\person-crud-app.bat --repo=mem --ui=cli
+```
 
 > [!NOTE]
 > Alternatively, download the pre-built distribution ZIP package from the GitHub Releases page.
-
----
 
 ## Learning resources
 
