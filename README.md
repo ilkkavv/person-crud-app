@@ -59,18 +59,19 @@ demonstrating separation of concerns and object-oriented design principles.
 
 ---
 
-## ✨ Current Features
+## Current Features
 
-- CLI-based CRUD operations for managing persons
-- Search persons by name (case-insensitive) or by age range
-- Sort results by name or age (supports ascending and descending order)
-- Input validation for name and age
-- Supports both CSV-based and in-memory data storage
-- Clean layered architecture with controller and repository abstraction
-- Automatic ID generation
-- Result wrapper classes for handling success and validation errors
-- Custom list implementation (MyArrayList)
-- Custom exception handling for CSV repository errors
+- Manage persons using either a Swing GUI or a command-line interface
+- Create, view, update, and delete person records
+- Search persons by ID or name
+- Filter persons by age range
+- Sort results by first name, last name, or age
+- Supports both ascending and descending sorting
+- Persistent CSV-based storage
+- Optional in-memory repository mode
+- Input validation with user-friendly error messages
+- Validation highlighting and dialogs in the GUI
+- Logging support and repository error handling
 
 ## 🎓 How to Use
 
