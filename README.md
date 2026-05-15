@@ -40,13 +40,18 @@
   - [🧠 AI Usage](#-ai-usage)
   - [📄 License](#-license)
 
-## 📝 Description
+## Description
 
-**Person CRUD App** is a simple command-line application for managing a collection of persons. It supports basic CRUD
-operations (create, read, update, delete) and is built using a clean layered architecture with a controller, repository
-abstraction, and custom data structures. Data can be stored either in memory or in a CSV file.
+**Person CRUD App** is a Java application for managing a collection of persons through either a command-line interface
+(CLI) or a graphical user interface (Swing GUI). The application supports full CRUD operations (create, read, update,
+delete), searching, filtering, sorting, validation, and structured error handling.
 
-The application is designed to be easily extensible and demonstrates clean separation of concerns.
+The project is built using a clean layered architecture with separate UI, controller, and repository layers. Data can be
+stored either persistently in a CSV file or temporarily in memory through interchangeable repository implementations.
+
+The application also includes custom data structures, centralized validation and exception handling, and
+**Log4j2**-based logging support. The architecture is designed to be modular, extensible, and easy to maintain while
+demonstrating separation of concerns and object-oriented design principles.
 
 ---
 
