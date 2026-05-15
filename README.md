@@ -200,6 +200,18 @@ objects. This allows both the CLI and GUI to display errors consistently without
 Technical failures, such as CSV read/write errors or invalid CSV content, are handled with custom repository exceptions.
 These errors are logged using **Log4j2** and shown to the user through CLI error messages or GUI dialogs.
 
+### Scope and Simplifications
+
+The application uses a deliberately simple person model focused on demonstrating application architecture, validation,
+repository abstraction, and user interface design.
+
+A more production-oriented implementation could include additional fields such as email addresses, phone numbers, or
+physical addresses. Age is currently stored directly as an integer value, whereas a more robust solution would typically
+store a birthdate and calculate the age dynamically.
+
+The simplified model allowed the project to focus more on software structure, maintainability, and separation of
+concerns.
+
 ## How to Compile and Run
 
 ### ❗ Requirements
