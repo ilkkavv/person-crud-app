@@ -50,7 +50,15 @@ demonstrating separation of concerns and object-oriented design principles.
 
 ---
 
-![CLI Demo](assets/cli-demo.gif)
+**Graphical User Interface:**  
+
+![Person CRUD App GUI](assets/gui.png)
+
+---
+
+**Command-Line Interface:**
+
+![Person CRUD App CLI](assets/cli.gif)
 
 ---
 
