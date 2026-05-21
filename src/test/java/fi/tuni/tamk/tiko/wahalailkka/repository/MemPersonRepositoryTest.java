@@ -1,6 +1,5 @@
 package fi.tuni.tamk.tiko.wahalailkka.repository;
 
-import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
@@ -8,7 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MemPersonRepositoryTest {
     private static final Person JOHN = new Person(
@@ -26,21 +26,21 @@ public class MemPersonRepositoryTest {
             "Jack", "Doe", 41);
 
     @Test
-    void findAllReturnsEmpty() {
+    void findAllEmpty() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         assertTrue(memRepo.findAll().isEmpty());
     }
 
     @Test
-    void createReturnsCorrectData() {
+    void createCorrectData() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         assertEquals(JOHN, memRepo.create(JOHN_DATA));
     }
 
     @Test
-    void createShouldIncrementId() {
+    void createIncrementsId() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         assertEquals(1, memRepo.create(JOHN_DATA).id());
@@ -49,13 +49,12 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void findAllReturnsAll() {
+    void findAllPersons() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         memRepo.create(JOHN_DATA);
         memRepo.create(JANE_DATA);
         memRepo.create(JACK_DATA);
-
         MyList<Person> personList = memRepo.findAll();
 
         assertEquals(3, personList.size());
@@ -65,7 +64,7 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void findByIdReturnsEmpty() {
+    void findByIdEmpty() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         Optional<Person> person = memRepo.findById(1);
@@ -74,7 +73,7 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void findByIdReturnsPerson() {
+    void findByIdPerson() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         memRepo.create(JOHN_DATA);
@@ -85,14 +84,14 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void updateByIdReturnsEmpty() {
+    void updateByIdEmpty() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         assertTrue(memRepo.updateById(1, JANE_DATA).isEmpty());
     }
 
     @Test
-    void updateByIdShouldUpdate() {
+    void updateByIdUpdates() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         memRepo.create(JOHN_DATA);
@@ -105,7 +104,7 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void updateByIdShouldKeepId() {
+    void updateByIdKeepsId() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         memRepo.create(JOHN_DATA);
@@ -117,7 +116,7 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void deleteByIdReturnsEmpty() {
+    void deleteByIdEmpty() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         Optional<Person> person = memRepo.deleteById(1);
@@ -126,7 +125,7 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void deleteByIdShouldRemove() {
+    void deleteByIdRemoves() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         memRepo.create(JOHN_DATA);
@@ -136,7 +135,7 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void deleteByIdReturnsPerson() {
+    void deleteByIdPerson() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         memRepo.create(JOHN_DATA);
@@ -147,22 +146,20 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void searchByNameReturnsEmpty() {
+    void searchByNameEmpty() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         memRepo.create(JOHN_DATA);
-
         MyList<Person> personList = memRepo.searchByName(JANE_DATA.firstName());
 
         assertTrue(personList.isEmpty());
     }
 
     @Test
-    void searchByNameShouldFindByFirstName() {
+    void searchByFirstName() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         memRepo.create(JOHN_DATA);
-
         MyList<Person> personList = memRepo.searchByName(JOHN_DATA.firstName());
 
         assertEquals(1, personList.size());
@@ -170,11 +167,10 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void searchByNameShouldFindByLastName() {
+    void searchByLastName() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         memRepo.create(JOHN_DATA);
-
         MyList<Person> personList = memRepo.searchByName(JOHN_DATA.lastName());
 
         assertEquals(1, personList.size());
@@ -182,7 +178,7 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void searchByAgeReturnsEmpty() {
+    void searchByAgeEmpty() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         memRepo.create(JOHN_DATA);
@@ -194,7 +190,7 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void searchByAgeReturnsPersonsWithinRange() {
+    void searchByAgeRange() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         memRepo.create(JOHN_DATA);
@@ -208,7 +204,7 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void searchByAgeShouldIncludeBoundaryValues() {
+    void searchByAgeBoundaries() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         memRepo.create(JOHN_DATA);
@@ -223,7 +219,7 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void findAllShouldNotExposeInternalList() {
+    void findAllDefensiveCopy() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         memRepo.create(JOHN_DATA);
