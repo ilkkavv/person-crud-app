@@ -144,4 +144,16 @@ public class MemPersonRepositoryTest {
         assertTrue(person.isPresent());
         assertEquals(JOHN, person.get());
     }
+
+    @Test
+    void searchByNameShouldFindByFirstName() {
+        MemPersonRepository memRepo = new MemPersonRepository();
+
+        memRepo.create(JOHN_DATA);
+
+        MyList<Person> personList = memRepo.searchByName(JOHN_DATA.firstName());
+
+        assertEquals(1, personList.size());
+        assertEquals(JOHN, personList.get(0));
+    }
 }
