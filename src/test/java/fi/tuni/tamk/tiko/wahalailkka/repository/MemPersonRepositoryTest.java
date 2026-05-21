@@ -65,6 +65,15 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
+    void findByIdReturnsEmpty() {
+        MemPersonRepository memRepo = new MemPersonRepository();
+
+        Optional<Person> person = memRepo.findById(1);
+
+        assertTrue(person.isEmpty());
+    }
+
+    @Test
     void findByIdReturnsPerson() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
