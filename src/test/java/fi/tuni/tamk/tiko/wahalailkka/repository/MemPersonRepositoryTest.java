@@ -84,6 +84,13 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
+    void updateByIdReturnsEmpty() {
+        MemPersonRepository memRepo = new MemPersonRepository();
+
+        assertTrue(memRepo.updateById(1, JANE_DATA).isEmpty());
+    }
+
+    @Test
     void updateByIdShouldUpdate() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
