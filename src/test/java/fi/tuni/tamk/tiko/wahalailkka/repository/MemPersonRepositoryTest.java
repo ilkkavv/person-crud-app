@@ -95,4 +95,16 @@ public class MemPersonRepositoryTest {
         assertEquals(new Person(1, JANE_DATA.firstName(), JANE_DATA.lastName(),
                         JANE_DATA.age()), person.get());
     }
+
+    @Test
+    void updateByIdShouldKeepId() {
+        MemPersonRepository memRepo = new MemPersonRepository();
+
+        memRepo.create(JOHN_DATA);
+        memRepo.updateById(1, JANE_DATA);
+        Optional<Person> person = memRepo.findById(1);
+
+        assertTrue(person.isPresent());
+        assertEquals(1, person.get().id());
+    }
 }
