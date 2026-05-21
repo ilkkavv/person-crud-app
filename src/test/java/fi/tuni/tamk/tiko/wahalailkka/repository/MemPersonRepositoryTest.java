@@ -22,4 +22,16 @@ public class MemPersonRepositoryTest {
         assertEquals(new Person(1, "John", "Doe", 35),
                      memRepo.create(new PersonData("John", "Doe", 35)));
     }
+
+    @Test
+    void createShouldIncrementId() {
+        MemPersonRepository memRepo = new MemPersonRepository();
+
+        assertEquals(1, memRepo.create(new PersonData(
+                "John", "Doe", 35)).id());
+        assertEquals(2, memRepo.create(new PersonData(
+                "Jane", "Doe", 32)).id());
+        assertEquals(3, memRepo.create(new PersonData(
+                "Jack", "Doe", 41)).id());
+    }
 }
