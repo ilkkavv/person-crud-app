@@ -181,6 +181,18 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
+    void searchByAgeReturnsEmpty() {
+        MemPersonRepository memRepo = new MemPersonRepository();
+
+        memRepo.create(JOHN_DATA);
+        memRepo.create(JANE_DATA);
+        memRepo.create(JACK_DATA);
+        MyList<Person> personList = memRepo.searchByAge(0, 10);
+
+        assertTrue(personList.isEmpty());
+    }
+
+    @Test
     void searchByAgeReturnsPersonsWithinRange() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
