@@ -31,6 +31,7 @@
       - [Swing GUI (default)](#swing-gui-default)
       - [Command-Line Interface](#command-line-interface)
     - [Repository Options](#repository-options)
+    - [Running Unit Tests](#running-unit-tests)
   - [Learning resources](#learning-resources)
   - [AI Usage](#ai-usage)
   - [License](#license)
@@ -322,6 +323,25 @@ bin\person-crud-app.bat --repo=mem --ui=cli
 
 > [!NOTE]
 > Alternatively, download the pre-built distribution ZIP package from the GitHub Releases page.
+
+### Running Unit Tests
+
+Automated unit tests can be run with Gradle:
+
+```bash
+./gradlew test
+```
+
+The current test suite focuses on the in-memory repository implementation, `MemPersonRepository`.
+
+The tests verify core repository behavior such as creating, reading, updating, deleting, searching, ID generation, and
+protecting the repository's internal list from external modification. They focus on validating repository behavior
+independently from the user interface and controller layers.
+
+The tests are located under `src/test/java/`.
+
+Gradle uses **JUnit Jupiter** for running the tests. The tests are also executed automatically when running the standard
+Gradle build task.
 
 ## Learning resources
 
