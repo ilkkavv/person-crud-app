@@ -1,5 +1,6 @@
 package fi.tuni.tamk.tiko.wahalailkka.repository;
 
+import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
 import org.junit.jupiter.api.Test;
@@ -8,11 +9,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MemPersonRepositoryTest {
+    private static final Person JOHN = new Person(
+            1, "John", "Doe", 35);
+    private static final Person JANE = new Person(
+            2, "Jane", "Doe", 34);
+    private static final Person JACK = new Person(
+            3, "Jack", "Doe", 41);
+
     private static final PersonData JOHN_DATA = new PersonData(
             "John", "Doe", 35);
     private static final PersonData JANE_DATA = new PersonData(
             "Jane", "Doe", 34);
-    private  static final PersonData JACK_DATA = new PersonData(
+    private static final PersonData JACK_DATA = new PersonData(
             "Jack", "Doe", 41);
 
     @Test
@@ -26,8 +34,7 @@ public class MemPersonRepositoryTest {
     void createReturnCorrectData() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
-        assertEquals(new Person(1, "John", "Doe", 35),
-                     memRepo.create(JOHN_DATA));
+        assertEquals(JOHN, memRepo.create(JOHN_DATA));
     }
 
     @Test
@@ -37,5 +44,21 @@ public class MemPersonRepositoryTest {
         assertEquals(1, memRepo.create(JOHN_DATA).id());
         assertEquals(2, memRepo.create(JANE_DATA).id());
         assertEquals(3, memRepo.create(JACK_DATA).id());
+    }
+
+    @Test
+    void findAllReturnAll() {
+        MemPersonRepository memRepo = new MemPersonRepository();
+
+        memRepo.create(JOHN_DATA);
+        memRepo.create(JANE_DATA);
+        memRepo.create(JACK_DATA);
+
+        MyList<Person> personList = memRepo.findAll();
+
+        assertEquals(3, personList.size());
+        assertEquals(JOHN, personList.get(0));
+        assertEquals(JANE, personList.get(1));
+        assertEquals(JACK, personList.get(2));
     }
 }
