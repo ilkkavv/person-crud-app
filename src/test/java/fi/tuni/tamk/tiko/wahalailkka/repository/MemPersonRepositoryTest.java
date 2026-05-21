@@ -114,4 +114,16 @@ public class MemPersonRepositoryTest {
         assertTrue(person.isPresent());
         assertEquals(1, person.get().id());
     }
+
+    @Test
+    void deleteByIdShouldRemove() {
+        MemPersonRepository memRepo = new MemPersonRepository();
+
+        memRepo.create(JOHN_DATA);
+        Optional<Person> person = memRepo.deleteById(1);
+
+        assertTrue(person.isPresent());
+        assertEquals(JOHN, person.get());
+        assertTrue(memRepo.findById(1).isEmpty());
+    }
 }
