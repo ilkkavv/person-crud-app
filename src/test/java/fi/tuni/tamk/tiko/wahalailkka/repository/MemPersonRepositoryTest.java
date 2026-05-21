@@ -5,6 +5,8 @@ import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -60,5 +62,16 @@ public class MemPersonRepositoryTest {
         assertEquals(JOHN, personList.get(0));
         assertEquals(JANE, personList.get(1));
         assertEquals(JACK, personList.get(2));
+    }
+
+    @Test
+    void findByIdReturnsPerson() {
+        MemPersonRepository memRepo = new MemPersonRepository();
+
+        memRepo.create(JOHN_DATA);
+        Optional<Person> person = memRepo.findById(1);
+
+        assertTrue(person.isPresent());
+        assertEquals(JOHN, person.get());
     }
 }
