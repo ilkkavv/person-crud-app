@@ -24,14 +24,14 @@ public class MemPersonRepositoryTest {
             "Jack", "Doe", 41);
 
     @Test
-    void findAllReturnEmpty() {
+    void findAllReturnsEmpty() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         assertTrue(memRepo.findAll().isEmpty());
     }
 
     @Test
-    void createReturnCorrectData() {
+    void createReturnsCorrectData() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         assertEquals(JOHN, memRepo.create(JOHN_DATA));
@@ -47,7 +47,7 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
-    void findAllReturnAll() {
+    void findAllReturnsAll() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
         memRepo.create(JOHN_DATA);
