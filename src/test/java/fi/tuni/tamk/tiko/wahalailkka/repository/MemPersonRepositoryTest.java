@@ -1,5 +1,6 @@
 package fi.tuni.tamk.tiko.wahalailkka.repository;
 
+import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyArrayList;
 import fi.tuni.tamk.tiko.wahalailkka.datastructure.MyList;
 import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.model.PersonData;
@@ -219,5 +220,20 @@ public class MemPersonRepositoryTest {
         assertEquals(2, personList.size());
         assertEquals(JOHN, personList.get(0));
         assertEquals(JANE, personList.get(1));
+    }
+
+    @Test
+    void findAllShouldNotExposeInternalList() {
+        MemPersonRepository memRepo = new MemPersonRepository();
+
+        memRepo.create(JOHN_DATA);
+        memRepo.create(JANE_DATA);
+        memRepo.create(JACK_DATA);
+        MyList<Person> returnedList = memRepo.findAll();
+        returnedList.remove(1);
+        MyList<Person> repositoryList = memRepo.findAll();
+
+        assertEquals(2, returnedList.size());
+        assertEquals(3, repositoryList.size());
     }
 }
