@@ -146,6 +146,17 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
+    void searchByNameReturnsEmpty() {
+        MemPersonRepository memRepo = new MemPersonRepository();
+
+        memRepo.create(JOHN_DATA);
+
+        MyList<Person> personList = memRepo.searchByName(JANE_DATA.firstName());
+
+        assertTrue(personList.isEmpty());
+    }
+
+    @Test
     void searchByNameShouldFindByFirstName() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
