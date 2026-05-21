@@ -179,4 +179,19 @@ public class MemPersonRepositoryTest {
         assertEquals(1, personList.size());
         assertEquals(JOHN, personList.get(0));
     }
+
+    @Test
+    void searchByAgeReturnsPersonsWithinRange() {
+        MemPersonRepository memRepo = new MemPersonRepository();
+
+        memRepo.create(JOHN_DATA);
+        memRepo.create(JANE_DATA);
+        memRepo.create(JACK_DATA);
+        MyList<Person> personList = memRepo.searchByAge(
+                JANE_DATA.age(), JOHN_DATA.age());
+
+        assertEquals(2, personList.size());
+        assertEquals(JOHN, personList.get(0));
+        assertEquals(JANE, personList.get(1));
+    }
 }
