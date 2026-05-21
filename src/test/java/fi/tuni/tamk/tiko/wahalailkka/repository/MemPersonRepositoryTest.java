@@ -116,6 +116,15 @@ public class MemPersonRepositoryTest {
     }
 
     @Test
+    void deleteByIdReturnsEmpty() {
+        MemPersonRepository memRepo = new MemPersonRepository();
+
+        Optional<Person> person = memRepo.deleteById(1);
+
+        assertTrue(person.isEmpty());
+    }
+
+    @Test
     void deleteByIdShouldRemove() {
         MemPersonRepository memRepo = new MemPersonRepository();
 
