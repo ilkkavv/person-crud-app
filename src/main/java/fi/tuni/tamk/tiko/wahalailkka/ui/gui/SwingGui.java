@@ -21,18 +21,13 @@ import static fi.tuni.tamk.tiko.wahalailkka.ui.gui.DialogHelper
 import static fi.tuni.tamk.tiko.wahalailkka.ui.gui.GuiExceptionHandler
         .runSafely;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Objects;
 
 /**
  * Swing-based graphical user interface for the Person CRUD application.
@@ -98,6 +93,9 @@ public class SwingGui extends JFrame implements AppUi {
         this.setSize(MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT);
         this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
+        ImageIcon icon = new ImageIcon(Objects.requireNonNull(
+                getClass().getResource("/icons/app-icon.png")));
+        this.setIconImage(icon.getImage());
     }
 
     private void initializeComponents() {
