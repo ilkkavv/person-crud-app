@@ -1,5 +1,7 @@
 # 👥 Person CRUD App
 
+![Person CRUD App GUI](assets/logo.png)
+
 ![Version](https://img.shields.io/badge/version-1.0.0--rc-yellow)
 ![License](https://img.shields.io/badge/license-GPLv3-blue)
 ![Status](https://img.shields.io/badge/status-active%20development-green)
