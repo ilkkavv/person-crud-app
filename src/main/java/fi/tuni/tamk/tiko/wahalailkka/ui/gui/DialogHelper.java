@@ -30,6 +30,9 @@ public final class DialogHelper {
     private static final String HELP_MSG = """
     NAME
         person-crud-app
+    
+    VERSION
+        1.0.0
 
     DESCRIPTION
         person-crud-app is a desktop application for managing
