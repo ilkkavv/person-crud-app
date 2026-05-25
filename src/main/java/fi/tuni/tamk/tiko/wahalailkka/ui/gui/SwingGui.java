@@ -21,7 +21,14 @@ import static fi.tuni.tamk.tiko.wahalailkka.ui.gui.DialogHelper
 import static fi.tuni.tamk.tiko.wahalailkka.ui.gui.GuiExceptionHandler
         .runSafely;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
