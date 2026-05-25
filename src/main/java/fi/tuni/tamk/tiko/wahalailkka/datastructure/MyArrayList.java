@@ -8,6 +8,7 @@ package fi.tuni.tamk.tiko.wahalailkka.datastructure;
  *
  * @param <T> the type of elements stored in this list
  */
+@SuppressWarnings("unchecked")
 public class MyArrayList<T> implements MyList<T> {
     /** Initial capacity of the list. */
     static final int INITIAL_SIZE = 10;
@@ -34,7 +35,7 @@ public class MyArrayList<T> implements MyList<T> {
         }
 
         if (size == data.length) {
-            Object[] oldData = data.clone();
+            T[] oldData = data;
             data = (T[]) new Object[(int) (size * SIZE_MULTIPLIER)];
             System.arraycopy(oldData, 0, data, 0,
                     oldData.length);
