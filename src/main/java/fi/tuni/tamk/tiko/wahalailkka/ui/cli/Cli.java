@@ -63,19 +63,51 @@ public class Cli implements AppUi {
     private static final String CMD_EXIT = "exit";
 
     private static final String HELP_MSG = """
-        NAME
-            person-crud-app
+    NAME
+        person-crud-app
 
-        DESCRIPTION
-            person-crud-app is an application for managing a collection of
-            persons. It allows the user to create, view, update, and delete
-            person records.
+    VERSION
+        1.0.0
 
-            Each person consists of an ID, first name, last name, and age. IDs
-            are assigned automatically by the application.
+    DESCRIPTION
+        person-crud-app is an application for managing a collection
+        of persons. It allows the user to create, view, update,
+        and delete person records.
 
-            The application supports basic CRUD operations through an
-            interactive menu.""";
+        Each person consists of an ID, first name, last name,
+        and age. IDs are assigned automatically by the application.
+
+        The application supports basic CRUD operations through
+        an interactive menu.
+
+    COMMANDS
+        1, c, create
+            Create a new person
+
+        2, l, list
+            List all persons
+
+        3, f, find
+            Find person by ID
+
+        4, n, name
+            Search persons by name
+
+        5, a, age
+            Search persons by age range
+
+        6, u, update
+            Update person data by ID
+
+        7, d, delete
+            Delete person by ID
+
+        8, h, help
+            Show this help message
+
+        9, e, exit
+            Exit the application
+    """;
 
     /**
      * Constructs a new CLI with the given controller.
