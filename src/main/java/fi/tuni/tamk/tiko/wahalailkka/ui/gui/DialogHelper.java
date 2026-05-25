@@ -30,7 +30,7 @@ public final class DialogHelper {
     private static final String HELP_MSG = """
     NAME
         person-crud-app
-    
+
     VERSION
         1.0.0
 
