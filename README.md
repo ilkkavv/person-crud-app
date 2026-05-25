@@ -324,7 +324,8 @@ bin\person-crud-app.bat --repo=mem --ui=cli
 ```
 
 > [!NOTE]
-> Alternatively, download the pre-built distribution ZIP package from the GitHub Releases page.
+> Alternatively, download the pre-built distribution ZIP package from the
+> [GitHub Releases page](https://github.com/ilkkavv/person-crud-app/releases).
 
 ### Running Unit Tests
 
