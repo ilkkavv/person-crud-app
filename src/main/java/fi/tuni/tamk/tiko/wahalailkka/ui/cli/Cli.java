@@ -362,6 +362,9 @@ public class Cli implements AppUi {
             printPersonResult(result, null);
         } else {
             System.out.println();
+            System.out.println("Update person:");
+            printPersonData(result.person());
+            System.out.println();
             System.out.println("Enter new values (Leave empty for no update):");
             System.out.println();
             System.out.print("Enter person first name: ");
