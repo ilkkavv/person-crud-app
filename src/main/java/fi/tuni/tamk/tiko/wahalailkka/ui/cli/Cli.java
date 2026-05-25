@@ -9,10 +9,10 @@ import fi.tuni.tamk.tiko.wahalailkka.model.Person;
 import fi.tuni.tamk.tiko.wahalailkka.repository.CsvRepositoryException;
 import fi.tuni.tamk.tiko.wahalailkka.ui.AppUi;
 import fi.tuni.tamk.tiko.wahalailkka.util.PersonSorter;
+import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 
 import java.util.Scanner;
 
-import fi.tuni.tamk.tiko.wahalailkka.validation.ValidationError;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
