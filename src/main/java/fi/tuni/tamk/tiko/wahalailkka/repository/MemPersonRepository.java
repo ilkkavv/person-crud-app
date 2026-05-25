@@ -14,7 +14,7 @@ import java.util.Optional;
  * This repository stores {@link Person} objects in a custom list
  * implementation. By default, it uses {@link MyArrayList}, but the underlying
  * data structure can be easily replaced with other list implementation as long
- * as it mplements the {@link MyList} interface.
+ * as it implements the {@link MyList} interface.
  * <p>
  * Data is not persisted and will be lost when the application terminates.
  */
@@ -25,7 +25,7 @@ public class MemPersonRepository implements PersonRepository {
     private int nextId = 1;
 
     /**
-     * Creates a new person and assigns an unique ID.
+     * Creates a new person and assigns unique ID.
      *
      * @param personData  the person data used to create a new person
      * @return the created person
