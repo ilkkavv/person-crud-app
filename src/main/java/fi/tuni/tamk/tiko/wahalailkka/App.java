@@ -42,11 +42,11 @@ public final class App {
     private static final String USAGE_MSG = """
         Usage:
             person-crud-app [options]
-    
+
         Options:
             --repo=mem        Use in-memory repository
             --ui=cli          Use command-line interface
-    
+
         Examples:
             ./bin/person-crud-app
             ./bin/person-crud-app --repo=mem
