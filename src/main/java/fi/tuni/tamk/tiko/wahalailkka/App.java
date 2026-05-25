@@ -41,17 +41,17 @@ public final class App {
     /** Usage instructions displayed when invalid arguments are provided. */
     private static final String USAGE_MSG = """
         Usage:
-            java -jar person-crud-app.jar [options]
-
+            person-crud-app [options]
+    
         Options:
             --repo=mem        Use in-memory repository
             --ui=cli          Use command-line interface
-
+    
         Examples:
-            java -jar person-crud-app.jar
-            java -jar person-crud-app.jar --repo=mem
-            java -jar person-crud-app.jar --ui=cli
-            java -jar person-crud-app.jar --repo=mem --ui=cli
+            ./bin/person-crud-app
+            ./bin/person-crud-app --repo=mem
+            ./bin/person-crud-app --ui=cli
+            ./bin/person-crud-app --repo=mem --ui=cli
         """;
 
     private App() { }
