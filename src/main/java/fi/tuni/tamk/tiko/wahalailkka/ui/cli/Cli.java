@@ -363,44 +363,51 @@ public class Cli implements AppUi {
         if (!result.isSuccess()) {
             printPersonResult(result, null);
         } else {
-            System.out.println();
-            System.out.println("Update person:");
-            printPersonData(result.person());
-            System.out.println();
-            System.out.println("Enter new values (Leave empty for no update):");
-            System.out.println();
-            System.out.print("Enter person first name: ");
-            String firstName = scanner.nextLine().trim();
-            System.out.print("Enter person last name: ");
-            String lastName = scanner.nextLine().trim();
-            System.out.print("Enter person age: ");
-            String stringAge = scanner.nextLine().trim();
-
+            boolean success = false;
             Person person = result.person();
 
-            if (firstName.isEmpty()) {
-                firstName = person.firstName();
-            }
+            while (!success) {
+                System.out.println();
+                System.out.println("Enter new values"
+                        + "(Leave empty for no update):");
+                System.out.println();
+                System.out.print("(Current: " + person.firstName()
+                        + ") Enter new first name: ");
+                String firstName = scanner.nextLine().trim();
+                System.out.print("(Current: " + person.lastName()
+                        + ") Enter new last name: ");
+                String lastName = scanner.nextLine().trim();
+                System.out.print("(Current: " + person.age()
+                        + ") Enter new age: ");
+                String stringAge = scanner.nextLine().trim();
 
-            if (lastName.isEmpty()) {
-                lastName = person.lastName();
-            }
+                if (firstName.isEmpty()) {
+                    firstName = person.firstName();
+                }
 
-            if (stringAge.isEmpty()) {
-                stringAge = String.valueOf(person.age());
-            }
+                if (lastName.isEmpty()) {
+                    lastName = person.lastName();
+                }
 
-            int age;
+                if (stringAge.isEmpty()) {
+                    stringAge = String.valueOf(person.age());
+                }
 
-            try {
-                age = Integer.parseInt(stringAge);
+                int age;
 
-                PersonUpdateResult updateResult = controller.updatePersonById(
-                        id, firstName, lastName, age);
-                printPersonUpdateResult(updateResult);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Age must be a valid"
-                        + " integer.");
+                try {
+                    age = Integer.parseInt(stringAge);
+
+                    PersonUpdateResult updateResult =
+                            controller.updatePersonById(id, firstName, lastName,
+                                    age);
+                    printPersonUpdateResult(updateResult);
+                    success = updateResult.isSuccess();
+                } catch (NumberFormatException e) {
+                    System.out.println();
+                    System.out.println("Invalid input. Age must be a valid"
+                            + " integer.");
+                }
             }
         }
 
