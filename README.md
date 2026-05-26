@@ -211,6 +211,12 @@ The application separates expected application-level failures from technical fai
 Expected failures, such as validation errors or missing persons, are returned from the controller as structured result
 objects. This allows both the CLI and GUI to display errors consistently without depending on repository details.
 
+The CSV repository also validates the structure of the CSV file. Invalid CSV headers and duplicate person IDs are
+detected during repository loading and reported as repository errors.
+
+The application assumes that CSV data is managed through the application itself. Manual external modification
+of the CSV file may still introduce unsupported or malformed data.
+
 Technical failures, such as CSV read/write errors or invalid CSV content, are handled with custom repository exceptions.
 These errors are logged using **Log4j2** and shown to the user through CLI error messages or GUI dialogs.
 
