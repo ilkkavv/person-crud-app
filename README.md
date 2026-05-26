@@ -125,34 +125,22 @@ following common software development practices such as modular design, logging,
 
 ```mermaid
 graph TD
-    App --> UI
-    UI --> Controller
-    Controller --> Repository
-    Repository --> DataStructure
+    App --> UI{UI}
+    UI --> CLI
+    UI --> SwingGUI
 
-    subgraph UI Layer
-        Cli[CLI]
-        SwingGui[Swing GUI]
-    end
+    CLI --> Controller
+    SwingGUI --> Controller
 
-    subgraph Repository Layer
-        CsvRepo[CSV Repository]
-        MemRepo[Memory Repository]
-    end
+    Controller --> Repository{Repository}
+    Repository --> CsvRepository[CSV Repository]
+    Repository --> MemRepository[Memory Repository]
 
-    subgraph Data Structure Layer
-        ArrayList[MyArrayList]
-        LinkedList[MyLinkedList]
-    end
+    CsvRepository --> DataStructure{Data Structure}
+    MemRepository --> DataStructure
 
-    UI --> Cli
-    UI --> SwingGui
-
-    Repository --> CsvRepo
-    Repository --> MemRepo
-
-    DataStructure --> ArrayList
-    DataStructure --> LinkedList
+    DataStructure --> MyArrayList
+    DataStructure --> MyLinkedList
 ```
 
 The application is designed so that user interfaces and repository implementations can be changed without modifying the
