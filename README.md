@@ -376,7 +376,7 @@ Each release represents a milestone in the development process:
 - 1.0.0 – Final version
 
 Pre-built distribution packages are available on the
-[GitHub Releases page](https://github.com/ilkkavv/person-crud-app/releases)
+[GitHub Releases page](https://github.com/ilkkavv/person-crud-app/releases).
 
 ## Learning resources
 
