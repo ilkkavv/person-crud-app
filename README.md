@@ -4,7 +4,7 @@
 
 ![Version](https://img.shields.io/badge/version-1.0.0-green)
 ![License](https://img.shields.io/badge/license-GPLv3-blue)
-![Status](https://img.shields.io/badge/status-active%20development-green)
+![Status](https://img.shields.io/badge/status-completed-blue)
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Gradle](https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white)
