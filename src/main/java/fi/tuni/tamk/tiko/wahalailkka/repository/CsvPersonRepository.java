@@ -30,8 +30,9 @@ public class CsvPersonRepository implements PersonRepository {
     private final String pathToFile;
 
     private final String csvDelimiter = ",";
-    private final String headers = String.format("id%sfirstName%slastName%sage",
-            csvDelimiter, csvDelimiter, csvDelimiter);
+    private final String csvHeader = String.format(
+            "id%sfirstName%slastName%sage", csvDelimiter, csvDelimiter,
+            csvDelimiter);
 
     private MyList<Person> personList = new MyArrayList<>();
     private int nextId = 1;
@@ -48,6 +49,7 @@ public class CsvPersonRepository implements PersonRepository {
             + " file.";
     private static final String LIST_WRITE_ERR_MSG = "Failed to write person"
             + "list to CSV file.";
+    private static final String CSV_HEADER_ERR_MSG = "Invalid CSV header.";
 
     /**
      * Constructs a CsvPersonRepository using the given file path.
@@ -227,7 +229,7 @@ public class CsvPersonRepository implements PersonRepository {
             if (Files.notExists(path) || Files.size(path) == 0) {
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(
                         pathToFile))) {
-                    writer.write(headers);
+                    writer.write(csvHeader);
                     writer.newLine();
                 }
             } else {
@@ -260,7 +262,12 @@ public class CsvPersonRepository implements PersonRepository {
         try (BufferedReader reader = new BufferedReader(new FileReader(
                 pathToFile))) {
             String line;
-            reader.readLine(); // Skip header
+            String header = reader.readLine();
+
+            if (!csvHeader.equals(header)) {
+                LOGGER.error(CSV_HEADER_ERR_MSG);
+                throw new CsvRepositoryException("Invalid CSV header.");
+            }
 
             while ((line = reader.readLine()) != null) {
                 if (!line.isBlank()) {
@@ -284,7 +291,7 @@ public class CsvPersonRepository implements PersonRepository {
     private void writePersonListToCsv() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(
                 pathToFile))) {
-            writer.write(headers);
+            writer.write(csvHeader);
             writer.newLine();
             for (int i = 0; i < personList.size(); i++) {
                 Person person = personList.get(i);
