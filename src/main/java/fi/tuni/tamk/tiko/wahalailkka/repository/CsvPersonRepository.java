@@ -48,8 +48,10 @@ public class CsvPersonRepository implements PersonRepository {
     private static final String DATA_READ_ERR_MSG = "Failed to read from CSV"
             + " file.";
     private static final String LIST_WRITE_ERR_MSG = "Failed to write person"
-            + "list to CSV file.";
+            + " list to CSV file.";
     private static final String CSV_HEADER_ERR_MSG = "Invalid CSV header.";
+    private static final String DUPLICATE_ID_ERR_MSG = "Duplicate ID in CSV"
+            + " file.";
 
     /**
      * Constructs a CsvPersonRepository using the given file path.
@@ -274,9 +276,16 @@ public class CsvPersonRepository implements PersonRepository {
                     String[] data = line.split(csvDelimiter);
                     int id = Integer.parseInt(data[ID_INDEX]);
                     int age = Integer.parseInt(data[AGE_INDEX]);
+
+                    if (idExists(id)) {
+                        LOGGER.error(DUPLICATE_ID_ERR_MSG);
+                        throw new CsvRepositoryException(DUPLICATE_ID_ERR_MSG);
+                    }
+
                     if (nextId <= id) {
                         nextId = id + 1;
                     }
+
                     personList.add(new Person(id, data[FIRST_NAME_INDEX],
                             data[LAST_NAME_INDEX], age));
                 }
@@ -306,5 +315,15 @@ public class CsvPersonRepository implements PersonRepository {
             LOGGER.error(LIST_WRITE_ERR_MSG, e);
             throw new CsvRepositoryException(LIST_WRITE_ERR_MSG, e);
         }
+    }
+
+    private boolean idExists(final int id) {
+        for (int i = 0; i < personList.size(); i++) {
+            if (personList.get(i).id() == id) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
