@@ -136,10 +136,12 @@ public class Cli implements AppUi {
                 showMenu();
                 handleCommand();
             } catch (CsvRepositoryException e) {
-                System.err.println(e.getMessage());
+                System.out.println();
+                System.err.println("ERROR: " + e.getMessage());
             } catch (Exception e) {
                 LOGGER.error("Unexpected error", e);
-                System.err.println("Unexpected error.");
+                System.out.println();
+                System.err.println("ERROR: Unexpected error.");
             }
         }
     }
