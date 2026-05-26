@@ -34,6 +34,7 @@
       - [Command-Line Interface](#command-line-interface)
     - [Repository Options](#repository-options)
     - [Running Unit Tests](#running-unit-tests)
+  - [Releases](#releases)
   - [Learning resources](#learning-resources)
   - [AI Usage](#ai-usage)
   - [License](#license)
@@ -362,6 +363,20 @@ The tests are located under `src/test/java/`.
 
 Gradle uses **JUnit Jupiter** for running the tests. The tests are also executed automatically when running the standard
 Gradle build task.
+
+## Releases
+
+Project versions follow semantic versioning (MAJOR.MINOR.PATCH) and are published using **GitHub Releases**.
+
+Each release represents a milestone in the development process:
+
+- 1.0.0-alpha – Initial MVP
+- 1.0.0-beta – Feature improvements
+- 1.0.0-rc – Release candidate
+- 1.0.0 – Final version
+
+Pre-built distribution packages are available on the
+[GitHub Releases page](https://github.com/ilkkavv/person-crud-app/releases)
 
 ## Learning resources
 
