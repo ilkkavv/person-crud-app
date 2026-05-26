@@ -268,7 +268,7 @@ public class CsvPersonRepository implements PersonRepository {
 
             if (!csvHeader.equals(header)) {
                 LOGGER.error(CSV_HEADER_ERR_MSG);
-                throw new CsvRepositoryException("Invalid CSV header.");
+                throw new CsvRepositoryException(CSV_HEADER_ERR_MSG);
             }
 
             while ((line = reader.readLine()) != null) {
