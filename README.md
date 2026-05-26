@@ -13,7 +13,7 @@
 
 ## Table of Contents
 
-- [👥 Person CRUD app](#-person-crud-app)
+- [👥 Person CRUD App](#-person-crud-app)
   - [Table of Contents](#table-of-contents)
   - [Description](#description)
   - [Current Features](#current-features)
@@ -133,6 +133,14 @@ Controller
 Repository
  ↓
 Data structure
+```
+
+```mermaid
+graph TD
+    App --> UI
+    UI --> Controller
+    Controller --> Repository
+    Repository --> DataStructure
 ```
 
 The application is designed so that user interfaces and repository implementations can be changed without modifying the
