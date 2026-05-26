@@ -356,7 +356,7 @@ The current test suite focuses on the in-memory repository implementation, `MemP
 
 The tests verify core repository behavior such as creating, reading, updating, deleting, searching, ID generation, and
 protecting the repository's internal list from external modification. They focus on validating repository behavior
-independently from the user interface and controller layers.
+independently of the user interface and controller layers.
 
 The tests are located under `src/test/java/`.
 
