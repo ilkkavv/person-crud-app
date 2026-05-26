@@ -208,7 +208,7 @@ public class Cli implements AppUi {
         int age = askForAge();
 
         PersonResult result = controller.createPerson(firstName, lastName, age);
-        printPersonResult(result, "New person created!");
+        printPersonResult(result, "New person created:");
         waitForEnter();
     }
 
@@ -369,7 +369,7 @@ public class Cli implements AppUi {
             while (!success) {
                 System.out.println();
                 System.out.println("Enter new values"
-                        + "(Leave empty for no update):");
+                        + " (Leave empty for no update):");
                 System.out.println();
                 System.out.print("(Current: " + person.firstName()
                         + ") Enter new first name: ");
@@ -539,8 +539,10 @@ public class Cli implements AppUi {
             try {
                 return Integer.parseInt(stringAge);
             } catch (NumberFormatException e) {
+                System.out.println();
                 System.out.println("Invalid input. Age must be a valid"
                         + " integer.");
+                System.out.println();
             }
         }
     }
