@@ -74,12 +74,16 @@ public final class App {
             LOGGER.info("Person CRUD App stopped");
         } catch (IOException e) {
             LOGGER.error("Failed to initialize application files.", e);
-            System.err.println("Failed to initialize application files.");
+            System.out.println();
+            System.err.println("ERROR: "
+                    + "Failed to initialize application files.");
         } catch (CsvRepositoryException e) {
-            System.err.println(e.getMessage());
+            System.out.println();
+            System.err.println("ERROR: " + e.getMessage());
         } catch (Exception e) {
             LOGGER.error("Unexpected error", e);
-            System.err.println("Unexpected error.");
+            System.out.println();
+            System.err.println("ERROR: Unexpected error.");
         }
     }
 
