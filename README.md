@@ -16,7 +16,7 @@
 - [👥 Person CRUD App](#-person-crud-app)
   - [Table of Contents](#table-of-contents)
   - [Description](#description)
-  - [Current Features](#current-features)
+  - [Features](#features)
   - [Usage](#usage)
   - [About](#about)
   - [Architecture](#architecture)
@@ -65,7 +65,7 @@ demonstrating separation of concerns and object-oriented design principles.
 
 ---
 
-## Current Features
+## Features
 
 - Manage persons using either a Swing GUI or a command-line interface
 - Create, view, update, and delete person records
