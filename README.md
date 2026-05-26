@@ -232,6 +232,9 @@ store a birthdate and calculate the age dynamically.
 The simplified model allowed the project to focus more on software structure, maintainability, and separation of
 concerns.
 
+The CSV repository prioritizes simplicity and data consistency over performance by reloading the CSV file before
+repository operations.
+
 ## How to Compile and Run
 
 ### ❗ Requirements
