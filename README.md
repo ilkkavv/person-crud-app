@@ -123,24 +123,36 @@ following common software development practices such as modular design, logging,
 
 **Person CRUD app** follows a layered architecture with clear separation of concerns:
 
-```text
-App
- ↓
-UI
- ↓
-Controller
- ↓
-Repository
- ↓
-Data structure
-```
-
 ```mermaid
 graph TD
     App --> UI
     UI --> Controller
     Controller --> Repository
     Repository --> DataStructure
+
+    subgraph UI Layer
+        Cli[CLI]
+        SwingGui[Swing GUI]
+    end
+
+    subgraph Repository Layer
+        CsvRepo[CSV Repository]
+        MemRepo[Memory Repository]
+    end
+
+    subgraph Data Structure Layer
+        ArrayList[MyArrayList]
+        LinkedList[MyLinkedList]
+    end
+
+    UI --> Cli
+    UI --> SwingGui
+
+    Repository --> CsvRepo
+    Repository --> MemRepo
+
+    DataStructure --> ArrayList
+    DataStructure --> LinkedList
 ```
 
 The application is designed so that user interfaces and repository implementations can be changed without modifying the
