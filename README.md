@@ -20,7 +20,7 @@
   - [Usage](#usage)
   - [About](#about)
   - [Architecture](#architecture)
-    - [Main Layers](#main-layers)
+    - [Application Layers](#application-layers)
     - [Design Principles](#design-principles)
     - [Error Handling and Logging](#error-handling-and-logging)
     - [Scope and Simplifications](#scope-and-simplifications)
@@ -122,13 +122,13 @@ following common software development practices such as modular design, logging,
 
 ## Architecture
 
-**Person CRUD app** follows a layered architecture with clear separation of concerns:
+**Person CRUD App** follows a layered architecture with clear separation of concerns:
 
 ```mermaid
 graph TD
     App --> UI{UI}
     UI --> CLI
-    UI --> SwingGUI
+    UI --> SwingGUI[Swing GUI]
 
     CLI --> Controller
     SwingGUI --> Controller
@@ -147,7 +147,7 @@ graph TD
 The application is designed so that user interfaces and repository implementations can be changed without modifying the
 core application logic.
 
-### Main Layers
+### Application Layers
 
 - Application entry point
 
