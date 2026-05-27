@@ -417,12 +417,27 @@ public class Cli implements AppUi {
     private void delete() {
         int id = askForId();
 
-        if (showChoices("Are you sure you want to delete person with ID " + id
-                + "?", "Yes", "No")) {
-            PersonResult result = controller.deletePersonById(id);
-            printPersonResult(result, "Person data deleted:");
-            waitForEnter();
+        PersonResult result = controller.findPersonById(id);
+
+        if (result.isSuccess()) {
+            Person person = result.person();
+            String question = String.format("Are you sure you want to delete:"
+                    + " ID: %d | %s %s | Age: %d?",
+                    person.id(),
+                    person.firstName(),
+                    person.lastName(),
+                    person.age()
+            );
+
+            if (showChoices(question, "Yes", "No")) {
+                PersonResult deleteResult = controller.deletePersonById(id);
+                printPersonResult(deleteResult, "Person data deleted:");
+            }
+        } else {
+            printPersonResult(result, null);
         }
+
+        waitForEnter();
     }
 
     private void help() {
