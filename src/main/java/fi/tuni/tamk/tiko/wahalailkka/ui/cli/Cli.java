@@ -422,7 +422,7 @@ public class Cli implements AppUi {
         if (result.isSuccess()) {
             Person person = result.person();
             String question = String.format("Are you sure you want to delete:"
-                    + " ID: %d | %s %s | Age: %d?",
+                    + " [ID: %d | %s %s | Age: %d]?",
                     person.id(),
                     person.firstName(),
                     person.lastName(),
