@@ -200,16 +200,56 @@ public class Cli implements AppUi {
     }
 
     private void create() {
-        System.out.println();
-        System.out.print("Enter person first name: ");
-        String firstName = scanner.nextLine().trim();
-        System.out.print("Enter person last name: ");
-        String lastName = scanner.nextLine().trim();
-        int age = askForAge();
+        boolean success = false;
 
-        PersonResult result = controller.createPerson(firstName, lastName, age);
-        printPersonResult(result, "New person created:");
-        waitForEnter();
+        while (!success) {
+            System.out.println();
+            System.out.println("Enter values (or type 'cancel' in any field"
+                    + " to return):");
+            System.out.println();
+            System.out.print("Enter person first name: ");
+            String firstName = scanner.nextLine().trim();
+            if (isCancelCommand(firstName)) {
+                return;
+            }
+
+            System.out.print("Enter person last name: ");
+            String lastName = scanner.nextLine().trim();
+            if (isCancelCommand(lastName)) {
+                return;
+            }
+
+            int age;
+
+            while (true) {
+                System.out.print("Enter person age: ");
+                String stringAge = scanner.nextLine().trim();
+                if (isCancelCommand(stringAge)) {
+                    return;
+                }
+
+                try {
+                    age = Integer.parseInt(stringAge);
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println();
+                    System.out.println("Invalid input. Age must be a valid"
+                            + " integer.");
+                    System.out.println();
+                }
+            }
+
+            PersonResult result = controller.createPerson(firstName, lastName,
+                    age);
+            printPersonResult(result, "New person created:");
+            success = result.isSuccess();
+
+            waitForEnter();
+        }
+    }
+
+    private boolean isCancelCommand(final String input) {
+        return input.equalsIgnoreCase("cancel");
     }
 
     private void list() {
@@ -542,22 +582,6 @@ public class Cli implements AppUi {
                 return Integer.parseInt(stringId);
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. ID must be a number.");
-            }
-        }
-    }
-
-    private int askForAge() {
-        while (true) {
-            System.out.print("Enter person age: ");
-            String stringAge = scanner.nextLine().trim();
-
-            try {
-                return Integer.parseInt(stringAge);
-            } catch (NumberFormatException e) {
-                System.out.println();
-                System.out.println("Invalid input. Age must be a valid"
-                        + " integer.");
-                System.out.println();
             }
         }
     }
