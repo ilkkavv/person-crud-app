@@ -133,7 +133,7 @@ following common software development practices such as modular design, logging,
 graph TD
     App --> UI{UI}
     UI --> CLI
-    UI --> SwingGUI[Swing GUI]
+    UI --> SwingGUI[SwingGUI]
 
     CLI --> Controller
     SwingGUI --> Controller
