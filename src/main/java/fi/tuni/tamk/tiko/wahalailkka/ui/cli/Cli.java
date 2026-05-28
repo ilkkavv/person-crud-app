@@ -408,17 +408,16 @@ public class Cli implements AppUi {
 
             while (!success) {
                 System.out.println();
-                System.out.println("Enter new values"
-                        + " (Leave empty for no update):");
+                System.out.println("Leave fields empty to keep current"
+                        + " values.");
                 System.out.println();
-                System.out.print("(Current: " + person.firstName()
-                        + ") Enter new first name: ");
+                System.out.print("Enter new first name ["
+                        + person.firstName() + "]: ");
                 String firstName = scanner.nextLine().trim();
-                System.out.print("(Current: " + person.lastName()
-                        + ") Enter new last name: ");
+                System.out.print("Enter new last name ["
+                        + person.lastName() + "]: ");
                 String lastName = scanner.nextLine().trim();
-                System.out.print("(Current: " + person.age()
-                        + ") Enter new age: ");
+                System.out.print("Enter new age [" + person.age() + "]: ");
                 String stringAge = scanner.nextLine().trim();
 
                 if (firstName.isEmpty()) {
