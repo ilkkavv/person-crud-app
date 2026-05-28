@@ -71,7 +71,6 @@ public final class App {
             LOGGER.info("Person CRUD App started");
             handleArgs(args);
             appUi.run();
-            LOGGER.info("Person CRUD App stopped");
         } catch (IOException e) {
             LOGGER.error("Failed to initialize application files.", e);
             System.out.println();
