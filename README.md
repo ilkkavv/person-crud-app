@@ -16,7 +16,6 @@
 - [👥 Person CRUD App](#-person-crud-app)
   - [Table of Contents](#table-of-contents)
   - [Description](#description)
-  - [Screencast](#screencast)
   - [Features](#features)
   - [Usage](#usage)
   - [About](#about)
@@ -66,10 +65,6 @@ demonstrating separation of concerns and object-oriented design principles.
 ![Person CRUD App CLI](assets/cli.gif)
 
 ---
-
-## Screencast
-
-🎞️ [Watch screencast on YouTube](https://www.youtube.com/watch?v=1jkjOgXCP0Q&feature=youtu.be)
 
 ## Features
 
